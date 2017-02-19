@@ -1,15 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CommandLine;
+using NLog;
 
 namespace StartMenuCleaner
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static Logger logger = LogManager.GetCurrentClassLogger();
+
+		private static void Main(string[] args)
 		{
+			var result = Parser.Default.ParseArguments<ProgramOptions>(args);
+			if (result.Errors.Any())
+			{
+				Console.WriteLine("Invalid command line arguments.");
+			}
+
+			logger.Info("Starting");
+			Console.WriteLine();
+			Cleaner cleaner = new Cleaner(result.Value.Simulate);
+			cleaner.Start();
+
+			Console.WriteLine();
+			logger.Info("Finished");
 		}
 	}
 }
