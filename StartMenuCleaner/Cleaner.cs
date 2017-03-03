@@ -90,7 +90,7 @@ namespace StartMenuCleaner
 
 			// Move the app items to the program root directory.
 			var appFilePaths = files.Where(x => x.Classification == FileClassification.App).Select(x => x.Path);
-			this.MoveFilesToDirectory(programRootDir, appFilePaths);
+			this.MoveFilesToDirectory(programRootDir, appFilePaths, replaceExisting: true);
 
 			// Delete the rest of the files.
 			var otherFilePaths = files.Where(x => x.Classification != FileClassification.App).Select(x => x.Path);
@@ -144,7 +144,7 @@ namespace StartMenuCleaner
 
 			// Move the only file into the program root directory.
 			string currentFileLocation = Directory.GetFiles(itemToClean.Path).First();
-			this.MoveFileToDirectory(programRootDir, currentFileLocation);
+			this.MoveFileToDirectory(programRootDir, currentFileLocation, replaceExisting: true);
 
 			// Delete the empty folder.
 			this.DeleteDirectory(itemToClean.Path);
@@ -187,31 +187,47 @@ namespace StartMenuCleaner
 			logger.Debug($"Deleted directory: \"{Path.GetFileName(directoryPath)}\"");
 		}
 
+		private void DeleteFile(string filePath)
+		{
+			if (!File.Exists(filePath))
+			{
+				return;
+			}
+
+			if (!this.simulate)
+			{
+				File.Delete(filePath);
+			}
+
+			logger.Debug($"Deleted file: \"{Path.GetFileName(filePath)}\"");
+		}
+
 		private void DeleteFiles(IEnumerable<string> filePaths)
 		{
 			foreach (string filePath in filePaths)
 			{
-				if (!this.simulate)
-				{
-					File.Delete(filePath);
-				}
-				logger.Debug($"Deleted file: \"{Path.GetFileName(filePath)}\"");
+				this.DeleteFile(filePath);
 			}
 		}
 
-		private void MoveFilesToDirectory(string newDirectory, IEnumerable<string> currentFileLocations)
+		private void MoveFilesToDirectory(string newDirectory, IEnumerable<string> currentFileLocations, bool replaceExisting = false)
 		{
 			foreach (string currentFileLocation in currentFileLocations)
 			{
-				this.MoveFileToDirectory(newDirectory, currentFileLocation);
+				this.MoveFileToDirectory(newDirectory, currentFileLocation, replaceExisting);
 			}
 		}
 
-		private void MoveFileToDirectory(string newDirectory, string currentFileLocation)
+		private void MoveFileToDirectory(string newDirectory, string currentFileLocation, bool replaceExisting = false)
 		{
 			string newFileLocation = Path.Combine(newDirectory, Path.GetFileName(currentFileLocation));
 			if (!this.simulate)
 			{
+				if (replaceExisting && File.Exists(newFileLocation))
+				{
+					this.DeleteFile(newFileLocation);
+				}
+
 				File.Move(currentFileLocation, newFileLocation);
 			}
 			logger.Debug($"Moved file: \"{Path.GetFileName(currentFileLocation)}\" to \"{newFileLocation}\"");
