@@ -2,8 +2,9 @@
 {
 	public class FileClassificationItem
 	{
-		public FileClassification Classification { get; private set; }
-		public string Path { get; private set; }
+		public FileClassification Classification { get; }
+
+		public string Path { get; }
 
 		public FileClassificationItem(string path, FileClassification classification)
 		{

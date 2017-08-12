@@ -9,7 +9,7 @@ namespace StartMenuCleaner
 {
 	public class Cleaner
 	{
-		private static Logger logger = LogManager.GetCurrentClassLogger();
+		private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
 		private readonly bool simulate;
 
@@ -40,8 +40,7 @@ namespace StartMenuCleaner
 			}
 
 			// Log the directories to be cleaned.
-			var itemGroups = itemsToClean.GroupBy(x => x.Reason);
-			foreach (var group in itemGroups)
+			foreach (IGrouping<CleanReason, ProgramDirectoryItem> group in itemsToClean.GroupBy(x => x.Reason))
 			{
 				Console.WriteLine($"Found {group.Count()} {group.Key} items to clean:");
 				foreach (ProgramDirectoryItem item in group)
@@ -60,7 +59,7 @@ namespace StartMenuCleaner
 				throw new ArgumentException($"The item is not a {CleanReason.Empty}.", nameof(itemToClean.Reason));
 			}
 
-			var testFunction = rules.GetReasonTestFunction(CleanReason.Empty);
+			Func<string, bool> testFunction = rules.GetReasonTestFunction(CleanReason.Empty);
 			if (!testFunction(itemToClean.Path))
 			{
 				throw new InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
@@ -77,7 +76,7 @@ namespace StartMenuCleaner
 				throw new ArgumentException($"The item is not a {CleanReason.FewAppsWithCruft}.", nameof(itemToClean.Reason));
 			}
 
-			var testFunction = rules.GetReasonTestFunction(CleanReason.FewAppsWithCruft);
+			Func<string, bool> testFunction = rules.GetReasonTestFunction(CleanReason.FewAppsWithCruft);
 			if (!testFunction(itemToClean.Path))
 			{
 				throw new InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
@@ -89,11 +88,11 @@ namespace StartMenuCleaner
 				.Select(x => new FileClassificationItem(x, rules.ClassifyFile(x)));
 
 			// Move the app items to the program root directory.
-			var appFilePaths = files.Where(x => x.Classification == FileClassification.App).Select(x => x.Path);
+			IEnumerable<string> appFilePaths = files.Where(x => x.Classification == FileClassification.App).Select(x => x.Path);
 			this.MoveFilesToDirectory(programRootDir, appFilePaths, replaceExisting: true);
 
 			// Delete the rest of the files.
-			var otherFilePaths = files.Where(x => x.Classification != FileClassification.App).Select(x => x.Path);
+			IEnumerable<string> otherFilePaths = files.Where(x => x.Classification != FileClassification.App).Select(x => x.Path);
 			this.DeleteFiles(otherFilePaths);
 
 			// Delete the empty folder.
@@ -102,7 +101,7 @@ namespace StartMenuCleaner
 
 		private void CleanItem(CleanupRulesEngine rules, ProgramDirectoryItem itemToClean)
 		{
-			var cleanFunction = this.GetCleanFunction(itemToClean.Reason);
+			Action<CleanupRulesEngine, ProgramDirectoryItem> cleanFunction = this.GetCleanFunction(itemToClean.Reason);
 
 			try
 			{
@@ -118,7 +117,7 @@ namespace StartMenuCleaner
 		{
 			logger.Debug("Cleaning.");
 
-			foreach (var item in itemsToClean)
+			foreach (ProgramDirectoryItem item in itemsToClean)
 			{
 				logger.Debug($"Cleaning {item.Reason} {item.Path}");
 				this.CleanItem(rules, item);
@@ -134,7 +133,7 @@ namespace StartMenuCleaner
 				throw new ArgumentException($"The item is not a {CleanReason.SingleApp}.", nameof(itemToClean.Reason));
 			}
 
-			var testFunction = rules.GetReasonTestFunction(CleanReason.SingleApp);
+			Func<string, bool> testFunction = rules.GetReasonTestFunction(CleanReason.SingleApp);
 			if (!testFunction(itemToClean.Path))
 			{
 				throw new InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");

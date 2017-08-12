@@ -2,9 +2,9 @@
 {
 	public class ProgramDirectoryItem
 	{
-		public string Path { get; private set; }
+		public string Path { get; }
 
-		public CleanReason Reason { get; private set; }
+		public CleanReason Reason { get; }
 
 		public ProgramDirectoryItem(string path, CleanReason reason)
 		{

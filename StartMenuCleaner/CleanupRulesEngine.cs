@@ -18,18 +18,18 @@ namespace StartMenuCleaner
 		private const string uninstallFileNameKeyword = "uninstall";
 		private const string urlFileExtension = ".url";
 
-		private static string[] appExtensions = new string[]
+		private static readonly string[] appExtensions = new string[]
 		{
 			exeFileExtension,
 			apprefmsFileExtension
 		};
 
-		private static string[] deletableExtensions = new string[]
+		private static readonly string[] deletableExtensions = new string[]
 		{
 			txtFileExtension
 		};
 
-		private static string[] directoriesToIgnore = new string[]
+		private static readonly string[] directoriesToIgnore = new string[]
 		{
 			"chrome apps",
 			"startup",
@@ -44,7 +44,7 @@ namespace StartMenuCleaner
 			"system tools"
 		};
 
-		private static string[] uninstallerExtensions = new string[]
+		private static readonly string[] uninstallerExtensions = new string[]
 		{
 			exeFileExtension,
 			msiFileExtension
@@ -94,7 +94,7 @@ namespace StartMenuCleaner
 					return this.TestForSingleApp;
 
 				case CleanReason.None:
-					return x => { return this.TestForCleanReason(x) == CleanReason.None; };
+					return x => this.TestForCleanReason(x) == CleanReason.None;
 			}
 
 			throw new ArgumentException("An invalid reason was encountered.", nameof(reason));
@@ -279,9 +279,8 @@ namespace StartMenuCleaner
 				return false;
 			}
 
-			var unremovableFiles = classifiedFiles
-				.Where(x => x.Classification != FileClassification.App)
-				.Where(x => !this.CanBeRemoved(x.Classification));
+			IEnumerable<FileClassificationItem> unremovableFiles = classifiedFiles
+				.Where(x => x.Classification != FileClassification.App && !this.CanBeRemoved(x.Classification));
 			if (unremovableFiles.Any())
 			{
 				return false;

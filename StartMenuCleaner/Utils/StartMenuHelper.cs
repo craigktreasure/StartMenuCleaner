@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace StartMenuCleaner.Utils
 {
-	public class StartMenuHelper
+	public static class StartMenuHelper
 	{
 		private const string programsFolderName = "Programs";
 
