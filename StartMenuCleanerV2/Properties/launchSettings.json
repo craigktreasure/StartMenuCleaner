@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "StartMenuCleanerV2": {
+      "commandName": "Project"
+    },
+    "Simulation": {
+      "commandName": "Project",
+      "commandLineArgs": "-s -d"
+    }
+  }
+}
