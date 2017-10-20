@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using CommandLine;
 using Serilog;
 
@@ -13,14 +12,11 @@ namespace StartMenuCleaner
 
 			Console.Title = "Start Menu Cleaner";
 
-			ParserResult<ProgramOptions> result = Parser.Default.ParseArguments<ProgramOptions>(args);
-			if (result.Errors.Any())
-			{
-				Console.WriteLine("Invalid command line arguments.");
-			}
+			Parser.Default.ParseArguments<ProgramOptions>(args).WithParsed(Run);
+		}
 
-			ProgramOptions options = result.Value;
-
+		private static void Run(ProgramOptions options)
+		{
 			Log.Information("Starting");
 
 			if (options.Debug)
