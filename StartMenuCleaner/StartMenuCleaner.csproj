@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-    <RuntimeIdentifiers>win10-x64;</RuntimeIdentifiers>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
     <CodeAnalysisRuleSet>..\rules.ruleset</CodeAnalysisRuleSet>
     <Authors>Craig Treasure</Authors>
     <Company />
