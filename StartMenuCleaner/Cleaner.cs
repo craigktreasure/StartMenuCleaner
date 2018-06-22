@@ -40,10 +40,10 @@ namespace StartMenuCleaner
 			// Log the directories to be cleaned.
 			foreach (IGrouping<CleanReason, ProgramDirectoryItem> group in itemsToClean.GroupBy(x => x.Reason))
 			{
-				Console.WriteLine($"Found {group.Count()} {group.Key} items to clean:");
+				Log.Verbose($"Found {group.Count()} {group.Key} items to clean:");
 				foreach (ProgramDirectoryItem item in group)
 				{
-					Console.WriteLine($"\t{item.Path}");
+					Log.Verbose($"\t{item.Path}");
 				}
 			}
 
@@ -113,15 +113,15 @@ namespace StartMenuCleaner
 
 		private void CleanItems(CleanupRulesEngine rules, IEnumerable<ProgramDirectoryItem> itemsToClean)
 		{
-			Log.Debug("Cleaning.");
+			Log.Information("Cleaning.");
 
 			foreach (ProgramDirectoryItem item in itemsToClean)
 			{
-				Log.Debug($"Cleaning {item.Reason} {item.Path}");
+				Log.Information($"Cleaning {item.Reason} {item.Path}");
 				this.CleanItem(rules, item);
 			}
 
-			Log.Debug("Finished cleaning.");
+			Log.Information("Finished cleaning.");
 		}
 
 		private void CleanSingleApp(CleanupRulesEngine rules, ProgramDirectoryItem itemToClean)
