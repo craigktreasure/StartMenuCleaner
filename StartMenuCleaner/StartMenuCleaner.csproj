@@ -3,22 +3,19 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <CodeAnalysisRuleSet>..\rules.ruleset</CodeAnalysisRuleSet>
-    <Authors>Craig Treasure</Authors>
     <Description>A simple start menu cleaner.</Description>
     <ToolCommandName>Clean-StartMenu</ToolCommandName>
     <PackAsTool>True</PackAsTool>
-    <PackageOutputPath>./nupkg/$(Configuration)</PackageOutputPath>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <!--<RunCodeAnalysis>true</RunCodeAnalysis>-->
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.8.0" />
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.1.91" PrivateAssets="all" />
-    <PackageReference Include="Serilog" Version="2.9.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
-    <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
+    <PackageReference Include="CommandLineParser" />
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" />
+    <PackageReference Include="Serilog.Sinks.Trace" />
   </ItemGroup>
 
 </Project>
