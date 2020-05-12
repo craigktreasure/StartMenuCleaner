@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <GlobalPackageReference Include="Nerdbank.GitVersioning" Version="3.1.91"
+                            PrivateAssets="all"
+                            Condition=" '$(EnableGitVersioning)' != 'false' " />
+
+    <PackageReference Update="CommandLineParser"            Version="2.8.0" />
+    <PackageReference Update="Serilog"                      Version="2.9.0" />
+    <PackageReference Update="Serilog.Sinks.Console"        Version="3.1.1" />
+    <PackageReference Update="Serilog.Sinks.RollingFile"    Version="3.3.0" />
+    <PackageReference Update="Serilog.Sinks.Trace"          Version="2.1.0" />
+  </ItemGroup>
+</Project>
