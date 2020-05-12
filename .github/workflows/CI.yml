@@ -17,6 +17,9 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.300
+          source-url: https://nuget.pkg.github.com/craigktreasure/StartMenuCleaner/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Install dependencies
         run: dotnet restore
       - name: Build
@@ -33,3 +36,5 @@ jobs:
         with:
           name: __packages
           path: __packages
+      - name: Publish NuGet package to GitHub registry
+        run: dotnet nuget push ./__packages/NuGet/Release/*.nupkg --skip-duplicate
