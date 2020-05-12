@@ -18,10 +18,10 @@ This is a .NET Core Global Tool that cleans your Windows start menu using a few 
 To build the tool, run the following command:
 
 ``` shell
-dotnet pack ./StartMenuCleaner/ -c Release
+dotnet build ./StartMenuCleaner/ -c Release
 ```
 
-The tool will be packed into a `nupkg` file at `./StartMenuCleaner/nupkg/Release/`.
+The tool will be packed into a `nupkg` file at `./__nuget/Release/`.
 
 ### Install the tool
 
@@ -30,7 +30,7 @@ These instructions assume you have previously [built](#build-the-tool) the tool.
 To install the tool, run the following command:
 
 ``` shell
-dotnet tool install -g StartMenuCleaner --add-source ./StartMenuCleaner/nupkg/Release/ --version <version number>
+dotnet tool install -g StartMenuCleaner --add-source ./__nuget/Release/ --version <version number>
 ```
 
 ### Update the tool
@@ -40,7 +40,7 @@ These instructions assume you have previously [built](#build-the-tool) and [inst
 For stable release versions, run the following command:
 
 ``` shell
-dotnet tool update -g StartMenuCleaner --add-source ./StartMenuCleaner/nupkg/Release/
+dotnet tool update -g StartMenuCleaner --add-source ./__nuget/Release/
 ```
 
 For pre-release versions, there is currently no way to update to a pre-release version. See [here](https://github.com/dotnet/sdk/issues/2551) for updates on this issue. For the time being, you need to [uninstall](#uninstall-the-tool) the previous version of the tool and then [install](#install-the-tool) the tool again.
@@ -59,8 +59,8 @@ dotnet tool uninstall -g StartMenuCleaner
 
 ``` shell
 > Clean-StartMenu --help
-StartMenuCleaner 1.1.4+b3eec6bd01
-Copyright (C) 2019 Craig Treasure
+StartMenuCleaner 1.2.19+8028ea50d1
+Copyright (C) 2020 Craig Treasure
 
   -s, --simulate    Simulate all file operations.
 
