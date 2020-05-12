@@ -2,6 +2,8 @@
 
 This is a .NET Core Global Tool that cleans your Windows start menu using a few very simple heuristics.
 
+![CI Build](https://github.com/craigktreasure/StartMenuCleaner/workflows/StartMenuCleaner-CI/badge.svg?branch=master)
+
 - [Start Menu Cleaner](#start-menu-cleaner)
   - [Tool management](#tool-management)
     - [Build the tool](#build-the-tool)
