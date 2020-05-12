@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: 'Build StartMenuCleaner'
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
         with:
@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.300
-          source-url: https://nuget.pkg.github.com/craigktreasure/StartMenuCleaner/index.json
+          source-url: ${{ secrets.GPR_URI }}
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup NuGet
@@ -41,5 +41,7 @@ jobs:
         with:
           name: __packages
           path: __packages
+      - name: Configure NuGet.config
+        run: nuget sources add -Name 'github' -Source ${{ secrets.GPR_URI }} -UserName ${{ secrets.GPR_USERNAME }} -Password ${{ secrets.GITHUB_TOKEN }}
       - name: Publish NuGet package to GitHub registry
-        run: nuget push ./__packages/NuGet/Release/*.nupkg -SkipDuplicate -Source https://nuget.pkg.github.com/craigktreasure/StartMenuCleaner/index.json -ApiKey ${{ secrets.GITHUB_TOKEN }}
+        run: dotnet nuget push ./__packages/NuGet/Release/*.nupkg --skip-duplicate --source 'github'
