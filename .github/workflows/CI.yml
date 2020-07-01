@@ -1,10 +1,17 @@
 name: 'StartMenuCleaner-CI'
 
 on:
-    push:
-      branches:
-        - main
+  push:
+    branches:
+      - main
 
+env:
+  # Stop wasting time caching packages
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  # GitHub Packages Feed settings
+  GH_FEED: https://nuget.pkg.github.com/craigktreasure/StartMenuCleaner/
+  GH_USER: craigktreasure
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   build:
     name: 'Build StartMenuCleaner'
@@ -33,3 +40,19 @@ jobs:
         with:
           name: __packages
           path: __packages
+  prerelease:
+    name: 'Publish StartMenuCleaner'
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: __packages
+      - name: Push to GitHub Feed
+        run: |
+          for f in ./__packages/NuGet/Release/*.nupkg
+          do
+            curl -vX PUT -u "$GH_USER:$GH_TOKEN" -F package=@$f $GH_FEED
+          done
