@@ -2,6 +2,10 @@ name: 'StartMenuCleaner-PR'
 
 on: pull_request
 
+env:
+  # Stop wasting time caching packages
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
 jobs:
   build:
     name: 'Build StartMenuCleaner'
