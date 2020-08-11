@@ -38,6 +38,7 @@ namespace StartMenuCleaner
 			"windows accessories",
 			"windows administrative tools",
 			"windows ease of access",
+            "windows powershell",
 			"windows system",
 			"accessibility",
 			"administrative tools",
