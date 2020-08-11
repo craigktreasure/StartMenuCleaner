@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -149,20 +149,14 @@ namespace StartMenuCleaner
 
 		private Action<CleanupRulesEngine, ProgramDirectoryItem> GetCleanFunction(CleanReason reason)
 		{
-			switch (reason)
-			{
-				case CleanReason.Empty:
-					return this.CleanEmptyDirectory;
-
-				case CleanReason.SingleApp:
-					return this.CleanSingleApp;
-
-				case CleanReason.FewAppsWithCruft:
-					return this.CleanFewAppsWithCruft;
-			}
-
-			throw new ArgumentException("No cleanup function was available.", nameof(reason));
-		}
+            return reason switch
+            {
+                CleanReason.Empty => this.CleanEmptyDirectory,
+                CleanReason.SingleApp => this.CleanSingleApp,
+                CleanReason.FewAppsWithCruft => this.CleanFewAppsWithCruft,
+                _ => throw new ArgumentException("No cleanup function was available.", nameof(reason)),
+            };
+        }
 
 		private IEnumerable<string> GetProgramDirectories()
 		{

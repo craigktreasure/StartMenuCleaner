@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -83,23 +83,15 @@ namespace StartMenuCleaner
 
 		public Func<string, bool> GetReasonTestFunction(CleanReason reason)
 		{
-			switch (reason)
-			{
-				case CleanReason.Empty:
-					return this.TestForEmpty;
-
-				case CleanReason.FewAppsWithCruft:
-					return this.TestForFewAppsWithCruft;
-
-				case CleanReason.SingleApp:
-					return this.TestForSingleApp;
-
-				case CleanReason.None:
-					return x => this.TestForCleanReason(x) == CleanReason.None;
-			}
-
-			throw new ArgumentException("An invalid reason was encountered.", nameof(reason));
-		}
+            return reason switch
+            {
+                CleanReason.Empty => this.TestForEmpty,
+                CleanReason.FewAppsWithCruft => this.TestForFewAppsWithCruft,
+                CleanReason.SingleApp => this.TestForSingleApp,
+                CleanReason.None => x => this.TestForCleanReason(x) == CleanReason.None,
+                _ => throw new ArgumentException("An invalid reason was encountered.", nameof(reason)),
+            };
+        }
 
 		public CleanReason TestForCleanReason(string directoryPath)
 		{
@@ -265,8 +257,8 @@ namespace StartMenuCleaner
 
 			IEnumerable<string> filePaths = Directory.EnumerateFiles(directoryPath);
 
-			// Classify the files
-			var classifiedFiles = filePaths.Select(x => new FileClassificationItem(x, this.ClassifyFile(x)));
+            // Classify the files
+            IEnumerable<FileClassificationItem> classifiedFiles = filePaths.Select(x => new FileClassificationItem(x, this.ClassifyFile(x)));
 
 			if (classifiedFiles.Any(x => x.Classification == FileClassification.Other))
 			{
@@ -282,15 +274,11 @@ namespace StartMenuCleaner
 
 			IEnumerable<FileClassificationItem> unremovableFiles = classifiedFiles
 				.Where(x => x.Classification != FileClassification.App && !this.CanBeRemoved(x.Classification));
-			if (unremovableFiles.Any())
-			{
-				return false;
-			}
 
-			return true;
-		}
+            return !unremovableFiles.Any();
+        }
 
-		private bool TestForSingleApp(string directoryPath)
+        private bool TestForSingleApp(string directoryPath)
 		{
 			if (this.TestForDirectories(directoryPath))
 			{
