@@ -80,5 +80,10 @@ Copyright (C) 2020 Craig Treasure
   1. In **Task Scheduler**, select **Create Task...**.
   2. From the **General** tab, give the taks a memorable name and select **Run whether user is logged on or not** to hide the command window.
   3. From the **Triggers** tab, create a new trigger to begin **At log on** delayed for 30 seconds for your specific user account.
-  4. From the **Actions** tab, create a new action to run the `Clean-StartMenu` program with the `--silent` argument.
+  4. From the **Actions** tab, create a new action to run the `%USERPROFILE%\.dotnet\tools\Clean-StartMenu.exe` program with the `--silent` argument.
   5. Configure options on the **Conditions** and **Settings** tabs to your liking.
+  6. Save the task. Upon saving, you'll be asked for your password.
+     1. If your password can't be accepted, it's likely that you logged in with Windows Hello
+        and in some cases this causes issues. The solution is to log out and log back in to Windows
+        using your username and password as opposed to Windows Hello. Repeat the steps and and enter
+        your password to save the task.
