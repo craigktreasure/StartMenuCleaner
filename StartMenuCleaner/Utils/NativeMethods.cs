@@ -8,12 +8,9 @@ namespace StartMenuCleaner.Utils
 	/// A helper class used to get the targets of .lnk files.
 	/// Significant code contribution from http://stackoverflow.com/questions/139010/how-to-resolve-a-lnk-in-c-sharp.
 	/// </summary>
-	public static class LinkHelper
+	public static class NativeMethods
 	{
-		#region Signitures imported from http://pinvoke.net
-
-		[DllImport("shfolder.dll", CharSet = CharSet.Auto)]
-		internal static extern int SHGetFolderPath(IntPtr hwndOwner, int nFolder, IntPtr hToken, int dwFlags, StringBuilder lpszPath);
+		#region Signatures imported from http://pinvoke.net
 
 		[Flags()]
 		private enum SLGP_FLAGS
@@ -132,8 +129,7 @@ namespace StartMenuCleaner.Utils
 			void SetShowCmd(int iShowCmd);
 
 			/// <summary>Retrieves the location (path and index) of the icon for a Shell link object</summary>
-			void GetIconLocation([Out(), MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszIconPath,
-				int cchIconPath, out int piIcon);
+			void GetIconLocation([Out(), MarshalAs(UnmanagedType.LPWStr)] StringBuilder pszIconPath, int cchIconPath, out int piIcon);
 
 			/// <summary>Sets the location (path and index) of the icon for a Shell link object</summary>
 			void SetIconLocation([MarshalAs(UnmanagedType.LPWStr)] string pszIconPath, int iIcon);
@@ -166,12 +162,10 @@ namespace StartMenuCleaner.Utils
 			int IsDirty();
 
 			[PreserveSig]
-			void Load([In, MarshalAs(UnmanagedType.LPWStr)]
-	string pszFileName, uint dwMode);
+			void Load([In, MarshalAs(UnmanagedType.LPWStr)] string pszFileName, uint dwMode);
 
 			[PreserveSig]
-			void Save([In, MarshalAs(UnmanagedType.LPWStr)] string pszFileName,
-				[In, MarshalAs(UnmanagedType.Bool)] bool fRemember);
+			void Save([In, MarshalAs(UnmanagedType.LPWStr)] string pszFileName, [In, MarshalAs(UnmanagedType.Bool)] bool fRemember);
 
 			[PreserveSig]
 			void SaveCompleted([In, MarshalAs(UnmanagedType.LPWStr)] string pszFileName);
@@ -181,6 +175,7 @@ namespace StartMenuCleaner.Utils
 		}
 
 		private const uint STGM_READ = 0;
+
 		private const int MAX_PATH = 260;
 
 		// CLSID_ShellLink from ShlGuid.h
@@ -188,11 +183,12 @@ namespace StartMenuCleaner.Utils
 			ComImport(),
 			Guid("00021401-0000-0000-C000-000000000046")
 		]
+
 		public class ShellLink
 		{
 		}
 
-		#endregion Signitures imported from http://pinvoke.net
+		#endregion Signatures imported from http://pinvoke.net
 
 		public static string ResolveShortcut(string filename)
 		{

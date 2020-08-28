@@ -153,7 +153,7 @@ namespace StartMenuCleaner
 		{
 			if (this.FileIsLink(filePath))
 			{
-				string linkPath = LinkHelper.ResolveShortcut(filePath);
+				string linkPath = NativeMethods.ResolveShortcut(filePath);
 
 				string linkExt = Path.GetExtension(linkPath);
 
@@ -167,7 +167,7 @@ namespace StartMenuCleaner
 		{
 			if (this.FileIsLink(filePath))
 			{
-				string linkPath = LinkHelper.ResolveShortcut(filePath);
+				string linkPath = NativeMethods.ResolveShortcut(filePath);
 
 				string linkExt = Path.GetExtension(linkPath);
 
@@ -181,7 +181,7 @@ namespace StartMenuCleaner
 		{
 			if (this.FileIsLink(filePath))
 			{
-				string linkPath = LinkHelper.ResolveShortcut(filePath);
+				string linkPath = NativeMethods.ResolveShortcut(filePath);
 
 				string linkExt = Path.GetExtension(linkPath);
 
@@ -198,7 +198,7 @@ namespace StartMenuCleaner
 				return false;
 			}
 
-			string linkPath = LinkHelper.ResolveShortcut(filePath);
+			string linkPath = NativeMethods.ResolveShortcut(filePath);
 
 			string linkExt = Path.GetExtension(linkPath);
 
@@ -212,7 +212,7 @@ namespace StartMenuCleaner
 		{
 			if (this.FileIsLink(filePath))
 			{
-				string linkPath = LinkHelper.ResolveShortcut(filePath);
+				string linkPath = NativeMethods.ResolveShortcut(filePath);
 
 				string linkExt = Path.GetExtension(linkPath);
 
