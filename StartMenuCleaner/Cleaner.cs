@@ -71,7 +71,7 @@ namespace StartMenuCleaner
 		{
 			if (CleanReason.FewAppsWithCruft != itemToClean.Reason)
 			{
-				throw new ArgumentException($"The item is not a {CleanReason.FewAppsWithCruft}.", nameof(itemToClean.Reason));
+				throw new ArgumentException($"The item {nameof(itemToClean.Reason)} is not {CleanReason.FewAppsWithCruft}.", nameof(itemToClean));
 			}
 
 			Func<string, bool> testFunction = rules.GetReasonTestFunction(CleanReason.FewAppsWithCruft);
@@ -80,7 +80,7 @@ namespace StartMenuCleaner
 				throw new InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
 			}
 
-			string programRootDir = Path.GetDirectoryName(itemToClean.Path);
+			string programRootDir = Path.GetDirectoryName(itemToClean.Path)!;
 
 			IEnumerable<FileClassificationItem> files = Directory.EnumerateFiles(itemToClean.Path)
 				.Select(x => new FileClassificationItem(x, rules.ClassifyFile(x)));
@@ -128,7 +128,7 @@ namespace StartMenuCleaner
 		{
 			if (CleanReason.SingleApp != itemToClean.Reason)
 			{
-				throw new ArgumentException($"The item is not a {CleanReason.SingleApp}.", nameof(itemToClean.Reason));
+				throw new ArgumentException($"The item {nameof(itemToClean.Reason)} is not {CleanReason.SingleApp}.", nameof(itemToClean));
 			}
 
 			Func<string, bool> testFunction = rules.GetReasonTestFunction(CleanReason.SingleApp);
@@ -137,7 +137,7 @@ namespace StartMenuCleaner
 				throw new InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
 			}
 
-			string programRootDir = Path.GetDirectoryName(itemToClean.Path);
+			string programRootDir = Path.GetDirectoryName(itemToClean.Path)!;
 
 			// Move the only file into the program root directory.
 			string currentFileLocation = Directory.GetFiles(itemToClean.Path).First();
