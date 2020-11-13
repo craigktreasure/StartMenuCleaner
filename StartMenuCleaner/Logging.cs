@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using Serilog;
-using Serilog.Core;
-using Serilog.Events;
-
-namespace StartMenuCleaner
+﻿namespace StartMenuCleaner
 {
-	public static class Logging
+    using System;
+    using System.IO;
+    using Serilog;
+    using Serilog.Core;
+    using Serilog.Events;
+
+    public static class Logging
 	{
 		private const LogEventLevel defaultLogLevel = LogEventLevel.Information;
 

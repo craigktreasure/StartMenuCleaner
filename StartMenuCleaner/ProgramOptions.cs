@@ -1,8 +1,10 @@
-﻿using CommandLine;
-
 namespace StartMenuCleaner
 {
-	internal class ProgramOptions
+    using CommandLine;
+    using System.Diagnostics.CodeAnalysis;
+
+    [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "Class is deserialized at runtime.")]
+    internal class ProgramOptions
 	{
 		[Option('s', "simulate", HelpText = "Simulate all file operations.")]
 		public bool Simulate { get; set; }

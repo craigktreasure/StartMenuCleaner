@@ -7,8 +7,6 @@
     <ToolCommandName>Clean-StartMenu</ToolCommandName>
     <PackAsTool>True</PackAsTool>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

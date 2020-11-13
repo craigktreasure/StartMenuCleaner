@@ -1,10 +1,10 @@
-﻿using System;
-using CommandLine;
-using Serilog;
-
-namespace StartMenuCleaner
+﻿namespace StartMenuCleaner
 {
-	internal static class Program
+    using System;
+    using CommandLine;
+    using Serilog;
+
+    internal static class Program
 	{
 		private static void Main(string[] args)
 		{

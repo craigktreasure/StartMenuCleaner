@@ -1,14 +1,14 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Text;
-
 namespace StartMenuCleaner.Utils
 {
-	/// <summary>
-	/// A helper class used to get the targets of .lnk files.
-	/// Significant code contribution from http://stackoverflow.com/questions/139010/how-to-resolve-a-lnk-in-c-sharp.
-	/// </summary>
-	public static class NativeMethods
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Text;
+
+    /// <summary>
+    /// A helper class used to get the targets of .lnk files.
+    /// Significant code contribution from http://stackoverflow.com/questions/139010/how-to-resolve-a-lnk-in-c-sharp.
+    /// </summary>
+    public static class NativeMethods
 	{
 		#region Signatures imported from http://pinvoke.net
 
@@ -146,7 +146,7 @@ namespace StartMenuCleaner.Utils
 
 		[ComImport, Guid("0000010c-0000-0000-c000-000000000046"),
 		InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-		public interface IPersist
+		internal interface IPersist
 		{
 			[PreserveSig]
 			void GetClassID(out Guid pClassID);
@@ -154,7 +154,7 @@ namespace StartMenuCleaner.Utils
 
 		[ComImport, Guid("0000010b-0000-0000-C000-000000000046"),
 		InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-		public interface IPersistFile : IPersist
+		internal interface IPersistFile : IPersist
 		{
 			new void GetClassID(out Guid pClassID);
 
@@ -184,7 +184,7 @@ namespace StartMenuCleaner.Utils
 			Guid("00021401-0000-0000-C000-000000000046")
 		]
 
-		public class ShellLink
+		internal class ShellLink
 		{
 		}
 

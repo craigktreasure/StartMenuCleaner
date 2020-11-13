@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-namespace StartMenuCleaner.Utils
+﻿namespace StartMenuCleaner.Utils
 {
-	public static class StartMenuHelper
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+
+    public static class StartMenuHelper
 	{
 		private const string programsFolderName = "Programs";
 

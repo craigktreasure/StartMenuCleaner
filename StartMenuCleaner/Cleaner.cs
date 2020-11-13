@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Serilog;
-using StartMenuCleaner.Utils;
-
 namespace StartMenuCleaner
 {
-	public class Cleaner
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using Serilog;
+    using StartMenuCleaner.Utils;
+
+    public class Cleaner
 	{
 		private readonly bool simulate;
 
@@ -24,7 +24,7 @@ namespace StartMenuCleaner
 				Console.WriteLine();
 			}
 
-			IEnumerable<string> programDirectories = this.GetProgramDirectories();
+			IEnumerable<string> programDirectories = GetProgramDirectories();
 
 			CleanupRulesEngine rules = new CleanupRulesEngine();
 			IEnumerable<ProgramDirectoryItem> itemsToClean = programDirectories
@@ -54,7 +54,7 @@ namespace StartMenuCleaner
 		{
 			if (CleanReason.Empty != itemToClean.Reason)
 			{
-				throw new ArgumentException($"The item is not a {CleanReason.Empty}.", nameof(itemToClean.Reason));
+				throw new ArgumentException($"The item {nameof(itemToClean.Reason)} is not {CleanReason.Empty}.", nameof(itemToClean));
 			}
 
 			Func<string, bool> testFunction = rules.GetReasonTestFunction(CleanReason.Empty);
@@ -83,7 +83,7 @@ namespace StartMenuCleaner
 			string programRootDir = Path.GetDirectoryName(itemToClean.Path)!;
 
 			IEnumerable<FileClassificationItem> files = Directory.EnumerateFiles(itemToClean.Path)
-				.Select(x => new FileClassificationItem(x, rules.ClassifyFile(x)));
+				.Select(x => new FileClassificationItem(x, CleanupRulesEngine.ClassifyFile(x)));
 
 			// Move the app items to the program root directory.
 			IEnumerable<string> appFilePaths = files.Where(x => x.Classification == FileClassification.App).Select(x => x.Path);
@@ -105,8 +105,10 @@ namespace StartMenuCleaner
 			{
 				cleanFunction(rules, itemToClean);
 			}
-			catch (Exception ex)
-			{
+#pragma warning disable CA1031 // Do not catch general exception types
+            catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
+            {
 				Log.Error(ex, $"Failed to clean {itemToClean.Path}. Aborting.");
 			}
 		}
@@ -158,7 +160,7 @@ namespace StartMenuCleaner
             };
         }
 
-		private IEnumerable<string> GetProgramDirectories()
+		private static IEnumerable<string> GetProgramDirectories()
 		{
 			IEnumerable<string> startMenuProgramDirectories = StartMenuHelper.GetStartMenuProgramDirectories();
 
