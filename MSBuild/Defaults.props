@@ -11,7 +11,14 @@
     <MSBuildTreatWarningsAsErrors Condition="'$(AGENT_ID)' != ''">true</MSBuildTreatWarningsAsErrors>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <TreatWarningsAsErrors Condition="'$(AGENT_ID)' != ''">true</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>$(SourceRootPath)/rules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+    <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisLevel>5.0</AnalysisLevel>
   </PropertyGroup>
 
   <PropertyGroup>
