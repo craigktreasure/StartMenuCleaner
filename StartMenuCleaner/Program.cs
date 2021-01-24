@@ -1,6 +1,7 @@
 namespace StartMenuCleaner
 {
     using System;
+    using Microsoft.Extensions.DependencyInjection;
     using CommandLine;
     using Serilog;
 
@@ -17,7 +18,9 @@ namespace StartMenuCleaner
 
 		private static void Run(ProgramOptions options)
 		{
-			Log.Information("Starting");
+            IServiceProvider services = ConfigureServices(options);
+
+            Log.Information("Starting");
 
 			if (options.Debug)
 			{
@@ -26,7 +29,7 @@ namespace StartMenuCleaner
 			}
 
 			Console.WriteLine();
-			Cleaner cleaner = new Cleaner(options.Simulate);
+            Cleaner cleaner = services.GetRequiredService<Cleaner>();
 			cleaner.Start();
 
 			Console.WriteLine();
@@ -37,5 +40,18 @@ namespace StartMenuCleaner
 				Console.ReadLine();
 			}
 		}
+
+        private static IServiceProvider ConfigureServices(ProgramOptions options)
+        {
+            CleanerOptions cleanerOptions = new CleanerOptions
+            {
+                Simulate = options.Simulate,
+            };
+
+            return new ServiceCollection()
+                .AddSingleton(cleanerOptions)
+                .AddTransient<Cleaner>()
+                .BuildServiceProvider();
+        }
 	}
 }
