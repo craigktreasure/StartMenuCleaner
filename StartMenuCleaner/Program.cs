@@ -56,6 +56,7 @@ namespace StartMenuCleaner
                 })
                 .UseFileSystem()
                 .UseDefaultFileShortcutHandler()
+                .AddTransient<FileClassifier>()
                 .AddTransient<CleanupRulesEngine>()
                 .AddSingleton(cleanerOptions)
                 .AddTransient<Cleaner>()
