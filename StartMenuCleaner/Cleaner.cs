@@ -10,15 +10,17 @@ namespace StartMenuCleaner
 
     public class Cleaner
 	{
+        private readonly CleanupRulesEngine cleanupEngine;
+        private readonly FileClassifier fileClassifier;
         private readonly IFileSystem fileSystem;
         private readonly ILogger<Cleaner> logger;
         private readonly CleanerOptions options;
-        private readonly CleanupRulesEngine cleanupEngine;
 
-        public Cleaner(CleanerOptions options, IFileSystem fileSystem, CleanupRulesEngine cleanupEngine, ILogger<Cleaner> logger)
+        public Cleaner(CleanerOptions options, IFileSystem fileSystem, FileClassifier fileClassifier, CleanupRulesEngine cleanupEngine, ILogger<Cleaner> logger)
 		{
             this.options = options;
             this.fileSystem = fileSystem;
+            this.fileClassifier = fileClassifier;
             this.logger = logger;
             this.cleanupEngine = cleanupEngine;
 		}
@@ -86,10 +88,10 @@ namespace StartMenuCleaner
 				throw new systemIO.InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
 			}
 
-			string programRootDir = this.fileSystem.Path.GetDirectoryName(itemToClean.Path)!;
+			string programRootDir = this.fileSystem.Path.GetDirectoryName(itemToClean.Path);
 
 			IEnumerable<FileClassificationItem> files = this.fileSystem.Directory.EnumerateFiles(itemToClean.Path)
-				.Select(x => new FileClassificationItem(x, this.cleanupEngine.ClassifyFile(x)));
+				.Select(x => new FileClassificationItem(x, this.fileClassifier.ClassifyFile(x)));
 
 			// Move the app items to the program root directory.
 			IEnumerable<string> appFilePaths = files.Where(x => x.Classification == FileClassification.App).Select(x => x.Path);
