@@ -55,6 +55,8 @@ namespace StartMenuCleaner
                     loggingBuilder.AddSerilog(SerilogLogging.Create(), dispose: true);
                 })
                 .UseFileSystem()
+                .UseDefaultFileShortcutHandler()
+                .AddTransient<CleanupRulesEngine>()
                 .AddSingleton(cleanerOptions)
                 .AddTransient<Cleaner>()
                 .BuildServiceProvider();

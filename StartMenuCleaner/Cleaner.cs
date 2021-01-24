@@ -15,12 +15,12 @@ namespace StartMenuCleaner
         private readonly CleanerOptions options;
         private readonly CleanupRulesEngine cleanupEngine;
 
-        public Cleaner(CleanerOptions options, IFileSystem fileSystem, ILogger<Cleaner> logger)
+        public Cleaner(CleanerOptions options, IFileSystem fileSystem, CleanupRulesEngine cleanupEngine, ILogger<Cleaner> logger)
 		{
             this.options = options;
             this.fileSystem = fileSystem;
             this.logger = logger;
-            this.cleanupEngine = new CleanupRulesEngine(fileSystem);
+            this.cleanupEngine = cleanupEngine;
 		}
 
 		public void Start()
