@@ -51,6 +51,7 @@ namespace StartMenuCleaner
             return new ServiceCollection()
                 .AddLogging(loggingBuilder =>
                 {
+                    loggingBuilder.AddDebug();
                     loggingBuilder.AddSerilog(SerilogLogging.Create(), dispose: true);
                 })
                 .AddSingleton(cleanerOptions)
