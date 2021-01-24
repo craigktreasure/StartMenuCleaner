@@ -2,7 +2,7 @@ namespace StartMenuCleaner
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
+    using System.IO.Abstractions;
     using System.Linq;
     using StartMenuCleaner.Utils;
 
@@ -51,29 +51,36 @@ namespace StartMenuCleaner
 			msiFileExtension
 		};
 
-		public static FileClassification ClassifyFile(string filePath)
+        private readonly IFileSystem fileSystem;
+
+        public CleanupRulesEngine(IFileSystem fileSystem)
+        {
+            this.fileSystem = fileSystem;
+        }
+
+		public FileClassification ClassifyFile(string filePath)
 		{
-			if (IsLinkToUninstaller(filePath))
+			if (this.IsLinkToUninstaller(filePath))
 			{
 				return FileClassification.Uninstaller;
 			}
 
-			if (IsLinkToApp(filePath) || IsClickOnceApp(filePath))
+			if (this.IsLinkToApp(filePath) || this.IsClickOnceApp(filePath))
 			{
 				return FileClassification.App;
 			}
 
-			if (IsWebLink(filePath) || IsLinkToWeb(filePath))
+			if (this.IsWebLink(filePath) || this.IsLinkToWeb(filePath))
 			{
 				return FileClassification.WebLink;
 			}
 
-			if (IsLinkToHelp(filePath))
+			if (this.IsLinkToHelp(filePath))
 			{
 				return FileClassification.Help;
 			}
 
-			if (IsDeletableFile(filePath) || IsLinkToDeletableFile(filePath))
+			if (this.IsDeletableFile(filePath) || this.IsLinkToDeletableFile(filePath))
 			{
 				return FileClassification.OtherDeletable;
 			}
@@ -95,7 +102,7 @@ namespace StartMenuCleaner
 
 		public CleanReason TestForCleanReason(string directoryPath)
 		{
-			if (ShouldIgnoreDirectory(directoryPath))
+			if (this.ShouldIgnoreDirectory(directoryPath))
 			{
 				return CleanReason.None;
 			}
@@ -105,7 +112,7 @@ namespace StartMenuCleaner
 				return CleanReason.Empty;
 			}
 
-			if (TestForDirectories(directoryPath))
+			if (this.TestForDirectories(directoryPath))
 			{
 				return CleanReason.None;
 			}
@@ -128,34 +135,34 @@ namespace StartMenuCleaner
 			return classification != FileClassification.App && classification != FileClassification.Other;
 		}
 
-		private static bool FileIsLink(string filePath)
+		private bool FileIsLink(string filePath)
 		{
-			string ext = Path.GetExtension(filePath);
+			string ext = this.fileSystem.Path.GetExtension(filePath);
 
 			return ext == lnkFileExtension;
 		}
 
-		private static bool IsClickOnceApp(string filePath)
+		private bool IsClickOnceApp(string filePath)
 		{
-			string ext = Path.GetExtension(filePath);
+			string ext = this.fileSystem.Path.GetExtension(filePath);
 
 			return ext == apprefmsFileExtension;
 		}
 
-		private static bool IsDeletableFile(string filePath)
+		private bool IsDeletableFile(string filePath)
 		{
-			string ext = Path.GetExtension(filePath);
+			string ext = this.fileSystem.Path.GetExtension(filePath);
 
 			return deletableExtensions.Contains(ext);
 		}
 
-		private static bool IsLinkToApp(string filePath)
+		private bool IsLinkToApp(string filePath)
 		{
-			if (FileIsLink(filePath))
+			if (this.FileIsLink(filePath))
 			{
 				string linkPath = NativeMethods.ResolveShortcut(filePath);
 
-				string linkExt = Path.GetExtension(linkPath);
+				string linkExt = this.fileSystem.Path.GetExtension(linkPath);
 
 				return appExtensions.Contains(linkExt);
 			}
@@ -163,13 +170,13 @@ namespace StartMenuCleaner
 			return false;
 		}
 
-		private static bool IsLinkToDeletableFile(string filePath)
+		private bool IsLinkToDeletableFile(string filePath)
 		{
-			if (FileIsLink(filePath))
+			if (this.FileIsLink(filePath))
 			{
 				string linkPath = NativeMethods.ResolveShortcut(filePath);
 
-				string linkExt = Path.GetExtension(linkPath);
+				string linkExt = this.fileSystem.Path.GetExtension(linkPath);
 
 				return deletableExtensions.Contains(linkExt);
 			}
@@ -177,13 +184,13 @@ namespace StartMenuCleaner
 			return false;
 		}
 
-		private static bool IsLinkToHelp(string filePath)
+		private bool IsLinkToHelp(string filePath)
 		{
-			if (FileIsLink(filePath))
+			if (this.FileIsLink(filePath))
 			{
 				string linkPath = NativeMethods.ResolveShortcut(filePath);
 
-				string linkExt = Path.GetExtension(linkPath);
+				string linkExt = this.fileSystem.Path.GetExtension(linkPath);
 
 				return linkExt == chmFileExtension;
 			}
@@ -191,30 +198,30 @@ namespace StartMenuCleaner
 			return false;
 		}
 
-		private static bool IsLinkToUninstaller(string filePath)
+		private bool IsLinkToUninstaller(string filePath)
 		{
-			if (!FileIsLink(filePath))
+			if (!this.FileIsLink(filePath))
 			{
 				return false;
 			}
 
 			string linkPath = NativeMethods.ResolveShortcut(filePath);
 
-			string linkExt = Path.GetExtension(linkPath);
+			string linkExt = this.fileSystem.Path.GetExtension(linkPath);
 
-			string fileName = Path.GetFileNameWithoutExtension(filePath);
+			string fileName = this.fileSystem.Path.GetFileNameWithoutExtension(filePath);
 
 			return uninstallerExtensions.Contains(linkExt) &&
 				fileName.Contains(uninstallFileNameKeyword, StringComparison.CurrentCultureIgnoreCase);
 		}
 
-		private static bool IsLinkToWeb(string filePath)
+		private bool IsLinkToWeb(string filePath)
 		{
-			if (FileIsLink(filePath))
+			if (this.FileIsLink(filePath))
 			{
 				string linkPath = NativeMethods.ResolveShortcut(filePath);
 
-				string linkExt = Path.GetExtension(linkPath);
+				string linkExt = this.fileSystem.Path.GetExtension(linkPath);
 
 				return linkExt == urlFileExtension;
 			}
@@ -222,43 +229,44 @@ namespace StartMenuCleaner
 			return false;
 		}
 
-		private static bool IsWebLink(string filePath)
+		private bool IsWebLink(string filePath)
 		{
-			string ext = Path.GetExtension(filePath);
+			string ext = this.fileSystem.Path.GetExtension(filePath);
 
 			return ext == urlFileExtension;
 		}
 
-		private static bool ShouldIgnoreDirectory(string directoryPath)
+		private bool ShouldIgnoreDirectory(string directoryPath)
 		{
-			string directoryName = Path.GetFileName(directoryPath);
+			string directoryName = this.fileSystem.Path.GetFileName(directoryPath);
 
 			return directoriesToIgnore.Contains(directoryName, StringComparer.CurrentCultureIgnoreCase);
 		}
 
-		private static bool TestForDirectories(string directoryPath)
+		private bool TestForDirectories(string directoryPath)
 		{
-			IEnumerable<string> directories = Directory.EnumerateDirectories(directoryPath);
+			IEnumerable<string> directories = this.fileSystem.Directory.EnumerateDirectories(directoryPath);
 
 			return directories.Any();
 		}
 
 		private bool TestForEmpty(string directoryPath)
 		{
-			return !Directory.EnumerateFileSystemEntries(directoryPath, "*", SearchOption.AllDirectories).Any();
+			return !this.fileSystem.Directory.EnumerateFileSystemEntries(
+                directoryPath, "*", System.IO.SearchOption.AllDirectories).Any();
 		}
 
 		private bool TestForFewAppsWithCruft(string directoryPath)
 		{
-			if (TestForDirectories(directoryPath))
+			if (this.TestForDirectories(directoryPath))
 			{
 				return false;
 			}
 
-			IEnumerable<string> filePaths = Directory.EnumerateFiles(directoryPath);
+			IEnumerable<string> filePaths = this.fileSystem.Directory.EnumerateFiles(directoryPath);
 
             // Classify the files
-            IEnumerable<FileClassificationItem> classifiedFiles = filePaths.Select(x => new FileClassificationItem(x, ClassifyFile(x)));
+            IEnumerable<FileClassificationItem> classifiedFiles = filePaths.Select(x => new FileClassificationItem(x, this.ClassifyFile(x)));
 
 			if (classifiedFiles.Any(x => x.Classification == FileClassification.Other))
 			{
@@ -280,12 +288,12 @@ namespace StartMenuCleaner
 
         private bool TestForSingleApp(string directoryPath)
 		{
-			if (TestForDirectories(directoryPath))
+			if (this.TestForDirectories(directoryPath))
 			{
 				return false;
 			}
 
-			IEnumerable<string> filePaths = Directory.EnumerateFiles(directoryPath);
+			IEnumerable<string> filePaths = this.fileSystem.Directory.EnumerateFiles(directoryPath);
 
 			if (filePaths.Count() != 1)
 			{
@@ -294,7 +302,7 @@ namespace StartMenuCleaner
 
 			string filePath = filePaths.First();
 
-			return ClassifyFile(filePath) == FileClassification.App;
+			return this.ClassifyFile(filePath) == FileClassification.App;
 		}
 	}
 }
