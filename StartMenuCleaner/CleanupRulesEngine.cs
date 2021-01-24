@@ -11,7 +11,6 @@ namespace StartMenuCleaner
 		private const string apprefmsFileExtension = ".appref-ms";
 		private const string chmFileExtension = ".chm";
 		private const string exeFileExtension = ".exe";
-		private const string lnkFileExtension = ".lnk";
 		private const int minCruftApps = 2;
 		private const string msiFileExtension = ".msi";
 		private const string txtFileExtension = ".txt";
@@ -53,9 +52,12 @@ namespace StartMenuCleaner
 
         private readonly IFileSystem fileSystem;
 
-        public CleanupRulesEngine(IFileSystem fileSystem)
+        private readonly IFileShortcutHandler shortcutHandler;
+
+        public CleanupRulesEngine(IFileSystem fileSystem, IFileShortcutHandler shortcutHandler)
         {
             this.fileSystem = fileSystem;
+            this.shortcutHandler = shortcutHandler;
         }
 
 		public FileClassification ClassifyFile(string filePath)
@@ -135,13 +137,6 @@ namespace StartMenuCleaner
 			return classification != FileClassification.App && classification != FileClassification.Other;
 		}
 
-		private bool FileIsLink(string filePath)
-		{
-			string ext = this.fileSystem.Path.GetExtension(filePath);
-
-			return ext == lnkFileExtension;
-		}
-
 		private bool IsClickOnceApp(string filePath)
 		{
 			string ext = this.fileSystem.Path.GetExtension(filePath);
@@ -158,11 +153,9 @@ namespace StartMenuCleaner
 
 		private bool IsLinkToApp(string filePath)
 		{
-			if (this.FileIsLink(filePath))
+			if (this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
 			{
-				string linkPath = NativeMethods.ResolveShortcut(filePath);
-
-				string linkExt = this.fileSystem.Path.GetExtension(linkPath);
+				string linkExt = this.fileSystem.Path.GetExtension(shortcut.Target);
 
 				return appExtensions.Contains(linkExt);
 			}
@@ -172,11 +165,9 @@ namespace StartMenuCleaner
 
 		private bool IsLinkToDeletableFile(string filePath)
 		{
-			if (this.FileIsLink(filePath))
+			if (this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
 			{
-				string linkPath = NativeMethods.ResolveShortcut(filePath);
-
-				string linkExt = this.fileSystem.Path.GetExtension(linkPath);
+				string linkExt = this.fileSystem.Path.GetExtension(shortcut.Target);
 
 				return deletableExtensions.Contains(linkExt);
 			}
@@ -186,11 +177,9 @@ namespace StartMenuCleaner
 
 		private bool IsLinkToHelp(string filePath)
 		{
-			if (this.FileIsLink(filePath))
+			if (this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
 			{
-				string linkPath = NativeMethods.ResolveShortcut(filePath);
-
-				string linkExt = this.fileSystem.Path.GetExtension(linkPath);
+				string linkExt = this.fileSystem.Path.GetExtension(shortcut.Target);
 
 				return linkExt == chmFileExtension;
 			}
@@ -200,14 +189,12 @@ namespace StartMenuCleaner
 
 		private bool IsLinkToUninstaller(string filePath)
 		{
-			if (!this.FileIsLink(filePath))
+			if (!this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
 			{
 				return false;
 			}
 
-			string linkPath = NativeMethods.ResolveShortcut(filePath);
-
-			string linkExt = this.fileSystem.Path.GetExtension(linkPath);
+			string linkExt = this.fileSystem.Path.GetExtension(shortcut.Target);
 
 			string fileName = this.fileSystem.Path.GetFileNameWithoutExtension(filePath);
 
@@ -217,11 +204,9 @@ namespace StartMenuCleaner
 
 		private bool IsLinkToWeb(string filePath)
 		{
-			if (this.FileIsLink(filePath))
+			if (this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
 			{
-				string linkPath = NativeMethods.ResolveShortcut(filePath);
-
-				string linkExt = this.fileSystem.Path.GetExtension(linkPath);
+				string linkExt = this.fileSystem.Path.GetExtension(shortcut.Target);
 
 				return linkExt == urlFileExtension;
 			}
