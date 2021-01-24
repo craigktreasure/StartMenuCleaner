@@ -2,20 +2,25 @@ namespace StartMenuCleaner
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
+    using System.IO.Abstractions;
     using System.Linq;
     using Microsoft.Extensions.Logging;
     using StartMenuCleaner.Utils;
+    using systemIO = System.IO;
 
     public class Cleaner
 	{
+        private readonly IFileSystem fileSystem;
         private readonly ILogger<Cleaner> logger;
         private readonly CleanerOptions options;
+        private readonly CleanupRulesEngine cleanupEngine;
 
-        public Cleaner(CleanerOptions options, ILogger<Cleaner> logger)
+        public Cleaner(CleanerOptions options, IFileSystem fileSystem, ILogger<Cleaner> logger)
 		{
             this.options = options;
+            this.fileSystem = fileSystem;
             this.logger = logger;
+            this.cleanupEngine = new CleanupRulesEngine(fileSystem);
 		}
 
 		public void Start()
@@ -26,11 +31,10 @@ namespace StartMenuCleaner
 				Console.WriteLine();
 			}
 
-			IEnumerable<string> programDirectories = GetProgramDirectories();
+			IEnumerable<string> programDirectories = this.GetProgramDirectories();
 
-			CleanupRulesEngine rules = new CleanupRulesEngine();
 			IEnumerable<ProgramDirectoryItem> itemsToClean = programDirectories
-				.Select(x => new ProgramDirectoryItem(x, rules.TestForCleanReason(x)))
+				.Select(x => new ProgramDirectoryItem(x, this.cleanupEngine.TestForCleanReason(x)))
 				.Where(x => x.Reason != CleanReason.None);
 
 			if (!itemsToClean.Any())
@@ -49,43 +53,43 @@ namespace StartMenuCleaner
 				}
 			}
 
-			this.CleanItems(rules, itemsToClean);
+			this.CleanItems(itemsToClean);
 		}
 
-		private void CleanEmptyDirectory(CleanupRulesEngine rules, ProgramDirectoryItem itemToClean)
+		private void CleanEmptyDirectory(ProgramDirectoryItem itemToClean)
 		{
 			if (CleanReason.Empty != itemToClean.Reason)
 			{
 				throw new ArgumentException($"The item {nameof(itemToClean.Reason)} is not {CleanReason.Empty}.", nameof(itemToClean));
 			}
 
-			Func<string, bool> testFunction = rules.GetReasonTestFunction(CleanReason.Empty);
+			Func<string, bool> testFunction = this.cleanupEngine.GetReasonTestFunction(CleanReason.Empty);
 			if (!testFunction(itemToClean.Path))
 			{
-				throw new InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
+				throw new systemIO.InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
 			}
 
 			// Delete the empty folder.
 			this.DeleteDirectory(itemToClean.Path);
 		}
 
-		private void CleanFewAppsWithCruft(CleanupRulesEngine rules, ProgramDirectoryItem itemToClean)
+		private void CleanFewAppsWithCruft(ProgramDirectoryItem itemToClean)
 		{
 			if (CleanReason.FewAppsWithCruft != itemToClean.Reason)
 			{
 				throw new ArgumentException($"The item {nameof(itemToClean.Reason)} is not {CleanReason.FewAppsWithCruft}.", nameof(itemToClean));
 			}
 
-			Func<string, bool> testFunction = rules.GetReasonTestFunction(CleanReason.FewAppsWithCruft);
+			Func<string, bool> testFunction = this.cleanupEngine.GetReasonTestFunction(CleanReason.FewAppsWithCruft);
 			if (!testFunction(itemToClean.Path))
 			{
-				throw new InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
+				throw new systemIO.InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
 			}
 
-			string programRootDir = Path.GetDirectoryName(itemToClean.Path)!;
+			string programRootDir = this.fileSystem.Path.GetDirectoryName(itemToClean.Path)!;
 
-			IEnumerable<FileClassificationItem> files = Directory.EnumerateFiles(itemToClean.Path)
-				.Select(x => new FileClassificationItem(x, CleanupRulesEngine.ClassifyFile(x)));
+			IEnumerable<FileClassificationItem> files = this.fileSystem.Directory.EnumerateFiles(itemToClean.Path)
+				.Select(x => new FileClassificationItem(x, this.cleanupEngine.ClassifyFile(x)));
 
 			// Move the app items to the program root directory.
 			IEnumerable<string> appFilePaths = files.Where(x => x.Classification == FileClassification.App).Select(x => x.Path);
@@ -99,13 +103,13 @@ namespace StartMenuCleaner
 			this.DeleteDirectory(itemToClean.Path);
 		}
 
-		private void CleanItem(CleanupRulesEngine rules, ProgramDirectoryItem itemToClean)
+		private void CleanItem(ProgramDirectoryItem itemToClean)
 		{
-			Action<CleanupRulesEngine, ProgramDirectoryItem> cleanFunction = this.GetCleanFunction(itemToClean.Reason);
+			Action<ProgramDirectoryItem> cleanFunction = this.GetCleanFunction(itemToClean.Reason);
 
 			try
 			{
-				cleanFunction(rules, itemToClean);
+				cleanFunction(itemToClean);
 			}
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
@@ -115,43 +119,43 @@ namespace StartMenuCleaner
 			}
 		}
 
-		private void CleanItems(CleanupRulesEngine rules, IEnumerable<ProgramDirectoryItem> itemsToClean)
+		private void CleanItems(IEnumerable<ProgramDirectoryItem> itemsToClean)
 		{
 			this.logger.LogInformation("Cleaning.");
 
 			foreach (ProgramDirectoryItem item in itemsToClean)
 			{
 				this.logger.LogInformation($"Cleaning {item.Reason} {item.Path}");
-				this.CleanItem(rules, item);
+				this.CleanItem(item);
 			}
 
 			this.logger.LogInformation("Finished cleaning.");
 		}
 
-		private void CleanSingleApp(CleanupRulesEngine rules, ProgramDirectoryItem itemToClean)
+		private void CleanSingleApp(ProgramDirectoryItem itemToClean)
 		{
 			if (CleanReason.SingleApp != itemToClean.Reason)
 			{
 				throw new ArgumentException($"The item {nameof(itemToClean.Reason)} is not {CleanReason.SingleApp}.", nameof(itemToClean));
 			}
 
-			Func<string, bool> testFunction = rules.GetReasonTestFunction(CleanReason.SingleApp);
+			Func<string, bool> testFunction = this.cleanupEngine.GetReasonTestFunction(CleanReason.SingleApp);
 			if (!testFunction(itemToClean.Path))
 			{
-				throw new InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
+				throw new systemIO.InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
 			}
 
-			string programRootDir = Path.GetDirectoryName(itemToClean.Path)!;
+			string programRootDir = this.fileSystem.Path.GetDirectoryName(itemToClean.Path)!;
 
 			// Move the only file into the program root directory.
-			string currentFileLocation = Directory.GetFiles(itemToClean.Path).First();
+			string currentFileLocation = this.fileSystem.Directory.GetFiles(itemToClean.Path).First();
 			this.MoveFileToDirectory(programRootDir, currentFileLocation, replaceExisting: true);
 
 			// Delete the empty folder.
 			this.DeleteDirectory(itemToClean.Path);
 		}
 
-		private Action<CleanupRulesEngine, ProgramDirectoryItem> GetCleanFunction(CleanReason reason)
+		private Action<ProgramDirectoryItem> GetCleanFunction(CleanReason reason)
 		{
             return reason switch
             {
@@ -162,11 +166,12 @@ namespace StartMenuCleaner
             };
         }
 
-		private static IEnumerable<string> GetProgramDirectories()
+		private IEnumerable<string> GetProgramDirectories()
 		{
-			IEnumerable<string> startMenuProgramDirectories = StartMenuHelper.GetStartMenuProgramDirectories();
+			IEnumerable<string> startMenuProgramDirectories = StartMenuHelper.GetStartMenuProgramDirectories(this.fileSystem);
 
-			IEnumerable<string> programDirectories = startMenuProgramDirectories.SelectMany(x => Directory.GetDirectories(x));
+			IEnumerable<string> programDirectories = startMenuProgramDirectories.SelectMany(x =>
+                this.fileSystem.Directory.GetDirectories(x));
 
 			return programDirectories;
 		}
@@ -177,25 +182,25 @@ namespace StartMenuCleaner
 		{
 			if (!this.options.Simulate)
 			{
-				Directory.Delete(directoryPath);
+				this.fileSystem.Directory.Delete(directoryPath);
 			}
 
-			this.logger.LogDebug($"Deleted directory: \"{Path.GetFileName(directoryPath)}\"");
+			this.logger.LogDebug($"Deleted directory: \"{this.fileSystem.Path.GetFileName(directoryPath)}\"");
 		}
 
 		private void DeleteFile(string filePath)
 		{
-			if (!File.Exists(filePath))
+			if (!this.fileSystem.File.Exists(filePath))
 			{
 				return;
 			}
 
 			if (!this.options.Simulate)
 			{
-				File.Delete(filePath);
+				this.fileSystem.File.Delete(filePath);
 			}
 
-            this.logger.LogDebug($"Deleted file: \"{Path.GetFileName(filePath)}\"");
+            this.logger.LogDebug($"Deleted file: \"{this.fileSystem.Path.GetFileName(filePath)}\"");
 		}
 
 		private void DeleteFiles(IEnumerable<string> filePaths)
@@ -216,18 +221,18 @@ namespace StartMenuCleaner
 
 		private void MoveFileToDirectory(string newDirectory, string currentFileLocation, bool replaceExisting = false)
 		{
-			string newFileLocation = Path.Combine(newDirectory, Path.GetFileName(currentFileLocation));
+			string newFileLocation = this.fileSystem.Path.Combine(newDirectory, this.fileSystem.Path.GetFileName(currentFileLocation));
 			if (!this.options.Simulate)
 			{
-				if (replaceExisting && File.Exists(newFileLocation))
+				if (replaceExisting && this.fileSystem.File.Exists(newFileLocation))
 				{
 					this.DeleteFile(newFileLocation);
 				}
 
-				File.Move(currentFileLocation, newFileLocation);
+				this.fileSystem.File.Move(currentFileLocation, newFileLocation);
 			}
 
-            this.logger.LogDebug($"Moved file: \"{Path.GetFileName(currentFileLocation)}\" to \"{newFileLocation}\"");
+            this.logger.LogDebug($"Moved file: \"{this.fileSystem.Path.GetFileName(currentFileLocation)}\" to \"{newFileLocation}\"");
 		}
 
 		#endregion IO Operation Wrappers
