@@ -1,4 +1,4 @@
-﻿namespace StartMenuCleaner
+namespace StartMenuCleaner
 {
     using System;
     using System.IO;
@@ -21,11 +21,12 @@
 					outputTemplate: "{Message}{NewLine}{Exception}",
 					restrictedToMinimumLevel: LogEventLevel.Information)
 				.WriteTo.Trace(restrictedToMinimumLevel: LogEventLevel.Verbose)
-				.WriteTo.RollingFile(
-					Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"logs\log-{Date}.txt"),
+				.WriteTo.File(
+					Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"logs\log-.txt"),
 					retainedFileCountLimit: 14,
 					outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}",
-					restrictedToMinimumLevel: LogEventLevel.Debug)
+					restrictedToMinimumLevel: LogEventLevel.Debug,
+                    rollingInterval: RollingInterval.Day)
 				.CreateLogger();
 		}
 
