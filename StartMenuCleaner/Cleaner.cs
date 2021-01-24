@@ -4,23 +4,25 @@ namespace StartMenuCleaner
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using Serilog;
+    using Microsoft.Extensions.Logging;
     using StartMenuCleaner.Utils;
 
     public class Cleaner
 	{
+        private readonly ILogger<Cleaner> logger;
         private readonly CleanerOptions options;
 
-        public Cleaner(CleanerOptions options)
+        public Cleaner(CleanerOptions options, ILogger<Cleaner> logger)
 		{
             this.options = options;
+            this.logger = logger;
 		}
 
 		public void Start()
 		{
 			if (this.options.Simulate)
 			{
-				Log.Information("Simulating. No changes will be made.");
+				this.logger.LogInformation("Simulating. No changes will be made.");
 				Console.WriteLine();
 			}
 
@@ -33,17 +35,17 @@ namespace StartMenuCleaner
 
 			if (!itemsToClean.Any())
 			{
-				Log.Information("Nothing to clean.");
+                this.logger.LogInformation("Nothing to clean.");
 				return;
 			}
 
 			// Log the directories to be cleaned.
 			foreach (IGrouping<CleanReason, ProgramDirectoryItem> group in itemsToClean.GroupBy(x => x.Reason))
 			{
-				Log.Verbose($"Found {group.Count()} {group.Key} items to clean:");
+                this.logger.LogTrace($"Found {group.Count()} {group.Key} items to clean:");
 				foreach (ProgramDirectoryItem item in group)
 				{
-					Log.Verbose($"\t{item.Path}");
+                    this.logger.LogTrace($"\t{item.Path}");
 				}
 			}
 
@@ -109,21 +111,21 @@ namespace StartMenuCleaner
             catch (Exception ex)
 #pragma warning restore CA1031 // Do not catch general exception types
             {
-				Log.Error(ex, $"Failed to clean {itemToClean.Path}. Aborting.");
+				this.logger.LogError(ex, $"Failed to clean {itemToClean.Path}. Aborting.");
 			}
 		}
 
 		private void CleanItems(CleanupRulesEngine rules, IEnumerable<ProgramDirectoryItem> itemsToClean)
 		{
-			Log.Information("Cleaning.");
+			this.logger.LogInformation("Cleaning.");
 
 			foreach (ProgramDirectoryItem item in itemsToClean)
 			{
-				Log.Information($"Cleaning {item.Reason} {item.Path}");
+				this.logger.LogInformation($"Cleaning {item.Reason} {item.Path}");
 				this.CleanItem(rules, item);
 			}
 
-			Log.Information("Finished cleaning.");
+			this.logger.LogInformation("Finished cleaning.");
 		}
 
 		private void CleanSingleApp(CleanupRulesEngine rules, ProgramDirectoryItem itemToClean)
@@ -178,7 +180,7 @@ namespace StartMenuCleaner
 				Directory.Delete(directoryPath);
 			}
 
-			Log.Debug($"Deleted directory: \"{Path.GetFileName(directoryPath)}\"");
+			this.logger.LogDebug($"Deleted directory: \"{Path.GetFileName(directoryPath)}\"");
 		}
 
 		private void DeleteFile(string filePath)
@@ -193,7 +195,7 @@ namespace StartMenuCleaner
 				File.Delete(filePath);
 			}
 
-			Log.Debug($"Deleted file: \"{Path.GetFileName(filePath)}\"");
+            this.logger.LogDebug($"Deleted file: \"{Path.GetFileName(filePath)}\"");
 		}
 
 		private void DeleteFiles(IEnumerable<string> filePaths)
@@ -225,7 +227,7 @@ namespace StartMenuCleaner
 				File.Move(currentFileLocation, newFileLocation);
 			}
 
-			Log.Debug($"Moved file: \"{Path.GetFileName(currentFileLocation)}\" to \"{newFileLocation}\"");
+            this.logger.LogDebug($"Moved file: \"{Path.GetFileName(currentFileLocation)}\" to \"{newFileLocation}\"");
 		}
 
 		#endregion IO Operation Wrappers

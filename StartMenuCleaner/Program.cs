@@ -1,45 +1,45 @@
 namespace StartMenuCleaner
 {
-    using System;
-    using Microsoft.Extensions.DependencyInjection;
     using CommandLine;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using Serilog;
+    using System;
 
-    internal static class Program
-	{
-		private static void Main(string[] args)
-		{
-			Logging.Startup();
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
+            Console.Title = "Start Menu Cleaner";
 
-			Console.Title = "Start Menu Cleaner";
+            Parser.Default.ParseArguments<ProgramOptions>(args).WithParsed(Run);
+        }
 
-			Parser.Default.ParseArguments<ProgramOptions>(args).WithParsed(Run);
-		}
-
-		private static void Run(ProgramOptions options)
-		{
+        private static void Run(ProgramOptions options)
+        {
             IServiceProvider services = ConfigureServices(options);
+            ILogger<Program> logger = services.GetRequiredService<ILogger<Program>>();
 
-            Log.Information("Starting");
+            logger.LogInformation("Starting");
 
-			if (options.Debug)
-			{
-				Logging.SetMinLogLevel(Serilog.Events.LogEventLevel.Debug);
-				Log.Information("Debug logging is enabled");
-			}
+            if (options.Debug)
+            {
+                SerilogLogging.SetMinLogLevel(Serilog.Events.LogEventLevel.Debug);
+                logger.LogInformation("Debug logging is enabled");
+            }
 
-			Console.WriteLine();
+            Console.WriteLine();
             Cleaner cleaner = services.GetRequiredService<Cleaner>();
-			cleaner.Start();
+            cleaner.Start();
 
-			Console.WriteLine();
-			Log.Information("Finished");
+            Console.WriteLine();
+            logger.LogInformation("Finished");
 
-			if (options.Wait)
-			{
-				Console.ReadLine();
-			}
-		}
+            if (options.Wait)
+            {
+                Console.ReadLine();
+            }
+        }
 
         private static IServiceProvider ConfigureServices(ProgramOptions options)
         {
@@ -49,9 +49,13 @@ namespace StartMenuCleaner
             };
 
             return new ServiceCollection()
+                .AddLogging(loggingBuilder =>
+                {
+                    loggingBuilder.AddSerilog(SerilogLogging.Create(), dispose: true);
+                })
                 .AddSingleton(cleanerOptions)
                 .AddTransient<Cleaner>()
                 .BuildServiceProvider();
         }
-	}
+    }
 }
