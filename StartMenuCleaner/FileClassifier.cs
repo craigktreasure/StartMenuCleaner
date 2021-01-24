@@ -109,9 +109,7 @@ namespace StartMenuCleaner
         {
             if (this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
             {
-                string linkExt = this.fileSystem.Path.GetExtension(shortcut.Target);
-
-                return deletableExtensions.Contains(linkExt);
+                return this.IsDeletableFile(shortcut.Target);
             }
 
             return false;
@@ -148,9 +146,7 @@ namespace StartMenuCleaner
         {
             if (this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
             {
-                string linkExt = this.fileSystem.Path.GetExtension(shortcut.Target);
-
-                return linkExt == urlFileExtension;
+                return this.IsWebLink(shortcut.Target);
             }
 
             return false;
