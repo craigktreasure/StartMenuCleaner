@@ -9,16 +9,16 @@ namespace StartMenuCleaner
 
     public class Cleaner
 	{
-		private readonly bool simulate;
+        private readonly CleanerOptions options;
 
-		public Cleaner(bool simulate)
+        public Cleaner(CleanerOptions options)
 		{
-			this.simulate = simulate;
+            this.options = options;
 		}
 
 		public void Start()
 		{
-			if (this.simulate)
+			if (this.options.Simulate)
 			{
 				Log.Information("Simulating. No changes will be made.");
 				Console.WriteLine();
@@ -173,7 +173,7 @@ namespace StartMenuCleaner
 
 		private void DeleteDirectory(string directoryPath)
 		{
-			if (!this.simulate)
+			if (!this.options.Simulate)
 			{
 				Directory.Delete(directoryPath);
 			}
@@ -188,7 +188,7 @@ namespace StartMenuCleaner
 				return;
 			}
 
-			if (!this.simulate)
+			if (!this.options.Simulate)
 			{
 				File.Delete(filePath);
 			}
@@ -215,7 +215,7 @@ namespace StartMenuCleaner
 		private void MoveFileToDirectory(string newDirectory, string currentFileLocation, bool replaceExisting = false)
 		{
 			string newFileLocation = Path.Combine(newDirectory, Path.GetFileName(currentFileLocation));
-			if (!this.simulate)
+			if (!this.options.Simulate)
 			{
 				if (replaceExisting && File.Exists(newFileLocation))
 				{
