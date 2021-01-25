@@ -59,11 +59,6 @@ namespace StartMenuCleaner
                 return CleanReason.Empty;
             }
 
-            if (this.TestForDirectories(directoryPath))
-            {
-                return CleanReason.None;
-            }
-
             if (this.TestForSingleApp(directoryPath))
             {
                 return CleanReason.SingleApp;
@@ -78,9 +73,7 @@ namespace StartMenuCleaner
         }
 
         private static bool CanBeRemoved(FileClassification classification)
-        {
-            return classification != FileClassification.App && classification != FileClassification.Other;
-        }
+            => classification is not FileClassification.App and not FileClassification.Other;
 
         private bool ShouldIgnoreDirectory(string directoryPath)
         {
