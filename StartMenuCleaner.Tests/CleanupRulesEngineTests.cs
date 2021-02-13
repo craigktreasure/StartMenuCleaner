@@ -1,29 +1,26 @@
 namespace StartMenuCleaner.Tests
 {
     using StartMenuCleaner.TestLibrary;
-    using System;
-    using System.IO.Abstractions.TestingHelpers;
+    using StartMenuCleaner.Utils;
     using Xunit;
 
     public class CleanupRulesEngineTests
     {
         private readonly CleanupRulesEngine cleanupEngine;
 
-        private readonly MockFileSystem mockFileSystem = new MockFileSystem();
-
-        private readonly TestFileShortcutHandler shortcutHandler = new TestFileShortcutHandler();
+        private readonly MockFileSystemComposer fileSystemComposer = new MockFileSystemComposer();
 
         public CleanupRulesEngineTests()
         {
-            FileClassifier classifier = new FileClassifier(this.mockFileSystem, this.shortcutHandler);
-            this.cleanupEngine = new CleanupRulesEngine(this.mockFileSystem, classifier);
+            FileClassifier classifier = new FileClassifier(this.fileSystemComposer.FileSystem, this.fileSystemComposer.ShortcutHandler);
+            this.cleanupEngine = new CleanupRulesEngine(this.fileSystemComposer.FileSystem, classifier);
         }
 
         [Fact]
         public void TestEmpty()
         {
             const string directoryPath = @"C:\StartMenu\MyApp";
-            this.mockFileSystem.AddDirectory(directoryPath);
+            this.fileSystemComposer.AddDirectory(directoryPath);
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
@@ -35,13 +32,13 @@ namespace StartMenuCleaner.Tests
         {
             string directoryPath = this.ConfigureForSingleApp();
             this.AddFile(
-                this.mockFileSystem.Path.Combine(directoryPath, "MyApp2.lnk"),
+                System.IO.Path.Combine(directoryPath, "MyApp2.lnk"),
                 @"C:\Programs\MyApp\MyApp2.exe");
             this.AddFile(
-                this.mockFileSystem.Path.Combine(directoryPath, "MyApp Help.lnk"),
+                System.IO.Path.Combine(directoryPath, "MyApp Help.lnk"),
                 @"C:\Programs\MyApp\MyApp Help.chm");
             this.AddFile(
-                this.mockFileSystem.Path.Combine(directoryPath, "MyApp Help.txt"),
+                System.IO.Path.Combine(directoryPath, "MyApp Help.txt"),
                 @"C:\Programs\MyApp\MyApp Help.txt");
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
@@ -54,15 +51,15 @@ namespace StartMenuCleaner.Tests
         {
             string directoryPath = this.ConfigureForSingleApp();
             this.AddFile(
-                this.mockFileSystem.Path.Combine(directoryPath, "MyApp2.lnk"),
+                System.IO.Path.Combine(directoryPath, "MyApp2.lnk"),
                 @"C:\Programs\MyApp\MyApp2.exe");
             this.AddFile(
-                this.mockFileSystem.Path.Combine(directoryPath, "MyApp Help.lnk"),
+                System.IO.Path.Combine(directoryPath, "MyApp Help.lnk"),
                 @"C:\Programs\MyApp\MyApp Help.chm");
             this.AddFile(
-                this.mockFileSystem.Path.Combine(directoryPath, "MyApp Help.txt"),
+                System.IO.Path.Combine(directoryPath, "MyApp Help.txt"),
                 @"C:\Programs\MyApp\MyApp Help.txt");
-            this.mockFileSystem.AddDirectory(this.mockFileSystem.Path.Combine(directoryPath, "Foo"));
+            this.fileSystemComposer.AddDirectory(System.IO.Path.Combine(directoryPath, "Foo"));
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
@@ -74,15 +71,15 @@ namespace StartMenuCleaner.Tests
         {
             string directoryPath = this.ConfigureForSingleApp();
             this.AddFile(
-                this.mockFileSystem.Path.Combine(directoryPath, "MyApp2.lnk"),
+                System.IO.Path.Combine(directoryPath, "MyApp2.lnk"),
                 @"C:\Programs\MyApp\MyApp2.exe");
             this.AddFile(
-                this.mockFileSystem.Path.Combine(directoryPath, "MyApp Help.lnk"),
+                System.IO.Path.Combine(directoryPath, "MyApp Help.lnk"),
                 @"C:\Programs\MyApp\MyApp Help.chm");
             this.AddFile(
-                this.mockFileSystem.Path.Combine(directoryPath, "MyApp Help.txt"),
+                System.IO.Path.Combine(directoryPath, "MyApp Help.txt"),
                 @"C:\Programs\MyApp\MyApp Help.txt");
-            this.AddFile(this.mockFileSystem.Path.Combine(directoryPath, "Foo.other"));
+            this.fileSystemComposer.AddFile(System.IO.Path.Combine(directoryPath, "Foo.other"));
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
@@ -92,7 +89,9 @@ namespace StartMenuCleaner.Tests
         [Fact]
         public void TestIgnoreFolderName()
         {
-            string directoryPath = this.AddFile(@"C:\StartMenu\Maintenance\MyApp.lnk");
+            const string filePath = @"C:\StartMenu\Maintenance\MyApp.lnk";
+            this.fileSystemComposer.AddFile(filePath);
+            string directoryPath = System.IO.Path.GetDirectoryName(filePath)!;
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
@@ -113,7 +112,7 @@ namespace StartMenuCleaner.Tests
         public void TestSingleAppWithExtraDirectory()
         {
             string directoryPath = this.ConfigureForSingleApp();
-            this.mockFileSystem.AddDirectory(this.mockFileSystem.Path.Combine(directoryPath, "Foo"));
+            this.fileSystemComposer.AddDirectory(System.IO.Path.Combine(directoryPath, "Foo"));
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
@@ -125,10 +124,10 @@ namespace StartMenuCleaner.Tests
         {
             string directoryPath = this.ConfigureForSingleApp();
             this.AddFile(
-                this.mockFileSystem.Path.Combine(directoryPath, "MyApp2.lnk"),
+                System.IO.Path.Combine(directoryPath, "MyApp2.lnk"),
                 @"C:\Programs\MyApp\MyApp2.exe");
             this.AddFile(
-                this.mockFileSystem.Path.Combine(directoryPath, "MyApp3.lnk"),
+                System.IO.Path.Combine(directoryPath, "MyApp3.lnk"),
                 @"C:\Programs\MyApp\MyApp3.exe");
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
@@ -141,7 +140,7 @@ namespace StartMenuCleaner.Tests
         {
             string directoryPath = this.ConfigureForSingleApp();
             this.AddFile(
-                this.mockFileSystem.Path.Combine(directoryPath, "MyApp2.lnk"),
+                System.IO.Path.Combine(directoryPath, "MyApp2.lnk"),
                 @"C:\Programs\MyApp\MyApp2.exe");
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
@@ -149,29 +148,17 @@ namespace StartMenuCleaner.Tests
             Assert.Equal(CleanReason.FewAppsWithCruft, actual);
         }
 
-        private string AddFile(string itemPath)
+        private void AddFile(string filePath, string targetPath)
         {
-            string fileDirectoryPath = this.mockFileSystem.Path.GetDirectoryName(itemPath);
-            this.mockFileSystem.AddDirectory(fileDirectoryPath);
-            this.mockFileSystem.AddFile(itemPath, new MockFileData(String.Empty));
-
-            return fileDirectoryPath;
-        }
-
-        private string AddFile(string itemPath, string shortcutPath)
-        {
-            string directoryPath = this.AddFile(itemPath);
-            this.shortcutHandler.AddShortcutMapping(itemPath, shortcutPath);
-
-            return directoryPath;
+            this.fileSystemComposer.Add(new FileShortcut(filePath, targetPath));
         }
 
         private string ConfigureForSingleApp()
         {
-            const string itemPath = @"C:\StartMenu\MyApp\MyApp.lnk";
-            const string shortcutPath = @"C:\Programs\MyApp\MyApp.exe";
+            FileShortcutSyntax fileShortcut = (FileShortcutSyntax)@"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe";
+            this.fileSystemComposer.Add(fileShortcut);
 
-            return AddFile(itemPath, shortcutPath);
+            return System.IO.Path.GetDirectoryName(fileShortcut.FilePath)!;
         }
     }
 }
