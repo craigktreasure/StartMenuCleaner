@@ -97,7 +97,7 @@ namespace StartMenuCleaner
         {
             if (this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
             {
-                string linkExt = this.fileSystem.Path.GetExtension(shortcut.Target);
+                string linkExt = this.fileSystem.Path.GetExtension(shortcut.TargetPath);
 
                 return appExtensions.Contains(linkExt);
             }
@@ -109,7 +109,7 @@ namespace StartMenuCleaner
         {
             if (this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
             {
-                return this.IsDeletableFile(shortcut.Target);
+                return this.IsDeletableFile(shortcut.TargetPath);
             }
 
             return false;
@@ -119,7 +119,7 @@ namespace StartMenuCleaner
         {
             if (this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
             {
-                string linkExt = this.fileSystem.Path.GetExtension(shortcut.Target);
+                string linkExt = this.fileSystem.Path.GetExtension(shortcut.TargetPath);
 
                 return linkExt == chmFileExtension;
             }
@@ -134,7 +134,7 @@ namespace StartMenuCleaner
                 return false;
             }
 
-            string linkExt = this.fileSystem.Path.GetExtension(shortcut.Target);
+            string linkExt = this.fileSystem.Path.GetExtension(shortcut.TargetPath);
 
             string fileName = this.fileSystem.Path.GetFileNameWithoutExtension(filePath);
 
@@ -146,7 +146,7 @@ namespace StartMenuCleaner
         {
             if (this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
             {
-                return this.IsWebLink(shortcut.Target);
+                return this.IsWebLink(shortcut.TargetPath);
             }
 
             return false;

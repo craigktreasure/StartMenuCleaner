@@ -17,6 +17,9 @@ namespace StartMenuCleaner.TestLibrary
         public void AddShortcutMapping(string shortcutFilePath, string shortcutTargetPath)
             => this.shortcutMap.Add(shortcutFilePath, shortcutTargetPath);
 
+        public void AddShortcutMapping(FileShortcut shortcut)
+            => this.AddShortcutMapping(shortcut.FilePath, shortcut.TargetPath);
+
         public string ResolveTarget(string shortcutPath)
         {
             if (this.shortcutMap.TryGetValue(shortcutPath, out string? shortcutTarget))

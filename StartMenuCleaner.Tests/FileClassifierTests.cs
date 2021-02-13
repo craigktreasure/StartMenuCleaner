@@ -1,45 +1,47 @@
 namespace StartMenuCleaner.Tests
 {
     using StartMenuCleaner.TestLibrary;
-    using System.IO.Abstractions.TestingHelpers;
     using Xunit;
 
     public class FileClassifierTests
     {
         private readonly FileClassifier classifier;
 
-        private readonly MockFileSystem mockFileSystem = new MockFileSystem();
-
-        private readonly TestFileShortcutHandler shortcutHandler = new TestFileShortcutHandler();
+        private readonly MockFileSystemComposer fileSystemComposer = new MockFileSystemComposer();
 
         public FileClassifierTests()
         {
-            this.classifier = new FileClassifier(this.mockFileSystem, this.shortcutHandler);
+            this.classifier = new FileClassifier(this.fileSystemComposer.FileSystem, this.fileSystemComposer.ShortcutHandler);
         }
 
         [Theory]
-        [InlineData(FileClassification.App, @"C:\StartMenu\MyApp\MyApp.lnk", @"C:\MyApp\MyApp.exe")]
-        [InlineData(FileClassification.App, @"C:\StartMenu\MyApp\MyClickOnceApp.lnk", @"C:\MyApp\MyApp.appref-ms")]
-        [InlineData(FileClassification.App, @"C:\StartMenu\MyApp\MyClickOnceApp.appref-ms", null)]
-        [InlineData(FileClassification.Help, @"C:\StartMenu\MyApp\MyApp Help.lnk", @"C:\MyApp\Help.chm")]
-        [InlineData(FileClassification.Other, @"C:\StartMenu\MyApp\MyApp.other", null)]
-        [InlineData(FileClassification.Other, @"C:\StartMenu\MyApp\MyApp.lnk", @"C:\MyApp\MyApp.other")]
-        [InlineData(FileClassification.OtherDeletable, @"C:\StartMenu\MyApp\MyApp.txt", null)]
-        [InlineData(FileClassification.OtherDeletable, @"C:\StartMenu\MyApp\MyApp.lnk", @"C:\MyApp\MyApp.txt")]
-        [InlineData(FileClassification.Uninstaller, @"C:\StartMenu\MyApp\Uninstall MyApp.lnk", @"C:\MyApp\Uninstall MyApp.exe")]
-        [InlineData(FileClassification.Uninstaller, @"C:\StartMenu\MyApp\Uninstall MyApp.lnk", @"C:\MyApp\Uninstall MyApp.msi")]
-        [InlineData(FileClassification.WebLink, @"C:\StartMenu\MyApp\MyApp Help.url", null)]
-        [InlineData(FileClassification.WebLink, @"C:\StartMenu\MyApp\MyApp Help.lnk", @"C:\MyApp\Help.url")]
-        public void ClassifyFile(FileClassification expectedClassification, string filePath, string? shortcutTarget)
+        [InlineData(FileClassification.App, @"C:\StartMenu\MyApp\MyApp.lnk;C:\MyApp\MyApp.exe")]
+        [InlineData(FileClassification.App, @"C:\StartMenu\MyApp\MyClickOnceApp.lnk;C:\MyApp\MyApp.appref-ms")]
+        [InlineData(FileClassification.App, @"C:\StartMenu\MyApp\MyClickOnceApp.appref-ms")]
+        [InlineData(FileClassification.Help, @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\MyApp\Help.chm")]
+        [InlineData(FileClassification.Other, @"C:\StartMenu\MyApp\MyApp.other")]
+        [InlineData(FileClassification.Other, @"C:\StartMenu\MyApp\MyApp.lnk;C:\MyApp\MyApp.other")]
+        [InlineData(FileClassification.OtherDeletable, @"C:\StartMenu\MyApp\MyApp.txt")]
+        [InlineData(FileClassification.OtherDeletable, @"C:\StartMenu\MyApp\MyApp.lnk;C:\MyApp\MyApp.txt")]
+        [InlineData(FileClassification.Uninstaller, @"C:\StartMenu\MyApp\Uninstall MyApp.lnk;C:\MyApp\Uninstall MyApp.exe")]
+        [InlineData(FileClassification.Uninstaller, @"C:\StartMenu\MyApp\Uninstall MyApp.lnk;C:\MyApp\Uninstall MyApp.msi")]
+        [InlineData(FileClassification.WebLink, @"C:\StartMenu\MyApp\MyApp Help.url")]
+        [InlineData(FileClassification.WebLink, @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\MyApp\Help.url")]
+        public void ClassifyFile(FileClassification expectedClassification, string filePath)
         {
-            this.mockFileSystem.AddFile(filePath, new MockFileData(string.Empty));
+            string pathToClassify = filePath;
 
-            if (shortcutTarget is not null)
+            if (FileShortcutSyntax.TryConvertFrom(filePath, out FileShortcutSyntax? fileShortcut))
             {
-                this.shortcutHandler.AddShortcutMapping(filePath, shortcutTarget);
+                pathToClassify = fileShortcut.FilePath;
+                this.fileSystemComposer.Add(fileShortcut);
+            }
+            else
+            {
+                this.fileSystemComposer.AddFile(filePath);
             }
 
-            FileClassification actual = this.classifier.ClassifyFile(filePath);
+            FileClassification actual = this.classifier.ClassifyFile(pathToClassify);
 
             Assert.Equal(expectedClassification, actual);
         }

@@ -5,17 +5,17 @@ namespace StartMenuCleaner.Utils
         /// <summary>
         /// Gets the path to the shortcut file.
         /// </summary>
-        public string Path { get; }
+        public string FilePath { get; }
 
         /// <summary>
-        /// Gets the path the shortcut points to.
+        /// Gets the target path the shortcut points to.
         /// </summary>
-        public string Target { get; }
+        public string TargetPath { get; }
 
-        public FileShortcut(string path, IFileShortcutHandler shortcutResolver)
+        public FileShortcut(string filePath, string targetPath)
         {
-            this.Path = path;
-            this.Target = shortcutResolver.ResolveTarget(path);
+            this.FilePath = filePath;
+            this.TargetPath = targetPath;
         }
     }
 }
