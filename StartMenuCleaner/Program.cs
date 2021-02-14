@@ -4,6 +4,7 @@ namespace StartMenuCleaner
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Serilog;
+    using StartMenuCleaner.Utils;
     using System;
 
     internal class Program
@@ -43,7 +44,7 @@ namespace StartMenuCleaner
 
         private static IServiceProvider ConfigureServices(ProgramOptions options)
         {
-            CleanerOptions cleanerOptions = new CleanerOptions
+            CleanerOptions cleanerOptions = new CleanerOptions(StartMenuHelper.GetKnownStartMenuProgramsFolders())
             {
                 Simulate = options.Simulate,
             };

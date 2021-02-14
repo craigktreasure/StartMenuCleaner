@@ -80,11 +80,11 @@ namespace StartMenuCleaner.TestLibrary
         public static explicit operator FileShortcutSyntax(string value) => ConvertFrom(value);
 
         /// <summary>
-        /// Performs an implicit conversion from <see cref="StartMenuCleaner.TestLibrary.FileShortcutSyntax"/> to <see cref="string"/>.
+        /// Performs an explicit conversion from <see cref="StartMenuCleaner.TestLibrary.FileShortcutSyntax"/> to <see cref="string"/>.
         /// </summary>
         /// <param name="fileShortcut">The shortcut path.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator string(FileShortcutSyntax fileShortcut) => fileShortcut.ToString();
+        public static explicit operator string(FileShortcutSyntax fileShortcut) => fileShortcut.ToString();
 
         /// <summary>
         /// Tries to convert shortcut path syntax to a <see cref="FileShortcutSyntax"/>.

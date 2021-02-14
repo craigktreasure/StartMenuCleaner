@@ -2,22 +2,28 @@ namespace StartMenuCleaner.Utils
 {
     using System;
     using System.Collections.Generic;
-    using System.IO.Abstractions;
     using System.Linq;
 
     public static class StartMenuHelper
-	{
-		private const string programsFolderName = "Programs";
+    {
+        private const string programsFolderName = "Programs";
 
-		public static IEnumerable<string> GetStartMenuProgramDirectories(IFileSystem fileSystem)
-		{
-			string[] dirs = new string[] {
-				Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
-				Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu)
-			};
+        /// <summary>
+        /// Gets the known start menu folders.
+        /// </summary>
+        /// <returns><see cref="IReadOnlyList{string}"/>.</returns>
+        public static IReadOnlyList<string> GetKnownStartMenuFolders() => new[] {
+            Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
+            Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu),
+        };
 
-			return dirs.Select(x => fileSystem.Path.Combine(x, programsFolderName))
-					   .Where(fileSystem.Directory.Exists);
-		}
-	}
+        /// <summary>
+        /// Gets the known start menu programs folders.
+        /// </summary>
+        /// <returns><see cref="IEnumerable{string}"/>.</returns>
+        public static IReadOnlyList<string> GetKnownStartMenuProgramsFolders() =>
+            GetKnownStartMenuFolders()
+                .Select(x => System.IO.Path.Combine(x, programsFolderName))
+                .ToArray();
+    }
 }

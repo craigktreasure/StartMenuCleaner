@@ -1,7 +1,6 @@
 namespace StartMenuCleaner.Tests
 {
     using StartMenuCleaner.TestLibrary;
-    using StartMenuCleaner.Utils;
     using Xunit;
 
     public class CleanupRulesEngineTests
@@ -20,7 +19,7 @@ namespace StartMenuCleaner.Tests
         public void TestEmpty()
         {
             const string directoryPath = @"C:\StartMenu\MyApp";
-            this.fileSystemComposer.AddDirectory(directoryPath);
+            this.fileSystemComposer.Add(directoryPath);
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
@@ -30,16 +29,14 @@ namespace StartMenuCleaner.Tests
         [Fact]
         public void TestFewAppsWithCruft()
         {
-            string directoryPath = this.ConfigureForSingleApp();
-            this.AddFile(
-                System.IO.Path.Combine(directoryPath, "MyApp2.lnk"),
-                @"C:\Programs\MyApp\MyApp2.exe");
-            this.AddFile(
-                System.IO.Path.Combine(directoryPath, "MyApp Help.lnk"),
-                @"C:\Programs\MyApp\MyApp Help.chm");
-            this.AddFile(
-                System.IO.Path.Combine(directoryPath, "MyApp Help.txt"),
-                @"C:\Programs\MyApp\MyApp Help.txt");
+            const string directoryPath = @"C:\StartMenu\MyApp";
+            this.fileSystemComposer.Add(new[]
+            {
+                $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
+                $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
+                $@"{directoryPath}\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
+                $@"{directoryPath}\MyApp Help.txt",
+            });
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
@@ -49,17 +46,15 @@ namespace StartMenuCleaner.Tests
         [Fact]
         public void TestFewAppsWithCruftWithDirectory()
         {
-            string directoryPath = this.ConfigureForSingleApp();
-            this.AddFile(
-                System.IO.Path.Combine(directoryPath, "MyApp2.lnk"),
-                @"C:\Programs\MyApp\MyApp2.exe");
-            this.AddFile(
-                System.IO.Path.Combine(directoryPath, "MyApp Help.lnk"),
-                @"C:\Programs\MyApp\MyApp Help.chm");
-            this.AddFile(
-                System.IO.Path.Combine(directoryPath, "MyApp Help.txt"),
-                @"C:\Programs\MyApp\MyApp Help.txt");
-            this.fileSystemComposer.AddDirectory(System.IO.Path.Combine(directoryPath, "Foo"));
+            const string directoryPath = @"C:\StartMenu\MyApp";
+            this.fileSystemComposer.Add(new[]
+            {
+                $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
+                $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
+                $@"{directoryPath}\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
+                $@"{directoryPath}\MyApp Help.txt",
+                $@"{directoryPath}\Foo",
+            });
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
@@ -69,17 +64,15 @@ namespace StartMenuCleaner.Tests
         [Fact]
         public void TestFewAppsWithCruftWithOtherFile()
         {
-            string directoryPath = this.ConfigureForSingleApp();
-            this.AddFile(
-                System.IO.Path.Combine(directoryPath, "MyApp2.lnk"),
-                @"C:\Programs\MyApp\MyApp2.exe");
-            this.AddFile(
-                System.IO.Path.Combine(directoryPath, "MyApp Help.lnk"),
-                @"C:\Programs\MyApp\MyApp Help.chm");
-            this.AddFile(
-                System.IO.Path.Combine(directoryPath, "MyApp Help.txt"),
-                @"C:\Programs\MyApp\MyApp Help.txt");
-            this.fileSystemComposer.AddFile(System.IO.Path.Combine(directoryPath, "Foo.other"));
+            const string directoryPath = @"C:\StartMenu\MyApp";
+            this.fileSystemComposer.Add(new[]
+            {
+                $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
+                $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
+                $@"{directoryPath}\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
+                $@"{directoryPath}\MyApp Help.txt",
+                $@"{directoryPath}\Foo.other",
+            });
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
@@ -89,9 +82,10 @@ namespace StartMenuCleaner.Tests
         [Fact]
         public void TestIgnoreFolderName()
         {
-            const string filePath = @"C:\StartMenu\Maintenance\MyApp.lnk";
-            this.fileSystemComposer.AddFile(filePath);
-            string directoryPath = System.IO.Path.GetDirectoryName(filePath)!;
+            const string directoryPath = @"C:\StartMenu\Maintenance";
+            this.fileSystemComposer.Add(
+                $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe"
+            );
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
@@ -101,7 +95,10 @@ namespace StartMenuCleaner.Tests
         [Fact]
         public void TestSingleApp()
         {
-            string directoryPath = this.ConfigureForSingleApp();
+            const string directoryPath = @"C:\StartMenu\MyApp";
+            this.fileSystemComposer.Add(
+                $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe"
+            );
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
@@ -111,8 +108,12 @@ namespace StartMenuCleaner.Tests
         [Fact]
         public void TestSingleAppWithExtraDirectory()
         {
-            string directoryPath = this.ConfigureForSingleApp();
-            this.fileSystemComposer.AddDirectory(System.IO.Path.Combine(directoryPath, "Foo"));
+            const string directoryPath = @"C:\StartMenu\MyApp";
+            this.fileSystemComposer.Add(new[]
+            {
+                $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
+                $@"{directoryPath}\Foo",
+            });
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
@@ -122,13 +123,13 @@ namespace StartMenuCleaner.Tests
         [Fact]
         public void TestThreeApps()
         {
-            string directoryPath = this.ConfigureForSingleApp();
-            this.AddFile(
-                System.IO.Path.Combine(directoryPath, "MyApp2.lnk"),
-                @"C:\Programs\MyApp\MyApp2.exe");
-            this.AddFile(
-                System.IO.Path.Combine(directoryPath, "MyApp3.lnk"),
-                @"C:\Programs\MyApp\MyApp3.exe");
+            const string directoryPath = @"C:\StartMenu\MyApp";
+            this.fileSystemComposer.Add(new[]
+            {
+                $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
+                $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
+                $@"{directoryPath}\MyApp3.lnk;C:\Programs\MyApp\MyApp3.exe",
+            });
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
@@ -138,27 +139,16 @@ namespace StartMenuCleaner.Tests
         [Fact]
         public void TestTwoApps()
         {
-            string directoryPath = this.ConfigureForSingleApp();
-            this.AddFile(
-                System.IO.Path.Combine(directoryPath, "MyApp2.lnk"),
-                @"C:\Programs\MyApp\MyApp2.exe");
+            const string directoryPath = @"C:\StartMenu\MyApp";
+            this.fileSystemComposer.Add(new[]
+            {
+                $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
+                $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe"
+            });
 
             CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
             Assert.Equal(CleanReason.FewAppsWithCruft, actual);
-        }
-
-        private void AddFile(string filePath, string targetPath)
-        {
-            this.fileSystemComposer.Add(new FileShortcut(filePath, targetPath));
-        }
-
-        private string ConfigureForSingleApp()
-        {
-            FileShortcutSyntax fileShortcut = (FileShortcutSyntax)@"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe";
-            this.fileSystemComposer.Add(fileShortcut);
-
-            return System.IO.Path.GetDirectoryName(fileShortcut.FilePath)!;
         }
     }
 }
