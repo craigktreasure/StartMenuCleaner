@@ -1,12 +1,14 @@
 namespace StartMenuCleaner.TestLibrary
 {
     using StartMenuCleaner.Utils;
-    using System;
     using System.Collections.Generic;
     using System.IO.Abstractions.TestingHelpers;
+    using System.Linq;
 
     public class MockFileSystemComposer
     {
+        private readonly IReadOnlyList<string> defaultFileSystemNodes;
+
         /// <summary>
         /// Gets the file system.
         /// </summary>
@@ -22,6 +24,7 @@ namespace StartMenuCleaner.TestLibrary
         /// </summary>
         public MockFileSystemComposer()
         {
+            this.defaultFileSystemNodes = this.FileSystem.AllNodes.ToArray();
         }
 
         /// <summary>
@@ -32,6 +35,29 @@ namespace StartMenuCleaner.TestLibrary
         {
             this.AddFile(fileShortcut.FilePath);
             this.ShortcutHandler.AddShortcutMapping(fileShortcut);
+        }
+
+        /// <summary>
+        /// Adds the specified files and folders to the file system.
+        /// </summary>
+        /// <param name="filesAndFolders">The files and folders.</param>
+        public void Add(params string[] filesAndFolders)
+        {
+            foreach (string path in filesAndFolders)
+            {
+                if (FileShortcutSyntax.TryConvertFrom(path, out FileShortcutSyntax? fileShortcut))
+                {
+                    this.Add(fileShortcut);
+                }
+                else if (this.FileSystem.Path.HasExtension(path))
+                {
+                    this.AddFile(path);
+                }
+                else
+                {
+                    this.AddDirectory(path);
+                }
+            }
         }
 
         /// <summary>
@@ -58,5 +84,12 @@ namespace StartMenuCleaner.TestLibrary
                 this.FileSystem.AddFile(filePath, MockFileData.NullObject);
             }
         }
+
+        /// <summary>
+        /// Gets all nodes (excluding default nodes).
+        /// </summary>
+        /// <returns><see cref="IEnumerable{System.String}"/>.</returns>
+        public IEnumerable<string> GetAllNodes() =>
+            this.FileSystem.AllNodes.Except(this.defaultFileSystemNodes);
     }
 }

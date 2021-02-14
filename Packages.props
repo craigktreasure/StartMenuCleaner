@@ -8,6 +8,8 @@
 
     <PackageReference Update="CommandLineParser"                        Version="2.8.0" />
     <PackageReference Update="coverlet.collector"                       Version="3.0.2" />
+    <PackageReference Update="Divergic.Logging.Xunit"                   Version="3.6.0" />
+    <PackageReference Update="FluentAssertions"                         Version="5.10.3" />
     <PackageReference Update="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Update="Microsoft.Extensions.Logging"             Version="5.0.0" />
     <PackageReference Update="Microsoft.Extensions.Logging.Debug"       Version="5.0.0" />

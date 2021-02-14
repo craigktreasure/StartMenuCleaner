@@ -1,7 +1,6 @@
 namespace StartMenuCleaner
 {
     using Microsoft.Extensions.Logging;
-    using StartMenuCleaner.Utils;
     using System;
     using System.Collections.Generic;
     using System.IO.Abstractions;
@@ -37,9 +36,9 @@ namespace StartMenuCleaner
                 Console.WriteLine();
             }
 
-            IEnumerable<string> programDirectories = this.GetProgramDirectories();
+            IEnumerable<string> foldersToClean = this.GetFoldersToClean();
 
-            IEnumerable<ProgramDirectoryItem> itemsToClean = programDirectories
+            IEnumerable<ProgramDirectoryItem> itemsToClean = foldersToClean
                 .Select(x => new ProgramDirectoryItem(x, this.cleanupEngine.TestForCleanReason(x)))
                 .Where(x => x.Reason != CleanReason.None);
 
@@ -172,15 +171,10 @@ namespace StartMenuCleaner
             };
         }
 
-        private IEnumerable<string> GetProgramDirectories()
-        {
-            IEnumerable<string> startMenuProgramDirectories = StartMenuHelper.GetStartMenuProgramDirectories(this.fileSystem);
-
-            IEnumerable<string> programDirectories = startMenuProgramDirectories.SelectMany(x =>
-                this.fileSystem.Directory.GetDirectories(x));
-
-            return programDirectories;
-        }
+        private IEnumerable<string> GetFoldersToClean() =>
+            this.options.RootFoldersToClean
+                .Where(this.fileSystem.Directory.Exists)
+                .SelectMany(this.fileSystem.Directory.GetDirectories);
 
         #region IO Operation Wrappers
 
