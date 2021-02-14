@@ -57,10 +57,17 @@ namespace StartMenuCleaner.Utils
                 return false;
             }
 
-            string target = this.ResolveTarget(filePath);
+            try
+            {
+                string target = this.ResolveTarget(filePath);
 
-            shortcut = new FileShortcut(filePath, target);
-            return true;
+                shortcut = new FileShortcut(filePath, target);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
