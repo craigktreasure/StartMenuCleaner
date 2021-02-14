@@ -5,7 +5,7 @@ namespace StartMenuCleaner
     using System.IO.Abstractions;
     using System.Linq;
 
-    public class CleanupRulesEngine
+    internal class CleanupRulesEngine
     {
         private const int minCruftApps = 2;
 

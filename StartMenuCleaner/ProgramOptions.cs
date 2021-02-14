@@ -1,9 +1,7 @@
 namespace StartMenuCleaner
 {
     using CommandLine;
-    using System.Diagnostics.CodeAnalysis;
 
-    [SuppressMessage("Microsoft.Performance", "CA1812", Justification = "Class is deserialized at runtime.")]
     internal class ProgramOptions
 	{
         [Option('d', "debug", HelpText = "Enable debug information in console.")]

@@ -45,7 +45,7 @@ namespace StartMenuCleaner.TestLibrary
         {
             foreach (string path in filesAndFolders)
             {
-                if (FileShortcutSyntax.TryConvertFrom(path, out FileShortcutSyntax? fileShortcut))
+                if (FileShortcut.TryConvertFrom(path, out FileShortcut? fileShortcut))
                 {
                     this.Add(fileShortcut);
                 }
@@ -64,10 +64,8 @@ namespace StartMenuCleaner.TestLibrary
         /// Add a directory to the file system.
         /// </summary>
         /// <param name="directoryPath">The directory path.</param>
-        public void AddDirectory(string directoryPath)
-        {
+        public void AddDirectory(string directoryPath) =>
             this.FileSystem.AddDirectory(directoryPath);
-        }
 
         /// <summary>
         /// Add a file to the file system.
@@ -75,7 +73,7 @@ namespace StartMenuCleaner.TestLibrary
         /// <param name="filePath">The file path.</param>
         public void AddFile(string filePath)
         {
-            if (FileShortcutSyntax.TryConvertFrom(filePath, out FileShortcutSyntax? fileShortcut))
+            if (FileShortcut.TryConvertFrom(filePath, out FileShortcut? fileShortcut))
             {
                 this.Add(fileShortcut);
             }

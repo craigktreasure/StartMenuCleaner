@@ -3,7 +3,7 @@ namespace StartMenuCleaner.Utils
     using System;
     using System.Diagnostics.CodeAnalysis;
 
-    public interface IFileShortcutHandler
+    internal interface IFileShortcutHandler
     {
         private const string lnkFileExtension = ".lnk";
 

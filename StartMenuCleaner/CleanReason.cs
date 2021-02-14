@@ -1,6 +1,6 @@
-﻿namespace StartMenuCleaner
+namespace StartMenuCleaner
 {
-	public enum CleanReason
+	internal enum CleanReason
 	{
 		None,
 		Empty,

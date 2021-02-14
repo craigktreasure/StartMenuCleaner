@@ -1,6 +1,6 @@
-﻿namespace StartMenuCleaner
+namespace StartMenuCleaner
 {
-	public class FileClassificationItem
+	internal class FileClassificationItem
 	{
 		public FileClassification Classification { get; }
 

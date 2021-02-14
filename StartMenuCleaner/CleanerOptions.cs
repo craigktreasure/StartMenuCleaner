@@ -3,7 +3,7 @@ namespace StartMenuCleaner
     using System;
     using System.Collections.Generic;
 
-    public class CleanerOptions
+    internal class CleanerOptions
     {
         /// <summary>
         /// Gets the root folders to clean.

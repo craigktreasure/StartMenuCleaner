@@ -1,6 +1,6 @@
-﻿namespace StartMenuCleaner
+namespace StartMenuCleaner
 {
-	public enum FileClassification
+	internal enum FileClassification
 	{
 		App,
 		Help,
