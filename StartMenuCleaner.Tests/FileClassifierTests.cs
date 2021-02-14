@@ -1,6 +1,8 @@
 namespace StartMenuCleaner.Tests
 {
     using StartMenuCleaner.TestLibrary;
+    using StartMenuCleaner.Utils;
+    using System;
     using Xunit;
 
     public class FileClassifierTests
@@ -15,23 +17,24 @@ namespace StartMenuCleaner.Tests
         }
 
         [Theory]
-        [InlineData(FileClassification.App, @"C:\StartMenu\MyApp\MyApp.lnk;C:\MyApp\MyApp.exe")]
-        [InlineData(FileClassification.App, @"C:\StartMenu\MyApp\MyClickOnceApp.lnk;C:\MyApp\MyApp.appref-ms")]
-        [InlineData(FileClassification.App, @"C:\StartMenu\MyApp\MyClickOnceApp.appref-ms")]
-        [InlineData(FileClassification.Help, @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\MyApp\Help.chm")]
-        [InlineData(FileClassification.Other, @"C:\StartMenu\MyApp\MyApp.other")]
-        [InlineData(FileClassification.Other, @"C:\StartMenu\MyApp\MyApp.lnk;C:\MyApp\MyApp.other")]
-        [InlineData(FileClassification.OtherDeletable, @"C:\StartMenu\MyApp\MyApp.txt")]
-        [InlineData(FileClassification.OtherDeletable, @"C:\StartMenu\MyApp\MyApp.lnk;C:\MyApp\MyApp.txt")]
-        [InlineData(FileClassification.Uninstaller, @"C:\StartMenu\MyApp\Uninstall MyApp.lnk;C:\MyApp\Uninstall MyApp.exe")]
-        [InlineData(FileClassification.Uninstaller, @"C:\StartMenu\MyApp\Uninstall MyApp.lnk;C:\MyApp\Uninstall MyApp.msi")]
-        [InlineData(FileClassification.WebLink, @"C:\StartMenu\MyApp\MyApp Help.url")]
-        [InlineData(FileClassification.WebLink, @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\MyApp\Help.url")]
-        public void ClassifyFile(FileClassification expectedClassification, string filePath)
+        [InlineData(nameof(FileClassification.App), @"C:\StartMenu\MyApp\MyApp.lnk;C:\MyApp\MyApp.exe")]
+        [InlineData(nameof(FileClassification.App), @"C:\StartMenu\MyApp\MyClickOnceApp.lnk;C:\MyApp\MyApp.appref-ms")]
+        [InlineData(nameof(FileClassification.App), @"C:\StartMenu\MyApp\MyClickOnceApp.appref-ms")]
+        [InlineData(nameof(FileClassification.Help), @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\MyApp\Help.chm")]
+        [InlineData(nameof(FileClassification.Other), @"C:\StartMenu\MyApp\MyApp.other")]
+        [InlineData(nameof(FileClassification.Other), @"C:\StartMenu\MyApp\MyApp.lnk;C:\MyApp\MyApp.other")]
+        [InlineData(nameof(FileClassification.OtherDeletable), @"C:\StartMenu\MyApp\MyApp.txt")]
+        [InlineData(nameof(FileClassification.OtherDeletable), @"C:\StartMenu\MyApp\MyApp.lnk;C:\MyApp\MyApp.txt")]
+        [InlineData(nameof(FileClassification.Uninstaller), @"C:\StartMenu\MyApp\Uninstall MyApp.lnk;C:\MyApp\Uninstall MyApp.exe")]
+        [InlineData(nameof(FileClassification.Uninstaller), @"C:\StartMenu\MyApp\Uninstall MyApp.lnk;C:\MyApp\Uninstall MyApp.msi")]
+        [InlineData(nameof(FileClassification.WebLink), @"C:\StartMenu\MyApp\MyApp Help.url")]
+        [InlineData(nameof(FileClassification.WebLink), @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\MyApp\Help.url")]
+        public void ClassifyFile(string expectedClassificationValue, string filePath)
         {
+            FileClassification expectedClassification = Enum.Parse<FileClassification>(expectedClassificationValue);
             string pathToClassify = filePath;
 
-            if (FileShortcutSyntax.TryConvertFrom(filePath, out FileShortcutSyntax? fileShortcut))
+            if (FileShortcut.TryConvertFrom(filePath, out FileShortcut? fileShortcut))
             {
                 pathToClassify = fileShortcut.FilePath;
                 this.fileSystemComposer.Add(fileShortcut);

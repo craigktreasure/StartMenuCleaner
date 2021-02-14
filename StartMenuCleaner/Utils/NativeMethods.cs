@@ -8,7 +8,7 @@ namespace StartMenuCleaner.Utils
     /// A helper class used to get the targets of .lnk files.
     /// Significant code contribution from http://stackoverflow.com/questions/139010/how-to-resolve-a-lnk-in-c-sharp.
     /// </summary>
-    public static class NativeMethods
+    internal static class NativeMethods
 	{
 		#region Signatures imported from http://pinvoke.net
 

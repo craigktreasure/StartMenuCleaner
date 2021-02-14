@@ -4,7 +4,7 @@ namespace StartMenuCleaner.Utils
     using System.Collections.Generic;
     using System.Linq;
 
-    public static class StartMenuHelper
+    internal static class StartMenuHelper
     {
         private const string programsFolderName = "Programs";
 

@@ -7,7 +7,7 @@ namespace StartMenuCleaner
     using System.Linq;
     using systemIO = System.IO;
 
-    public class Cleaner
+    internal class Cleaner
     {
         private readonly CleanupRulesEngine cleanupEngine;
 

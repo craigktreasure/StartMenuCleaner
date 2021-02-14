@@ -6,7 +6,7 @@ namespace StartMenuCleaner
     using System.IO.Abstractions;
     using System.Linq;
 
-    public class FileClassifier
+    internal class FileClassifier
     {
         private const string apprefmsFileExtension = ".appref-ms";
 

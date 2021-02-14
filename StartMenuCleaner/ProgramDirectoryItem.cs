@@ -1,6 +1,6 @@
-﻿namespace StartMenuCleaner
+namespace StartMenuCleaner
 {
-	public class ProgramDirectoryItem
+	internal class ProgramDirectoryItem
 	{
 		public string Path { get; }
 

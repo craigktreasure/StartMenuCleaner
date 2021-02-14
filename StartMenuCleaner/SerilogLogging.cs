@@ -6,7 +6,7 @@ namespace StartMenuCleaner
     using Serilog.Core;
     using Serilog.Events;
 
-    public static class SerilogLogging
+    internal static class SerilogLogging
 	{
 		private const LogEventLevel defaultLogLevel = LogEventLevel.Information;
 
