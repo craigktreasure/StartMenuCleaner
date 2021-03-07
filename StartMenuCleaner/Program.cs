@@ -1,4 +1,4 @@
-﻿namespace StartMenuCleaner
+namespace StartMenuCleaner
 {
     using System;
     using CommandLine;
@@ -32,7 +32,7 @@
 			Console.WriteLine();
 			Log.Information("Finished");
 
-			if (!options.Silent)
+			if (options.Wait)
 			{
 				Console.ReadLine();
 			}
