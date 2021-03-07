@@ -61,14 +61,14 @@ dotnet tool uninstall -g StartMenuCleaner
 
 ``` shell
 > Clean-StartMenu --help
-StartMenuCleaner 1.2.19+8028ea50d1
-Copyright (C) 2020 Craig Treasure
+StartMenuCleaner 2.0.0
+Copyright (C) 2021 Craig Treasure
+
+  -d, --debug       Enable debug information in console.
 
   -s, --simulate    Simulate all file operations.
 
-  --silent          Silently run and exit the application.
-
-  -d, --debug       Enable debug information in console.
+  -w, --wait        Wait before exiting the application.
 
   --help            Display this help screen.
 
@@ -80,7 +80,7 @@ Copyright (C) 2020 Craig Treasure
   1. In **Task Scheduler**, select **Create Task...**.
   2. From the **General** tab, give the taks a memorable name and select **Run whether user is logged on or not** to hide the command window.
   3. From the **Triggers** tab, create a new trigger to begin **At log on** delayed for 30 seconds for your specific user account.
-  4. From the **Actions** tab, create a new action to run the `%USERPROFILE%\.dotnet\tools\Clean-StartMenu.exe` program with the `--silent` argument.
+  4. From the **Actions** tab, create a new action to run the `%USERPROFILE%\.dotnet\tools\Clean-StartMenu.exe` program.
   5. Configure options on the **Conditions** and **Settings** tabs to your liking.
   6. Save the task. Upon saving, you'll be asked for your password.
      1. If your password can't be accepted, it's likely that you logged in with Windows Hello
