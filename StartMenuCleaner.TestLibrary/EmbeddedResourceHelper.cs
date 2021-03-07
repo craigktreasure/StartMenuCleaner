@@ -12,9 +12,23 @@ namespace StartMenuCleaner.TestLibrary
 
         private readonly Assembly resourceAssembly;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmbeddedResourceHelper"/> class.
+        /// </summary>
+        /// <param name="resourceAssembly">The resource assembly.</param>
         public EmbeddedResourceHelper(Assembly resourceAssembly)
             : this(resourceAssembly, new FileSystem()) { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmbeddedResourceHelper"/> class.
+        /// </summary>
+        /// <param name="resourceAssembly">The resource assembly.</param>
+        /// <param name="fileSystem">The file system.</param>
+        /// <exception cref="ArgumentNullException">
+        /// resourceAssembly
+        /// or
+        /// fileSystem
+        /// </exception>
         public EmbeddedResourceHelper(Assembly resourceAssembly, IFileSystem fileSystem)
         {
             if (resourceAssembly is null)
@@ -31,8 +45,18 @@ namespace StartMenuCleaner.TestLibrary
             this.fileSystem = fileSystem;
         }
 
+        /// <summary>
+        /// Gets the embedded resource names.
+        /// </summary>
+        /// <returns><see cref="IReadOnlyList{System.String}"/>.</returns>
         public IReadOnlyList<string> GetResourceNames() => this.resourceAssembly.GetManifestResourceNames();
 
+        /// <summary>
+        /// Gets the embedded resource information.
+        /// </summary>
+        /// <param name="embeddedResourcePath">The embedded resource path.</param>
+        /// <returns><see cref="ManifestResourceInfo"/>.</returns>
+        /// <exception cref="ArgumentException"></exception>
         public ManifestResourceInfo GetResourceInfo(string embeddedResourcePath)
         {
             ManifestResourceInfo? resourceInfo = this.resourceAssembly.GetManifestResourceInfo(embeddedResourcePath);
@@ -45,6 +69,12 @@ namespace StartMenuCleaner.TestLibrary
             return resourceInfo;
         }
 
+        /// <summary>
+        /// Loads the embedded resource  to a stream.
+        /// </summary>
+        /// <param name="embeddedResourcePath">The embedded resource path.</param>
+        /// <returns><see cref="Stream"/>.</returns>
+        /// <exception cref="ArgumentException"></exception>
         public Stream LoadStream(string embeddedResourcePath)
         {
             Stream? embeddedResourceStream = this.resourceAssembly.GetManifestResourceStream(embeddedResourcePath);
@@ -57,6 +87,11 @@ namespace StartMenuCleaner.TestLibrary
             return embeddedResourceStream;
         }
 
+        /// <summary>
+        /// Copies the embedded resource to the file system.
+        /// </summary>
+        /// <param name="embeddedResourcePath">The embedded resource path.</param>
+        /// <param name="fileSystemPath">The file system path.</param>
         public void CopyToFileSystem(string embeddedResourcePath, string fileSystemPath)
         {
             using Stream embeddedResourceStream = this.LoadStream(embeddedResourcePath);
@@ -64,6 +99,11 @@ namespace StartMenuCleaner.TestLibrary
             embeddedResourceStream.CopyTo(newFileStream);
         }
 
+        /// <summary>
+        /// Copies the embedded resource to a temporary file.
+        /// </summary>
+        /// <param name="embeddedResourcePath">The embedded resource path.</param>
+        /// <returns><see cref="System.String"/>.</returns>
         public string CopyToTempFile(string embeddedResourcePath)
         {
             string temporaryFileName = this.fileSystem.Path.GetTempFileName();
