@@ -19,7 +19,7 @@
     <PackageReference Update="Serilog.Sinks.Console"                    Version="3.1.1" />
     <PackageReference Update="Serilog.Sinks.File"                       Version="4.1.0" />
     <PackageReference Update="Serilog.Sinks.Trace"                      Version="2.1.0" />
-    <PackageReference Update="System.IO.Abstractions"                   Version="13.2.31" />
+    <PackageReference Update="System.IO.Abstractions"                   Version="13.2.33" />
     <PackageReference Update="System.IO.Abstractions.TestingHelpers"    Version="13.2.31" />
     <PackageReference Update="xunit"                                    Version="2.4.1" />
     <PackageReference Update="xunit.runner.visualstudio"                Version="2.4.3" />
