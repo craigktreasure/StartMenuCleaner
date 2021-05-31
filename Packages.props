@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <GlobalPackageReference Include="Nerdbank.GitVersioning"
-                            Version="3.4.194"
+                            Version="3.4.203"
                             PrivateAssets="all"
                             Condition=" '$(EnableGitVersioning)' != 'false' " />
 
