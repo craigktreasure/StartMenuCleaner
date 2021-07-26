@@ -7,7 +7,7 @@
                             Condition=" '$(EnableGitVersioning)' != 'false' " />
 
     <PackageReference Update="CommandLineParser"                        Version="2.8.0" />
-    <PackageReference Update="coverlet.collector"                       Version="3.0.3" />
+    <PackageReference Update="coverlet.collector"                       Version="3.1.0" />
     <PackageReference Update="Divergic.Logging.Xunit"                   Version="3.6.0" />
     <PackageReference Update="FluentAssertions"                         Version="5.10.3" />
     <PackageReference Update="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
