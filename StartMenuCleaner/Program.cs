@@ -44,7 +44,7 @@ internal class Program
 
     private static IServiceProvider ConfigureServices(ProgramOptions options)
     {
-        CleanerOptions cleanerOptions = new CleanerOptions(StartMenuHelper.GetKnownStartMenuProgramsFolders())
+        CleanerOptions cleanerOptions = new(StartMenuHelper.GetKnownStartMenuProgramsFolders())
         {
             Simulate = options.Simulate,
         };

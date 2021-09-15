@@ -9,7 +9,7 @@ public class FileClassifierTests
 {
     private readonly FileClassifier classifier;
 
-    private readonly MockFileSystemComposer fileSystemComposer = new MockFileSystemComposer();
+    private readonly MockFileSystemComposer fileSystemComposer = new();
 
     public FileClassifierTests()
     {

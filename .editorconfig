@@ -107,3 +107,6 @@ csharp_style_expression_bodied_methods = when_on_single_line
 
 # IDE0023: Use block body for operators
 csharp_style_expression_bodied_operators = when_on_single_line
+
+# IDE0090: Use 'new(...)'
+csharp_style_implicit_object_creation_when_type_is_apparent = true:suggestion
