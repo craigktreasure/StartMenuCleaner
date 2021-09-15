@@ -1,67 +1,66 @@
-namespace StartMenuCleaner
+namespace StartMenuCleaner;
+
+using CommandLine;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using StartMenuCleaner.Utils;
+using System;
+
+internal class Program
 {
-    using CommandLine;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-    using Serilog;
-    using StartMenuCleaner.Utils;
-    using System;
-
-    internal class Program
+    private static void Main(string[] args)
     {
-        private static void Main(string[] args)
-        {
-            Console.Title = "Start Menu Cleaner";
+        Console.Title = "Start Menu Cleaner";
 
-            Parser.Default.ParseArguments<ProgramOptions>(args).WithParsed(Run);
+        Parser.Default.ParseArguments<ProgramOptions>(args).WithParsed(Run);
+    }
+
+    private static void Run(ProgramOptions options)
+    {
+        IServiceProvider services = ConfigureServices(options);
+        ILogger<Program> logger = services.GetRequiredService<ILogger<Program>>();
+
+        logger.LogInformation("Starting");
+
+        if (options.Debug)
+        {
+            SerilogLogging.SetMinLogLevel(Serilog.Events.LogEventLevel.Debug);
+            logger.LogInformation("Debug logging is enabled");
         }
 
-        private static void Run(ProgramOptions options)
+        Console.WriteLine();
+        Cleaner cleaner = services.GetRequiredService<Cleaner>();
+        cleaner.Start();
+
+        Console.WriteLine();
+        logger.LogInformation("Finished");
+
+        if (options.Wait)
         {
-            IServiceProvider services = ConfigureServices(options);
-            ILogger<Program> logger = services.GetRequiredService<ILogger<Program>>();
-
-            logger.LogInformation("Starting");
-
-            if (options.Debug)
-            {
-                SerilogLogging.SetMinLogLevel(Serilog.Events.LogEventLevel.Debug);
-                logger.LogInformation("Debug logging is enabled");
-            }
-
-            Console.WriteLine();
-            Cleaner cleaner = services.GetRequiredService<Cleaner>();
-            cleaner.Start();
-
-            Console.WriteLine();
-            logger.LogInformation("Finished");
-
-            if (options.Wait)
-            {
-                Console.ReadLine();
-            }
+            Console.ReadLine();
         }
+    }
 
-        private static IServiceProvider ConfigureServices(ProgramOptions options)
+    private static IServiceProvider ConfigureServices(ProgramOptions options)
+    {
+        CleanerOptions cleanerOptions = new CleanerOptions(StartMenuHelper.GetKnownStartMenuProgramsFolders())
         {
-            CleanerOptions cleanerOptions = new CleanerOptions(StartMenuHelper.GetKnownStartMenuProgramsFolders())
-            {
-                Simulate = options.Simulate,
-            };
+            Simulate = options.Simulate,
+        };
 
-            return new ServiceCollection()
-                .AddLogging(loggingBuilder =>
-                {
-                    loggingBuilder.AddDebug();
-                    loggingBuilder.AddSerilog(SerilogLogging.Create(), dispose: true);
-                })
-                .UseFileSystem()
-                .UseDefaultFileShortcutHandler()
-                .AddTransient<FileClassifier>()
-                .AddTransient<CleanupRulesEngine>()
-                .AddSingleton(cleanerOptions)
-                .AddTransient<Cleaner>()
-                .BuildServiceProvider();
-        }
+        return new ServiceCollection()
+            .AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddDebug();
+                loggingBuilder.AddSerilog(SerilogLogging.Create(), dispose: true);
+            })
+            .UseFileSystem()
+            .UseDefaultFileShortcutHandler()
+            .AddTransient<FileClassifier>()
+            .AddTransient<CleanupRulesEngine>()
+            .AddSingleton(cleanerOptions)
+            .AddTransient<Cleaner>()
+            .BuildServiceProvider();
     }
 }

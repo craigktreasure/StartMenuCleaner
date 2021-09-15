@@ -1,10 +1,9 @@
-namespace StartMenuCleaner
+namespace StartMenuCleaner;
+
+internal enum CleanReason
 {
-    internal enum CleanReason
-    {
-        None,
-        Empty,
-        SingleApp,
-        FewAppsWithCruft
-    }
+    None,
+    Empty,
+    SingleApp,
+    FewAppsWithCruft
 }

@@ -1,54 +1,54 @@
-namespace StartMenuCleaner.Tests
+namespace StartMenuCleaner.Tests;
+
+using StartMenuCleaner.TestLibrary;
+using Xunit;
+
+public class CleanupRulesEngineTests
 {
-    using StartMenuCleaner.TestLibrary;
-    using Xunit;
+    private readonly CleanupRulesEngine cleanupEngine;
 
-    public class CleanupRulesEngineTests
+    private readonly MockFileSystemComposer fileSystemComposer = new MockFileSystemComposer();
+
+    public CleanupRulesEngineTests()
     {
-        private readonly CleanupRulesEngine cleanupEngine;
+        FileClassifier classifier = new FileClassifier(this.fileSystemComposer.FileSystem, this.fileSystemComposer.ShortcutHandler);
+        this.cleanupEngine = new CleanupRulesEngine(this.fileSystemComposer.FileSystem, classifier);
+    }
 
-        private readonly MockFileSystemComposer fileSystemComposer = new MockFileSystemComposer();
+    [Fact]
+    public void TestEmpty()
+    {
+        const string directoryPath = @"C:\StartMenu\MyApp";
+        this.fileSystemComposer.Add(directoryPath);
 
-        public CleanupRulesEngineTests()
+        CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
+
+        Assert.Equal(CleanReason.Empty, actual);
+    }
+
+    [Fact]
+    public void TestFewAppsWithCruft()
+    {
+        const string directoryPath = @"C:\StartMenu\MyApp";
+        this.fileSystemComposer.Add(new[]
         {
-            FileClassifier classifier = new FileClassifier(this.fileSystemComposer.FileSystem, this.fileSystemComposer.ShortcutHandler);
-            this.cleanupEngine = new CleanupRulesEngine(this.fileSystemComposer.FileSystem, classifier);
-        }
-
-        [Fact]
-        public void TestEmpty()
-        {
-            const string directoryPath = @"C:\StartMenu\MyApp";
-            this.fileSystemComposer.Add(directoryPath);
-
-            CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
-
-            Assert.Equal(CleanReason.Empty, actual);
-        }
-
-        [Fact]
-        public void TestFewAppsWithCruft()
-        {
-            const string directoryPath = @"C:\StartMenu\MyApp";
-            this.fileSystemComposer.Add(new[]
-            {
                 $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
                 $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
                 $@"{directoryPath}\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
                 $@"{directoryPath}\MyApp Help.txt",
             });
 
-            CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
+        CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
-            Assert.Equal(CleanReason.FewAppsWithCruft, actual);
-        }
+        Assert.Equal(CleanReason.FewAppsWithCruft, actual);
+    }
 
-        [Fact]
-        public void TestFewAppsWithCruftWithDirectory()
+    [Fact]
+    public void TestFewAppsWithCruftWithDirectory()
+    {
+        const string directoryPath = @"C:\StartMenu\MyApp";
+        this.fileSystemComposer.Add(new[]
         {
-            const string directoryPath = @"C:\StartMenu\MyApp";
-            this.fileSystemComposer.Add(new[]
-            {
                 $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
                 $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
                 $@"{directoryPath}\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
@@ -56,17 +56,17 @@ namespace StartMenuCleaner.Tests
                 $@"{directoryPath}\Foo",
             });
 
-            CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
+        CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
-            Assert.Equal(CleanReason.None, actual);
-        }
+        Assert.Equal(CleanReason.None, actual);
+    }
 
-        [Fact]
-        public void TestFewAppsWithCruftWithOtherFile()
+    [Fact]
+    public void TestFewAppsWithCruftWithOtherFile()
+    {
+        const string directoryPath = @"C:\StartMenu\MyApp";
+        this.fileSystemComposer.Add(new[]
         {
-            const string directoryPath = @"C:\StartMenu\MyApp";
-            this.fileSystemComposer.Add(new[]
-            {
                 $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
                 $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
                 $@"{directoryPath}\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
@@ -74,81 +74,80 @@ namespace StartMenuCleaner.Tests
                 $@"{directoryPath}\Foo.other",
             });
 
-            CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
+        CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
-            Assert.Equal(CleanReason.None, actual);
-        }
+        Assert.Equal(CleanReason.None, actual);
+    }
 
-        [Fact]
-        public void TestIgnoreFolderName()
+    [Fact]
+    public void TestIgnoreFolderName()
+    {
+        const string directoryPath = @"C:\StartMenu\Maintenance";
+        this.fileSystemComposer.Add(
+            $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe"
+        );
+
+        CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
+
+        Assert.Equal(CleanReason.None, actual);
+    }
+
+    [Fact]
+    public void TestSingleApp()
+    {
+        const string directoryPath = @"C:\StartMenu\MyApp";
+        this.fileSystemComposer.Add(
+            $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe"
+        );
+
+        CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
+
+        Assert.Equal(CleanReason.SingleApp, actual);
+    }
+
+    [Fact]
+    public void TestSingleAppWithExtraDirectory()
+    {
+        const string directoryPath = @"C:\StartMenu\MyApp";
+        this.fileSystemComposer.Add(new[]
         {
-            const string directoryPath = @"C:\StartMenu\Maintenance";
-            this.fileSystemComposer.Add(
-                $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe"
-            );
-
-            CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
-
-            Assert.Equal(CleanReason.None, actual);
-        }
-
-        [Fact]
-        public void TestSingleApp()
-        {
-            const string directoryPath = @"C:\StartMenu\MyApp";
-            this.fileSystemComposer.Add(
-                $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe"
-            );
-
-            CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
-
-            Assert.Equal(CleanReason.SingleApp, actual);
-        }
-
-        [Fact]
-        public void TestSingleAppWithExtraDirectory()
-        {
-            const string directoryPath = @"C:\StartMenu\MyApp";
-            this.fileSystemComposer.Add(new[]
-            {
                 $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
                 $@"{directoryPath}\Foo",
             });
 
-            CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
+        CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
-            Assert.Equal(CleanReason.None, actual);
-        }
+        Assert.Equal(CleanReason.None, actual);
+    }
 
-        [Fact]
-        public void TestThreeApps()
+    [Fact]
+    public void TestThreeApps()
+    {
+        const string directoryPath = @"C:\StartMenu\MyApp";
+        this.fileSystemComposer.Add(new[]
         {
-            const string directoryPath = @"C:\StartMenu\MyApp";
-            this.fileSystemComposer.Add(new[]
-            {
                 $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
                 $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
                 $@"{directoryPath}\MyApp3.lnk;C:\Programs\MyApp\MyApp3.exe",
             });
 
-            CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
+        CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
-            Assert.Equal(CleanReason.None, actual);
-        }
+        Assert.Equal(CleanReason.None, actual);
+    }
 
-        [Fact]
-        public void TestTwoApps()
+    [Fact]
+    public void TestTwoApps()
+    {
+        const string directoryPath = @"C:\StartMenu\MyApp";
+        this.fileSystemComposer.Add(new[]
         {
-            const string directoryPath = @"C:\StartMenu\MyApp";
-            this.fileSystemComposer.Add(new[]
-            {
                 $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
                 $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe"
             });
 
-            CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
+        CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
 
-            Assert.Equal(CleanReason.FewAppsWithCruft, actual);
-        }
+        Assert.Equal(CleanReason.FewAppsWithCruft, actual);
     }
 }

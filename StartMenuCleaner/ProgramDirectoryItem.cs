@@ -1,15 +1,14 @@
-namespace StartMenuCleaner
+namespace StartMenuCleaner;
+
+internal class ProgramDirectoryItem
 {
-    internal class ProgramDirectoryItem
+    public string Path { get; }
+
+    public CleanReason Reason { get; }
+
+    public ProgramDirectoryItem(string path, CleanReason reason)
     {
-        public string Path { get; }
-
-        public CleanReason Reason { get; }
-
-        public ProgramDirectoryItem(string path, CleanReason reason)
-        {
-            this.Path = path;
-            this.Reason = reason;
-        }
+        this.Path = path;
+        this.Reason = reason;
     }
 }
