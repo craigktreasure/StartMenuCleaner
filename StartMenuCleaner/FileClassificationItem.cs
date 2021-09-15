@@ -1,15 +1,14 @@
-namespace StartMenuCleaner
+namespace StartMenuCleaner;
+
+internal class FileClassificationItem
 {
-    internal class FileClassificationItem
+    public FileClassification Classification { get; }
+
+    public string Path { get; }
+
+    public FileClassificationItem(string path, FileClassification classification)
     {
-        public FileClassification Classification { get; }
-
-        public string Path { get; }
-
-        public FileClassificationItem(string path, FileClassification classification)
-        {
-            this.Path = path;
-            this.Classification = classification;
-        }
+        this.Path = path;
+        this.Classification = classification;
     }
 }

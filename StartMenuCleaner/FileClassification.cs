@@ -1,12 +1,11 @@
-namespace StartMenuCleaner
+namespace StartMenuCleaner;
+
+internal enum FileClassification
 {
-    internal enum FileClassification
-    {
-        App,
-        Help,
-        OtherDeletable,
-        Uninstaller,
-        WebLink,
-        Other
-    }
+    App,
+    Help,
+    OtherDeletable,
+    Uninstaller,
+    WebLink,
+    Other
 }

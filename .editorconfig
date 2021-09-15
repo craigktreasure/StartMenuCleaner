@@ -95,3 +95,9 @@ dotnet_diagnostic.CA1848.severity = suggestion
 
 # CA2254: Template should be a static expression
 dotnet_diagnostic.CA2254.severity = suggestion
+
+# IDE0161
+dotnet_diagnostic.IDE0161.severity = warning
+
+# IDE0161: NamespaceDeclarations
+csharp_style_namespace_declarations = file_scoped

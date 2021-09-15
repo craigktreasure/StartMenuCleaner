@@ -1,93 +1,92 @@
-namespace StartMenuCleaner.TestLibrary
+namespace StartMenuCleaner.TestLibrary;
+
+using StartMenuCleaner.Utils;
+using System.Collections.Generic;
+using System.IO.Abstractions.TestingHelpers;
+using System.Linq;
+
+public class MockFileSystemComposer
 {
-    using StartMenuCleaner.Utils;
-    using System.Collections.Generic;
-    using System.IO.Abstractions.TestingHelpers;
-    using System.Linq;
+    private readonly IReadOnlyList<string> defaultFileSystemNodes;
 
-    public class MockFileSystemComposer
+    /// <summary>
+    /// Gets the file system.
+    /// </summary>
+    public MockFileSystem FileSystem { get; } = new MockFileSystem();
+
+    /// <summary>
+    /// Gets the shortcut handler.
+    /// </summary>
+    public TestFileShortcutHandler ShortcutHandler { get; } = new TestFileShortcutHandler();
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MockFileSystemComposer"/> class.
+    /// </summary>
+    public MockFileSystemComposer()
     {
-        private readonly IReadOnlyList<string> defaultFileSystemNodes;
+        this.defaultFileSystemNodes = this.FileSystem.AllNodes.ToArray();
+    }
 
-        /// <summary>
-        /// Gets the file system.
-        /// </summary>
-        public MockFileSystem FileSystem { get; } = new MockFileSystem();
+    /// <summary>
+    /// Adds the specified file shortcut to the file system.
+    /// </summary>
+    /// <param name="fileShortcut">The file shortcut.</param>
+    public void Add(FileShortcut fileShortcut)
+    {
+        this.AddFile(fileShortcut.FilePath);
+        this.ShortcutHandler.AddShortcutMapping(fileShortcut);
+    }
 
-        /// <summary>
-        /// Gets the shortcut handler.
-        /// </summary>
-        public TestFileShortcutHandler ShortcutHandler { get; } = new TestFileShortcutHandler();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MockFileSystemComposer"/> class.
-        /// </summary>
-        public MockFileSystemComposer()
+    /// <summary>
+    /// Adds the specified files and folders to the file system.
+    /// </summary>
+    /// <param name="filesAndFolders">The files and folders.</param>
+    public void Add(params string[] filesAndFolders)
+    {
+        foreach (string path in filesAndFolders)
         {
-            this.defaultFileSystemNodes = this.FileSystem.AllNodes.ToArray();
-        }
-
-        /// <summary>
-        /// Adds the specified file shortcut to the file system.
-        /// </summary>
-        /// <param name="fileShortcut">The file shortcut.</param>
-        public void Add(FileShortcut fileShortcut)
-        {
-            this.AddFile(fileShortcut.FilePath);
-            this.ShortcutHandler.AddShortcutMapping(fileShortcut);
-        }
-
-        /// <summary>
-        /// Adds the specified files and folders to the file system.
-        /// </summary>
-        /// <param name="filesAndFolders">The files and folders.</param>
-        public void Add(params string[] filesAndFolders)
-        {
-            foreach (string path in filesAndFolders)
-            {
-                if (FileShortcut.TryConvertFrom(path, out FileShortcut? fileShortcut))
-                {
-                    this.Add(fileShortcut);
-                }
-                else if (this.FileSystem.Path.HasExtension(path))
-                {
-                    this.AddFile(path);
-                }
-                else
-                {
-                    this.AddDirectory(path);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Add a directory to the file system.
-        /// </summary>
-        /// <param name="directoryPath">The directory path.</param>
-        public void AddDirectory(string directoryPath) =>
-            this.FileSystem.AddDirectory(directoryPath);
-
-        /// <summary>
-        /// Add a file to the file system.
-        /// </summary>
-        /// <param name="filePath">The file path.</param>
-        public void AddFile(string filePath)
-        {
-            if (FileShortcut.TryConvertFrom(filePath, out FileShortcut? fileShortcut))
+            if (FileShortcut.TryConvertFrom(path, out FileShortcut? fileShortcut))
             {
                 this.Add(fileShortcut);
             }
+            else if (this.FileSystem.Path.HasExtension(path))
+            {
+                this.AddFile(path);
+            }
             else
             {
-                this.FileSystem.AddFile(filePath, MockFileData.NullObject);
+                this.AddDirectory(path);
             }
         }
-
-        /// <summary>
-        /// Gets all nodes (excluding default nodes).
-        /// </summary>
-        /// <returns><see cref="IEnumerable{System.String}"/>.</returns>
-        public IEnumerable<string> GetAllNodes() =>
-            this.FileSystem.AllNodes.Except(this.defaultFileSystemNodes);
     }
+
+    /// <summary>
+    /// Add a directory to the file system.
+    /// </summary>
+    /// <param name="directoryPath">The directory path.</param>
+    public void AddDirectory(string directoryPath) =>
+        this.FileSystem.AddDirectory(directoryPath);
+
+    /// <summary>
+    /// Add a file to the file system.
+    /// </summary>
+    /// <param name="filePath">The file path.</param>
+    public void AddFile(string filePath)
+    {
+        if (FileShortcut.TryConvertFrom(filePath, out FileShortcut? fileShortcut))
+        {
+            this.Add(fileShortcut);
+        }
+        else
+        {
+            this.FileSystem.AddFile(filePath, MockFileData.NullObject);
+        }
+    }
+
+    /// <summary>
+    /// Gets all nodes (excluding default nodes).
+    /// </summary>
+    /// <returns><see cref="IEnumerable{System.String}"/>.</returns>
+    public IEnumerable<string> GetAllNodes() =>
+        this.FileSystem.AllNodes.Except(this.defaultFileSystemNodes);
 }

@@ -1,37 +1,36 @@
-namespace StartMenuCleaner
+namespace StartMenuCleaner;
+
+using Serilog;
+using Serilog.Core;
+using Serilog.Events;
+using System;
+using System.IO;
+
+internal static class SerilogLogging
 {
-    using Serilog;
-    using Serilog.Core;
-    using Serilog.Events;
-    using System;
-    using System.IO;
+    private const LogEventLevel defaultLogLevel = LogEventLevel.Information;
 
-    internal static class SerilogLogging
+    private static readonly LoggingLevelSwitch loggingSwitch = new LoggingLevelSwitch(defaultLogLevel);
+
+    public static void SetMinLogLevel(LogEventLevel level = defaultLogLevel)
     {
-        private const LogEventLevel defaultLogLevel = LogEventLevel.Information;
+        loggingSwitch.MinimumLevel = level;
+    }
 
-        private static readonly LoggingLevelSwitch loggingSwitch = new LoggingLevelSwitch(defaultLogLevel);
-
-        public static void SetMinLogLevel(LogEventLevel level = defaultLogLevel)
-        {
-            loggingSwitch.MinimumLevel = level;
-        }
-
-        public static ILogger Create()
-        {
-            return new LoggerConfiguration()
-                .MinimumLevel.ControlledBy(loggingSwitch)
-                .WriteTo.Console(
-                    outputTemplate: "{Message}{NewLine}{Exception}",
-                    restrictedToMinimumLevel: LogEventLevel.Information)
-                .WriteTo.Trace(restrictedToMinimumLevel: LogEventLevel.Verbose)
-                .WriteTo.File(
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"logs\log-.txt"),
-                    retainedFileCountLimit: 14,
-                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}",
-                    restrictedToMinimumLevel: LogEventLevel.Debug,
-                    rollingInterval: RollingInterval.Day)
-                .CreateLogger();
-        }
+    public static ILogger Create()
+    {
+        return new LoggerConfiguration()
+            .MinimumLevel.ControlledBy(loggingSwitch)
+            .WriteTo.Console(
+                outputTemplate: "{Message}{NewLine}{Exception}",
+                restrictedToMinimumLevel: LogEventLevel.Information)
+            .WriteTo.Trace(restrictedToMinimumLevel: LogEventLevel.Verbose)
+            .WriteTo.File(
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"logs\log-.txt"),
+                retainedFileCountLimit: 14,
+                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}",
+                restrictedToMinimumLevel: LogEventLevel.Debug,
+                rollingInterval: RollingInterval.Day)
+            .CreateLogger();
     }
 }
