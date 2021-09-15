@@ -86,7 +86,7 @@ public class MockFileSystemComposer
     /// <summary>
     /// Gets all nodes (excluding default nodes).
     /// </summary>
-    /// <returns><see cref="IEnumerable{System.String}"/>.</returns>
+    /// <returns><see cref="IEnumerable{string}"/>.</returns>
     public IEnumerable<string> GetAllNodes() =>
         this.FileSystem.AllNodes.Except(this.defaultFileSystemNodes);
 }

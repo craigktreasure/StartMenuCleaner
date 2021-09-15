@@ -6,7 +6,7 @@ internal class DefaultFileShortcutHandler : IFileShortcutHandler
     /// Resolves the target path of the specified shortcut.
     /// </summary>
     /// <param name="shortcutPath">The shortcut path.</param>
-    /// <returns><see cref="System.String" />.</returns>
+    /// <returns><see cref="string" />.</returns>
     public string ResolveTarget(string shortcutPath)
         => NativeMethods.ResolveShortcut(shortcutPath);
 }

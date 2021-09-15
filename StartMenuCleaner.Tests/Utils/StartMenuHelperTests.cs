@@ -8,13 +8,9 @@ public class StartMenuHelperTests
 {
     [Fact]
     public void GetKnownStartMenuFolders()
-    {
-        StartMenuHelper.GetKnownStartMenuFolders().Should().HaveCount(2);
-    }
+        => StartMenuHelper.GetKnownStartMenuFolders().Should().HaveCount(2);
 
     [Fact]
     public void GetKnownStartMenuProgramsFolders()
-    {
-        StartMenuHelper.GetKnownStartMenuProgramsFolders().Should().HaveCount(2);
-    }
+        => StartMenuHelper.GetKnownStartMenuProgramsFolders().Should().HaveCount(2);
 }
