@@ -48,7 +48,7 @@ public class EmbeddedResourceHelper
     /// <summary>
     /// Gets the embedded resource names.
     /// </summary>
-    /// <returns><see cref="IReadOnlyList{System.String}"/>.</returns>
+    /// <returns><see cref="IReadOnlyList{string}"/>.</returns>
     public IReadOnlyList<string> GetResourceNames() => this.resourceAssembly.GetManifestResourceNames();
 
     /// <summary>
@@ -103,7 +103,7 @@ public class EmbeddedResourceHelper
     /// Copies the embedded resource to a temporary file.
     /// </summary>
     /// <param name="embeddedResourcePath">The embedded resource path.</param>
-    /// <returns><see cref="System.String"/>.</returns>
+    /// <returns><see cref="string"/>.</returns>
     public string CopyToTempFile(string embeddedResourcePath)
     {
         string temporaryFileName = this.fileSystem.Path.GetTempFileName();

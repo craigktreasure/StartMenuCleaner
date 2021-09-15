@@ -13,9 +13,7 @@ internal static class SerilogLogging
     private static readonly LoggingLevelSwitch loggingSwitch = new LoggingLevelSwitch(defaultLogLevel);
 
     public static void SetMinLogLevel(LogEventLevel level = defaultLogLevel)
-    {
-        loggingSwitch.MinimumLevel = level;
-    }
+        => loggingSwitch.MinimumLevel = level;
 
     public static ILogger Create()
     {

@@ -133,14 +133,11 @@ public class FileShortcut : IEquatable<FileShortcut>
     }
 
     /// <summary>
-    /// Determines whether the specified <see cref="System.Object" /> is equal to this instance.
+    /// Determines whether the specified <see cref="object" /> is equal to this instance.
     /// </summary>
     /// <param name="obj">The object to compare with the current object.</param>
-    /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object? obj)
-    {
-        return this.Equals(obj as FileShortcut);
-    }
+    /// <returns><c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
+    public override bool Equals(object? obj) => this.Equals(obj as FileShortcut);
 
     /// <summary>
     /// Indicates whether the current object is equal to another object of the same type.

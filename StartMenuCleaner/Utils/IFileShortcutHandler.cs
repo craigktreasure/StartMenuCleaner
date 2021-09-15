@@ -39,7 +39,7 @@ internal interface IFileShortcutHandler
     /// Resolves the target path of the specified shortcut.
     /// </summary>
     /// <param name="shortcutPath">The shortcut path.</param>
-    /// <returns><see cref="System.String"/>.</returns>
+    /// <returns><see cref="string"/>.</returns>
     string ResolveTarget(string shortcutPath);
 
     /// <summary>
