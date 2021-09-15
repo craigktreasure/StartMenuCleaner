@@ -11,13 +11,13 @@ public class DefaultFileShortcutHandlerTests
     [Fact]
     public void ResolveShortcutTargetPath()
     {
-        EmbeddedResourceHelper embeddedResourceHelper = new EmbeddedResourceHelper(typeof(AssemblyToken).Assembly);
+        EmbeddedResourceHelper embeddedResourceHelper = new(typeof(AssemblyToken).Assembly);
 
         string temporaryFilePath = embeddedResourceHelper.CopyToTempFile(@"EmbeddedContent\systeminfo.lnk");
 
         try
         {
-            DefaultFileShortcutHandler shortcutHandler = new DefaultFileShortcutHandler();
+            DefaultFileShortcutHandler shortcutHandler = new();
             string actualTargetPath = shortcutHandler.ResolveTarget(temporaryFilePath);
 
             actualTargetPath.Should().Be(@"C:\Windows\System32\systeminfo.exe");

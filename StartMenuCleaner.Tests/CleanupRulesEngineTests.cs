@@ -7,11 +7,11 @@ public class CleanupRulesEngineTests
 {
     private readonly CleanupRulesEngine cleanupEngine;
 
-    private readonly MockFileSystemComposer fileSystemComposer = new MockFileSystemComposer();
+    private readonly MockFileSystemComposer fileSystemComposer = new();
 
     public CleanupRulesEngineTests()
     {
-        FileClassifier classifier = new FileClassifier(this.fileSystemComposer.FileSystem, this.fileSystemComposer.ShortcutHandler);
+        FileClassifier classifier = new(this.fileSystemComposer.FileSystem, this.fileSystemComposer.ShortcutHandler);
         this.cleanupEngine = new CleanupRulesEngine(this.fileSystemComposer.FileSystem, classifier);
     }
 

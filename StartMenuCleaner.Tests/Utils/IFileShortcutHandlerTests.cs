@@ -10,7 +10,7 @@ public class IFileShortcutHandlerTests
 {
     private IFileShortcutHandler ShortcutHandler => this.testShortcutHandler;
 
-    private readonly TestFileShortcutHandler testShortcutHandler = new TestFileShortcutHandler();
+    private readonly TestFileShortcutHandler testShortcutHandler = new();
 
     [Fact]
     public void IsShortcut()
@@ -22,7 +22,7 @@ public class IFileShortcutHandlerTests
     [Fact]
     public void CreateShortcut()
     {
-        FileShortcut expectedFileShortcut = new FileShortcut(@"C:\StartMenu\MyApp\MyApp.lnk", @"C:\Programs\MyApp\MyApp.exe");
+        FileShortcut expectedFileShortcut = new(@"C:\StartMenu\MyApp\MyApp.lnk", @"C:\Programs\MyApp\MyApp.exe");
         this.testShortcutHandler.AddShortcutMapping(expectedFileShortcut);
 
         FileShortcut shortcut = this.ShortcutHandler.CreateShortcut(expectedFileShortcut.FilePath);
@@ -39,7 +39,7 @@ public class IFileShortcutHandlerTests
     [Fact]
     public void TryCreateShortcut()
     {
-        FileShortcut expectedFileShortcut = new FileShortcut(@"C:\StartMenu\MyApp\MyApp.lnk", @"C:\Programs\MyApp\MyApp.exe");
+        FileShortcut expectedFileShortcut = new(@"C:\StartMenu\MyApp\MyApp.lnk", @"C:\Programs\MyApp\MyApp.exe");
         this.testShortcutHandler.AddShortcutMapping(expectedFileShortcut);
 
         this.ShortcutHandler.TryCreateShortcut(expectedFileShortcut.FilePath, out FileShortcut? shortcut)

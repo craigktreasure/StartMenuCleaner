@@ -10,7 +10,7 @@ using Xunit.Abstractions;
 
 public class CleanerTests
 {
-    private readonly MockFileSystemComposer fileSystemComposer = new MockFileSystemComposer();
+    private readonly MockFileSystemComposer fileSystemComposer = new();
 
     private readonly ITestOutputHelper output;
 
@@ -230,9 +230,9 @@ public class CleanerTests
         ILogger<Cleaner> logger = this.output.BuildLoggerFor<Cleaner>(LogLevel.Trace);
         MockFileSystem mockFileSystem = this.fileSystemComposer.FileSystem;
         TestFileShortcutHandler shortcutHandler = this.fileSystemComposer.ShortcutHandler;
-        FileClassifier classifier = new FileClassifier(mockFileSystem, shortcutHandler);
-        CleanupRulesEngine cleanupEngine = new CleanupRulesEngine(mockFileSystem, classifier);
-        CleanerOptions cleanerOptions = new CleanerOptions(new[] { @"C:\StartMenu" })
+        FileClassifier classifier = new(mockFileSystem, shortcutHandler);
+        CleanupRulesEngine cleanupEngine = new(mockFileSystem, classifier);
+        CleanerOptions cleanerOptions = new(new[] { @"C:\StartMenu" })
         {
             Simulate = simulate
         };

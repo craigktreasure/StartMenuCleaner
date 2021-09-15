@@ -10,7 +10,7 @@ internal static class SerilogLogging
 {
     private const LogEventLevel defaultLogLevel = LogEventLevel.Information;
 
-    private static readonly LoggingLevelSwitch loggingSwitch = new LoggingLevelSwitch(defaultLogLevel);
+    private static readonly LoggingLevelSwitch loggingSwitch = new(defaultLogLevel);
 
     public static void SetMinLogLevel(LogEventLevel level = defaultLogLevel)
         => loggingSwitch.MinimumLevel = level;
