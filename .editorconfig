@@ -19,6 +19,8 @@ indent_size = 2
 
 [*.cs]
 
+insert_final_newline = true
+
 #Core editorconfig formatting - indentation
 
 #use soft tabs (spaces) for indentation
