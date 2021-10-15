@@ -32,7 +32,7 @@ internal class Cleaner
     {
         if (this.options.Simulate)
         {
-            this.logger.LogInformation("Simulating. No changes will be made.");
+            this.logger.Simulating();
             Console.WriteLine();
         }
 
@@ -44,19 +44,11 @@ internal class Cleaner
 
         if (!itemsToClean.Any())
         {
-            this.logger.LogInformation("Nothing to clean.");
+            this.logger.NothingToClean();
             return;
         }
 
-        // Log the directories to be cleaned.
-        foreach (IGrouping<CleanReason, ProgramDirectoryItem> group in itemsToClean.GroupBy(x => x.Reason))
-        {
-            this.logger.LogTrace($"Found {group.Count()} {group.Key} items to clean:");
-            foreach (ProgramDirectoryItem item in group)
-            {
-                this.logger.LogTrace($"\t{item.Path}");
-            }
-        }
+        this.logger.FoundItemsToClean(itemsToClean);
 
         this.CleanItems(itemsToClean);
     }
@@ -116,25 +108,23 @@ internal class Cleaner
         {
             cleanFunction(itemToClean);
         }
-#pragma warning disable CA1031 // Do not catch general exception types
         catch (Exception ex)
-#pragma warning restore CA1031 // Do not catch general exception types
         {
-            this.logger.LogError(ex, $"Failed to clean {itemToClean.Path}. Aborting.");
+            this.logger.CleaningFailed(itemToClean.Path, ex);
         }
     }
 
     private void CleanItems(IEnumerable<ProgramDirectoryItem> itemsToClean)
     {
-        this.logger.LogInformation("Cleaning.");
+        this.logger.CleaningStarted();
 
         foreach (ProgramDirectoryItem item in itemsToClean)
         {
-            this.logger.LogInformation($"Cleaning {item.Reason} {item.Path}");
+            this.logger.CleaningItem(item);
             this.CleanItem(item);
         }
 
-        this.logger.LogInformation("Finished cleaning.");
+        this.logger.CleaningFinished();
     }
 
     private void CleanSingleApp(ProgramDirectoryItem itemToClean)
@@ -185,7 +175,7 @@ internal class Cleaner
             this.fileSystem.Directory.Delete(directoryPath);
         }
 
-        this.logger.LogDebug($"Deleted directory: \"{this.fileSystem.Path.GetFileName(directoryPath)}\"");
+        this.logger.DirectoryDeleted(this.fileSystem.Path.GetFileName(directoryPath));
     }
 
     private void DeleteFile(string filePath)
@@ -200,7 +190,7 @@ internal class Cleaner
             this.fileSystem.File.Delete(filePath);
         }
 
-        this.logger.LogDebug($"Deleted file: \"{this.fileSystem.Path.GetFileName(filePath)}\"");
+        this.logger.FileDeleted(this.fileSystem.Path.GetFileName(filePath));
     }
 
     private void DeleteFiles(IEnumerable<string> filePaths)
@@ -232,7 +222,7 @@ internal class Cleaner
             this.fileSystem.File.Move(currentFileLocation, newFileLocation);
         }
 
-        this.logger.LogDebug($"Moved file: \"{this.fileSystem.Path.GetFileName(currentFileLocation)}\" to \"{newFileLocation}\"");
+        this.logger.FileMoved(this.fileSystem.Path.GetFileName(currentFileLocation), newFileLocation);
     }
 
     #endregion IO Operation Wrappers

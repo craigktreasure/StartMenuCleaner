@@ -21,12 +21,12 @@ internal class Program
         IServiceProvider services = ConfigureServices(options);
         ILogger<Program> logger = services.GetRequiredService<ILogger<Program>>();
 
-        logger.LogInformation("Starting");
+        logger.Starting();
 
         if (options.Debug)
         {
             SerilogLogging.SetMinLogLevel(Serilog.Events.LogEventLevel.Debug);
-            logger.LogInformation("Debug logging is enabled");
+            logger.DebugEnabled();
         }
 
         Console.WriteLine();
@@ -34,7 +34,7 @@ internal class Program
         cleaner.Start();
 
         Console.WriteLine();
-        logger.LogInformation("Finished");
+        logger.Finished();
 
         if (options.Wait)
         {
