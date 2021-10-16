@@ -5,116 +5,42 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-internal static class LoggerExtensions
+internal static partial class LoggerExtensions
 {
-    private static readonly Action<ILogger, string, Exception?> cleaningFailed;
-    private static readonly Action<ILogger, Exception?> cleaningFinished;
-    private static readonly Action<ILogger, CleanReason, string, Exception?> cleaningItem;
-    private static readonly Action<ILogger, Exception?> cleaningStarted;
-    private static readonly Action<ILogger, Exception?> debugEnabled;
-    private static readonly Action<ILogger, string, Exception?> directoryDeleted;
-    private static readonly Action<ILogger, string, Exception?> fileDeleted;
-    private static readonly Action<ILogger, string, string, Exception?> fileMoved;
-    private static readonly Action<ILogger, Exception?> finished;
-    private static readonly Action<ILogger, int, CleanReason, Exception?> foundItemsToClean;
-    private static readonly Action<ILogger, string, Exception?> foundItemsToCleanPath;
-    private static readonly Action<ILogger, Exception?> nothingToClean;
-    private static readonly Action<ILogger, Exception?> simulating;
-    private static readonly Action<ILogger, Exception?> starting;
+    [LoggerMessage(501, LogLevel.Error, "Failed to clean {FilePath}. Aborting.",
+        EventName = nameof(CleaningFailed))]
+    public static partial void CleaningFailed(this ILogger logger, string filePath, Exception ex);
 
-    static LoggerExtensions()
-    {
-        cleaningFailed = LoggerMessage.Define<string>(
-            LogLevel.Error,
-            new EventId(0, nameof(CleaningFailed)),
-            "Failed to clean {Path}. Aborting.");
-
-        cleaningFinished = LoggerMessage.Define(
-            LogLevel.Information,
-            new EventId(0, nameof(CleaningFinished)),
-            "Finished Cleaning.");
-
-        cleaningItem = LoggerMessage.Define<CleanReason, string>(
-            LogLevel.Information,
-            new EventId(0, nameof(CleaningItem)),
-            "Cleaning {Reason} {Path}");
-
-        cleaningStarted = LoggerMessage.Define(
-            LogLevel.Information,
-            new EventId(0, nameof(CleaningStarted)),
-            "Cleaning.");
-
-        debugEnabled = LoggerMessage.Define(
-            LogLevel.Information,
-            new EventId(0, nameof(DebugEnabled)),
-            "Debug logging is enabled");
-
-        directoryDeleted = LoggerMessage.Define<string>(
-            LogLevel.Debug,
-            new EventId(0, nameof(DirectoryDeleted)),
-            "Deleted directory: \"{DirectoryName}\"");
-
-        fileDeleted = LoggerMessage.Define<string>(
-            LogLevel.Debug,
-            new EventId(0, nameof(FileDeleted)),
-            "Deleted file: \"{FileName}\"");
-
-        fileMoved = LoggerMessage.Define<string, string>(
-            LogLevel.Debug,
-            new EventId(0, nameof(FileMoved)),
-            "Moved file: \"{FileName}\" to \"{NewLocation}\"");
-
-        finished = LoggerMessage.Define(
-            LogLevel.Information,
-            new EventId(0, nameof(Finished)),
-            "Finished");
-
-        foundItemsToClean = LoggerMessage.Define<int, CleanReason>(
-            LogLevel.Trace,
-            new EventId(0, nameof(FoundItemsToClean)),
-            "Found {Count} {Type} items to clean:");
-
-        foundItemsToCleanPath = LoggerMessage.Define<string>(
-            LogLevel.Trace,
-            new EventId(0, nameof(FoundItemsToClean)),
-            "\t{Path}");
-
-        nothingToClean = LoggerMessage.Define(
-            LogLevel.Information,
-            new EventId(0, nameof(NothingToClean)),
-            "Nothing to clean.");
-
-        simulating = LoggerMessage.Define(
-            LogLevel.Information,
-            new EventId(0, nameof(Simulating)),
-            "Simulating. No changes will be made.");
-
-        starting = LoggerMessage.Define(
-            LogLevel.Information,
-            new EventId(0, nameof(Starting)),
-            "Starting");
-    }
-
-    public static void CleaningFailed(this ILogger logger, string filePath, Exception ex)
-        => cleaningFailed(logger, filePath, ex);
-
-    public static void CleaningFinished(this ILogger logger) => cleaningFinished(logger, null);
+    [LoggerMessage(108, LogLevel.Information, "Finished Cleaning.",
+        EventName = nameof(CleaningFinished))]
+    public static partial void CleaningFinished(this ILogger logger);
 
     public static void CleaningItem(this ILogger logger, ProgramDirectoryItem item)
-        => cleaningItem(logger, item.Reason, item.Path, null);
+        => logger.CleaningItem(item.Reason, item.Path);
 
-    public static void CleaningStarted(this ILogger logger) => cleaningStarted(logger, null);
+    [LoggerMessage(106, LogLevel.Information, "Cleaning.",
+        EventName = nameof(CleaningStarted))]
+    public static partial void CleaningStarted(this ILogger logger);
 
-    public static void DebugEnabled(this ILogger logger) => debugEnabled(logger, null);
+    [LoggerMessage(103, LogLevel.Information, "Debug logging is enabled",
+        EventName = nameof(DebugEnabled))]
+    public static partial void DebugEnabled(this ILogger logger);
 
-    public static void DirectoryDeleted(this ILogger logger, string name) => directoryDeleted(logger, name, null);
+    [LoggerMessage(301, LogLevel.Debug, "Deleted directory: \"{DirectoryName}\"",
+        EventName = nameof(DirectoryDeleted))]
+    public static partial void DirectoryDeleted(this ILogger logger, string directoryName);
 
-    public static void FileDeleted(this ILogger logger, string name) => fileDeleted(logger, name, null);
+    [LoggerMessage(302, LogLevel.Debug, "Deleted file: \"{FileName}\"",
+        EventName = nameof(FileDeleted))]
+    public static partial void FileDeleted(this ILogger logger, string fileName);
 
-    public static void FileMoved(this ILogger logger, string name, string newLocation)
-        => fileMoved(logger, name, newLocation, null);
+    [LoggerMessage(303, LogLevel.Debug, "Moved file: \"{FileName}\" to \"{NewLocation}\"",
+        EventName = nameof(FileMoved))]
+    public static partial void FileMoved(this ILogger logger, string fileName, string newLocation);
 
-    public static void Finished(this ILogger logger) => finished(logger, null);
+    [LoggerMessage(102, LogLevel.Information, "Finished",
+        EventName = nameof(Finished))]
+    public static partial void Finished(this ILogger logger);
 
     public static void FoundItemsToClean(this ILogger logger, IEnumerable<ProgramDirectoryItem> itemsToClean)
     {
@@ -126,16 +52,34 @@ internal static class LoggerExtensions
 
     public static void FoundItemsToClean(this ILogger logger, IGrouping<CleanReason, ProgramDirectoryItem> groupItems)
     {
-        foundItemsToClean(logger, groupItems.Count(), groupItems.Key, null);
+        logger.FoundItemsToClean(groupItems.Count(), groupItems.Key);
         foreach (ProgramDirectoryItem item in groupItems)
         {
-            foundItemsToCleanPath(logger, item.Path, null);
+            logger.FoundItemsToCleanPath(item.Path);
         }
     }
 
-    public static void NothingToClean(this ILogger logger) => nothingToClean(logger, null);
+    [LoggerMessage(105, LogLevel.Information, "Nothing to clean.",
+        EventName = nameof(NothingToClean))]
+    public static partial void NothingToClean(this ILogger logger);
 
-    public static void Simulating(this ILogger logger) => simulating(logger, null);
+    [LoggerMessage(104, LogLevel.Information, "Simulating. No changes will be made.",
+        EventName = nameof(Simulating))]
+    public static partial void Simulating(this ILogger logger);
 
-    public static void Starting(this ILogger logger) => starting(logger, null);
+    [LoggerMessage(101, LogLevel.Information, "Starting",
+        EventName = nameof(Starting))]
+    public static partial void Starting(this ILogger logger);
+
+    [LoggerMessage(107, LogLevel.Information, "Cleaning {Reason} {Path}",
+                                                    EventName = nameof(CleaningItem))]
+    private static partial void CleaningItem(this ILogger logger, CleanReason reason, string path);
+
+    [LoggerMessage(401, LogLevel.Trace, "Found {Count} {Type} items to clean:",
+        EventName = nameof(FoundItemsToClean))]
+    private static partial void FoundItemsToClean(this ILogger logger, int count, CleanReason type);
+
+    [LoggerMessage(402, LogLevel.Trace, "\t{Path}",
+        EventName = nameof(FoundItemsToCleanPath))]
+    private static partial void FoundItemsToCleanPath(this ILogger logger, string path);
 }
