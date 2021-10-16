@@ -71,6 +71,10 @@ internal static partial class LoggerExtensions
         EventName = nameof(Starting))]
     public static partial void Starting(this ILogger logger);
 
+    [LoggerMessage(201, LogLevel.Warning, "This operating system is not supported.",
+        EventName = nameof(OperatingSystemUnsupported))]
+    public static partial void OperatingSystemUnsupported(this ILogger logger);
+
     [LoggerMessage(107, LogLevel.Information, "Cleaning {Reason} {Path}",
                                                     EventName = nameof(CleaningItem))]
     private static partial void CleaningItem(this ILogger logger, CleanReason reason, string path);
