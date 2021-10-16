@@ -21,6 +21,12 @@ internal class Program
         IServiceProvider services = ConfigureServices(options);
         ILogger<Program> logger = services.GetRequiredService<ILogger<Program>>();
 
+        if (!OperatingSystem.IsWindows())
+        {
+            logger.OperatingSystemUnsupported();
+            return;
+        }
+
         logger.Starting();
 
         if (options.Debug)
