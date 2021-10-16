@@ -8,5 +8,5 @@ internal class DefaultFileShortcutHandler : IFileShortcutHandler
     /// <param name="shortcutPath">The shortcut path.</param>
     /// <returns><see cref="string" />.</returns>
     public string ResolveTarget(string shortcutPath)
-        => NativeMethods.ResolveShortcut(shortcutPath);
+        => WindowsSdk.ResolveShortcut(shortcutPath);
 }
