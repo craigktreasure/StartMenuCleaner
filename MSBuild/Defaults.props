@@ -22,8 +22,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <authors>Craig Treasure</authors>
-    <owners>craigktreasure</owners>
+    <Authors>Craig Treasure</Authors>
+    <Owners>craigktreasure</Owners>
+    <ProjectUrl>https://github.com/craigktreasure</ProjectUrl>
+    <RepositoryUrl>https://github.com/craigktreasure/StartMenuCleaner.git</RepositoryUrl>
   </PropertyGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)/Paths.props" />
