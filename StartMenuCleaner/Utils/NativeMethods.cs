@@ -118,12 +118,11 @@ internal static class NativeMethods
     public static string ResolveShortcut(string filename)
     {
         ShellLink link = new();
-        ((IPersistFile)link).Load(filename, Constants.STGM_READ);
+        ((IPersistFile)link).Load(filename, PInvoke.STGM_READ);
         // TODO: if I can get hold of the hwnd call resolve first. This handles moved and renamed files.
         // ((IShellLinkW)link).Resolve(hwnd, 0)
-        StringBuilder sb = new((int)Constants.MAX_PATH);
-        WIN32_FIND_DATAW data = new();
-        ((IShellLinkW)link).GetPath(sb, sb.Capacity, out data, 0);
+        StringBuilder sb = new((int)PInvoke.MAX_PATH);
+        ((IShellLinkW)link).GetPath(sb, sb.Capacity, out WIN32_FIND_DATAW data, 0);
         return sb.ToString();
     }
 }

@@ -22,20 +22,20 @@ internal static class WindowsSdk
         Justification = "PackAsTool doesn't support targeting specific platforms.")]
     public static unsafe string ResolveShortcut(string shortcutFilePath)
     {
-        ShellLink shellLink = new ShellLink();
+        ShellLink shellLink = new();
 
         IPersistFile persistFile = (IPersistFile)shellLink;
         fixed (char* shortcutFilePathPcwstr = shortcutFilePath)
         {
-            persistFile.Load(shortcutFilePathPcwstr, Constants.STGM_READ);
+            persistFile.Load(shortcutFilePathPcwstr, PInvoke.STGM_READ);
         }
 
-        Span<char> szShortcutTargetPath = stackalloc char[(int)Constants.MAX_PATH];
+        Span<char> szShortcutTargetPath = stackalloc char[(int)PInvoke.MAX_PATH];
         fixed (char* cShortcutTargetPath = szShortcutTargetPath)
         {
             IShellLinkW shellLinkW = (IShellLinkW)shellLink;
-            WIN32_FIND_DATAW data = new WIN32_FIND_DATAW();
-            shellLinkW.GetPath(cShortcutTargetPath, (int)Constants.MAX_PATH, &data, 0);
+            WIN32_FIND_DATAW data;
+            shellLinkW.GetPath(cShortcutTargetPath, (int)PInvoke.MAX_PATH, &data, 0);
 
             return new string(cShortcutTargetPath);
         }
