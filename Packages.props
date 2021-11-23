@@ -3,20 +3,20 @@
   <PropertyGroup>
     <DotNetPackageVersion>6.0.0</DotNetPackageVersion>
   </PropertyGroup>
+
   <ItemGroup>
-    <GlobalPackageReference Include="Nerdbank.GitVersioning"
-                            Version="3.4.244"
+    <!-- Global dependencies -->
+    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub"       Version="1.1.1"
+                            PrivateAssets="All"/>
+    <GlobalPackageReference Include="Nerdbank.GitVersioning"            Version="3.4.244"
                             PrivateAssets="all"
                             Condition=" '$(EnableGitVersioning)' != 'false' " />
 
+    <!-- Project dependencies -->
     <PackageReference Update="CommandLineParser"                        Version="2.8.0" />
-    <PackageReference Update="coverlet.collector"                       Version="3.1.0" />
-    <PackageReference Update="Divergic.Logging.Xunit"                   Version="3.6.0" />
-    <PackageReference Update="FluentAssertions"                         Version="6.2.0" />
     <PackageReference Update="Microsoft.Extensions.DependencyInjection" Version="$(DotNetPackageVersion)" />
     <PackageReference Update="Microsoft.Extensions.Logging"             Version="$(DotNetPackageVersion)" />
     <PackageReference Update="Microsoft.Extensions.Logging.Debug"       Version="$(DotNetPackageVersion)" />
-    <PackageReference Update="Microsoft.NET.Test.Sdk"                   Version="17.0.0" />
     <PackageReference Update="Microsoft.Windows.CsWin32"                Version="0.1.619-beta" />
     <PackageReference Update="Serilog"                                  Version="2.10.0" />
     <PackageReference Update="Serilog.Extensions.Logging"               Version="3.1.0" />
@@ -24,8 +24,18 @@
     <PackageReference Update="Serilog.Sinks.File"                       Version="5.0.0" />
     <PackageReference Update="Serilog.Sinks.Trace"                      Version="3.0.0" />
     <PackageReference Update="System.IO.Abstractions"                   Version="13.2.47" />
+
+    <!-- Test dependencies -->
+    <PackageReference Update="coverlet.collector"                       Version="3.1.0"
+                      IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"
+                      PrivateAssets="all" />
+    <PackageReference Update="Divergic.Logging.Xunit"                   Version="3.6.0" />
+    <PackageReference Update="FluentAssertions"                         Version="6.2.0" />
+    <PackageReference Update="Microsoft.NET.Test.Sdk"                   Version="17.0.0" />
     <PackageReference Update="System.IO.Abstractions.TestingHelpers"    Version="13.2.47" />
     <PackageReference Update="xunit"                                    Version="2.4.1" />
-    <PackageReference Update="xunit.runner.visualstudio"                Version="2.4.3" />
+    <PackageReference Update="xunit.runner.visualstudio"                Version="2.4.3"
+                      IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"
+                      PrivateAssets="all" />
   </ItemGroup>
 </Project>
