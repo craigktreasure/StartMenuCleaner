@@ -8,10 +8,13 @@ using Windows.Win32.UI.Shell;
 
 internal static class WindowsSdk
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility",
-        Justification = "PackAsTool doesn't support targeting specific platforms.")]
     public static unsafe string ResolveShortcut(string shortcutFilePath)
     {
+        if (!OperatingSystem.IsWindowsVersionAtLeast(5, 1, 2600))
+        {
+            throw new NotSupportedException($"{nameof(ResolveShortcut)} is only supported on Windows 5.1.2600+.");
+        }
+
         // See the following issues for current status and new advice:
         // https://github.com/microsoft/CsWin32/issues/453
         // https://github.com/microsoft/CsWin32/discussions/323
