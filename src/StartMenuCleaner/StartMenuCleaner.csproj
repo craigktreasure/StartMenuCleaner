@@ -3,10 +3,13 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
-    <Description>A simple start menu cleaner.</Description>
-    <ToolCommandName>Clean-StartMenu</ToolCommandName>
+
     <PackAsTool>True</PackAsTool>
+    <ToolCommandName>Clean-StartMenu</ToolCommandName>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>A start menu cleaner for Windows.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
