@@ -6,7 +6,7 @@ using System.Linq;
 
 /// <summary>
 /// A utility class for handling file shortcuts.
-/// A shortcut path syntax can be used to convert to a <see cref="FileShortcut"/>: "<file_path>;<target_path>".
+/// A shortcut path syntax can be used to convert to a <see cref="FileShortcut"/>: "{file_path};{target_path}".
 /// Implements the <see cref="FileShortcut" />
 /// </summary>
 public class FileShortcut : IEquatable<FileShortcut>
@@ -37,7 +37,7 @@ public class FileShortcut : IEquatable<FileShortcut>
     }
 
     /// <summary>
-    /// Determines whether the specified value contains shortcut path syntax ("<file_path>;<target_path>").
+    /// Determines whether the specified value contains shortcut path syntax ("{file_path};{target_path}").
     /// </summary>
     /// <param name="value">The value.</param>
     /// <returns>True if the value contains shortcut path syntax; otherwise false.</returns>
@@ -49,12 +49,26 @@ public class FileShortcut : IEquatable<FileShortcut>
     }
 
     /// <summary>
-    /// Converts shortcut path syntax ("<file_path>;<target_path>") to a <see cref="FileShortcut"/>.
+    /// Performs an explicit conversion from <see cref="string"/> to <see cref="FileShortcut"/>.
+    /// </summary>
+    /// <param name="value">The value.</param>
+    /// <returns>The result of the conversion.</returns>
+    public static explicit operator FileShortcut(string value) => FromString(value);
+
+    /// <summary>
+    /// Performs an explicit conversion from <see cref="FileShortcut"/> to <see cref="string"/>.
+    /// </summary>
+    /// <param name="fileShortcut">The shortcut path.</param>
+    /// <returns>The result of the conversion.</returns>
+    public static explicit operator string(FileShortcut fileShortcut) => Argument.NotNull(fileShortcut).ToString();
+
+    /// <summary>
+    /// Converts shortcut path syntax ("{file_path};{target_path}") to a <see cref="FileShortcut"/>.
     /// </summary>
     /// <param name="shortcutPathSyntax">The shortcut path syntax.</param>
-    /// <returns><see cref="StartMenuCleaner.TestLibrary.FileShortcut"/>.</returns>
+    /// <returns><see cref="FileShortcut"/>.</returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public static FileShortcut ConvertFrom(string shortcutPathSyntax)
+    public static FileShortcut FromString(string shortcutPathSyntax)
     {
         if (shortcutPathSyntax is null)
         {
@@ -76,7 +90,7 @@ public class FileShortcut : IEquatable<FileShortcut>
         string path = fragments[0];
         string target = fragments[1];
 
-        if (!System.IO.Path.GetExtension(path).Equals(lnkFileExtension, StringComparison.OrdinalIgnoreCase))
+        if (!Path.GetExtension(path).Equals(lnkFileExtension, StringComparison.OrdinalIgnoreCase))
         {
             throw new ArgumentException("Shortcut path does not contain a link (.lnk) file.", nameof(shortcutPathSyntax));
         }
@@ -85,27 +99,15 @@ public class FileShortcut : IEquatable<FileShortcut>
     }
 
     /// <summary>
-    /// Performs an explicit conversion from <see cref="string"/> to <see cref="StartMenuCleaner.TestLibrary.FileShortcut"/>.
-    /// </summary>
-    /// <param name="value">The value.</param>
-    /// <returns>The result of the conversion.</returns>
-    public static explicit operator FileShortcut(string value) => ConvertFrom(value);
-
-    /// <summary>
-    /// Performs an explicit conversion from <see cref="StartMenuCleaner.TestLibrary.FileShortcut"/> to <see cref="string"/>.
-    /// </summary>
-    /// <param name="fileShortcut">The shortcut path.</param>
-    /// <returns>The result of the conversion.</returns>
-    public static explicit operator string(FileShortcut fileShortcut) => fileShortcut.ToString();
-
-    /// <summary>
-    /// Tries to convert shortcut path syntax ("<file_path>;<target_path>") to a <see cref="FileShortcut"/>.
+    /// Tries to convert shortcut path syntax ("{file_path};{target_path}") to a <see cref="FileShortcut"/>.
     /// </summary>
     /// <param name="shortcutPathSyntax">The shortcut path syntax.</param>
     /// <param name="fileShortcut">The shortcut path.</param>
     /// <returns><see cref="bool"/>.</returns>
     public static bool TryConvertFrom(string shortcutPathSyntax, [NotNullWhen(true)] out FileShortcut? fileShortcut)
     {
+        Argument.NotNullOrWhiteSpace(shortcutPathSyntax);
+
         fileShortcut = null;
 
         if (!ContainsShortcutPathSyntax(shortcutPathSyntax))
@@ -163,7 +165,7 @@ public class FileShortcut : IEquatable<FileShortcut>
         (this.ToString()).GetHashCode(StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
-    /// Converts to a string using shortcut path syntax: "<file_path>;<target_path>".
+    /// Converts to a string using shortcut path syntax: "{file_path};{target_path}".
     /// </summary>
     /// <returns><see cref="string"/>.</returns>
     public override string ToString() =>

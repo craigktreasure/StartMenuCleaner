@@ -4,6 +4,11 @@ using StartMenuCleaner.Utils;
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// Class TestFileShortcutHandler.
+/// Implements the <see cref="IFileShortcutHandler" />
+/// </summary>
+/// <seealso cref="IFileShortcutHandler" />
 public class TestFileShortcutHandler : IFileShortcutHandler
 {
     private readonly IDictionary<string, string> shortcutMap;
@@ -34,7 +39,11 @@ public class TestFileShortcutHandler : IFileShortcutHandler
     /// </summary>
     /// <param name="shortcut">The shortcut.</param>
     public void AddShortcutMapping(FileShortcut shortcut)
-        => this.AddShortcutMapping(shortcut.FilePath, shortcut.TargetPath);
+    {
+        ArgumentNullException.ThrowIfNull(shortcut);
+
+        this.AddShortcutMapping(shortcut.FilePath, shortcut.TargetPath);
+    }
 
     /// <summary>
     /// Resolves the target path of the specified shortcut.
