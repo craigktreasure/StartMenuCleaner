@@ -62,7 +62,7 @@ internal class Program
                 loggingBuilder.AddSerilog(SerilogLogging.Create(), dispose: true);
             })
             .UseFileSystem()
-            .UseDefaultFileShortcutHandler()
+            .RegisterFileShortcutHandler<CsWin32ShortcutHandler>()
             .AddTransient<FileClassifier>()
             .AddTransient<CleanupRulesEngine>()
             .AddSingleton(cleanerOptions)

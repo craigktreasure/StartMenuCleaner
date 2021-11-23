@@ -6,10 +6,10 @@ using StartMenuCleaner.Utils;
 using System.IO;
 using Xunit;
 
-public class DefaultFileShortcutHandlerTests
+public class CsWin32ShortcutHandlerTests
 {
     [Fact]
-    public void ResolveShortcutTargetPath()
+    public void ResolveTarget()
     {
         EmbeddedResourceHelper embeddedResourceHelper = new(typeof(AssemblyToken).Assembly);
 
@@ -17,7 +17,7 @@ public class DefaultFileShortcutHandlerTests
 
         try
         {
-            DefaultFileShortcutHandler shortcutHandler = new();
+            CsWin32ShortcutHandler shortcutHandler = new();
             string actualTargetPath = shortcutHandler.ResolveTarget(temporaryFilePath);
 
             actualTargetPath.Should().Be(@"C:\Windows\System32\systeminfo.exe");

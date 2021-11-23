@@ -7,12 +7,14 @@ using System.IO.Abstractions;
 internal static class SericeCollectionExtensions
 {
     /// <summary>
-    /// Adds the default file shortcut handler to the service collection.
+    /// Registers the file shortcut handler.
     /// </summary>
+    /// <typeparam name="TShortcutHandler">The type of the shortcut handler.</typeparam>
     /// <param name="services">The services.</param>
     /// <returns><see cref="IServiceCollection"/>.</returns>
-    public static IServiceCollection UseDefaultFileShortcutHandler(this IServiceCollection services)
-                => services.AddSingleton<IFileShortcutHandler>(new DefaultFileShortcutHandler());
+    public static IServiceCollection RegisterFileShortcutHandler<TShortcutHandler>(this IServiceCollection services)
+        where TShortcutHandler : class, IFileShortcutHandler
+        => services.AddSingleton<IFileShortcutHandler, TShortcutHandler>();
 
     /// <summary>
     /// Adds the file system to the service collection.
