@@ -3,6 +3,7 @@
   <PropertyGroup>
     <SourceRootPath>$(MSBuildThisFileDirectory)</SourceRootPath>
     <CentralBuildOutputPath>$(SourceRootPath)</CentralBuildOutputPath>
+    <CentralBuildOutputRelativeToPath>$(SourceRootPath)/src/</CentralBuildOutputRelativeToPath>
   </PropertyGroup>
 
   <Import Project="$(MSBuildThisFileDirectory)\build\Defaults.props" />
