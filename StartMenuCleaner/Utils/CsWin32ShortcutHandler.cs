@@ -6,13 +6,13 @@ using Windows.Win32.Storage.FileSystem;
 using Windows.Win32.System.Com;
 using Windows.Win32.UI.Shell;
 
-internal static class WindowsSdk
+internal class CsWin32ShortcutHandler : IFileShortcutHandler
 {
-    public static unsafe string ResolveShortcut(string shortcutFilePath)
+    public unsafe string ResolveTarget(string shortcutPath)
     {
         if (!OperatingSystem.IsWindowsVersionAtLeast(5, 1, 2600))
         {
-            throw new NotSupportedException($"{nameof(ResolveShortcut)} is only supported on Windows 5.1.2600+.");
+            throw new NotSupportedException($"{nameof(ResolveTarget)} is only supported on Windows 5.1.2600+.");
         }
 
         // See the following issues for current status and new advice:
@@ -21,7 +21,7 @@ internal static class WindowsSdk
         IPersistFile shellLink = (IPersistFile)(Activator.CreateInstance(Type.GetTypeFromCLSID(typeof(ShellLink).GUID, throwOnError: true)!)
             ?? throw new InvalidOperationException("Failed to create an instance of ShellLink"));
 
-        fixed (char* shortcutFilePathPcwstr = shortcutFilePath)
+        fixed (char* shortcutFilePathPcwstr = shortcutPath)
         {
             shellLink.Load(shortcutFilePathPcwstr, PInvoke.STGM_READ);
         }
