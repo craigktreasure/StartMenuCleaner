@@ -2,6 +2,7 @@
 <Project InitialTargets="_ValidatePathProperties">
   <PropertyGroup Condition=" '$(EnableCentralBuildOutput)' != 'false' ">
     <RelativeProjectPath>$([MSBuild]::MakeRelative($(CentralBuildOutputPath), $(MSBuildProjectDirectory)))/</RelativeProjectPath>
+    <RelativeProjectPath Condition=" '$(CentralBuildOutputRelativeToPath)' != '' ">$([MSBuild]::MakeRelative($(CentralBuildOutputRelativeToPath), $(MSBuildProjectDirectory)))/</RelativeProjectPath>
 
     <!-- Set output root folders. -->
     <BasePackagesDir>$(CentralBuildOutputPath)__packages/</BasePackagesDir>
