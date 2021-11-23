@@ -1,6 +1,7 @@
 IPersistFile
 IShellLinkW
 MAX_PATH
+ShellLink
 SLGP_FLAGS
 SLR_FLAGS
 STGM_READ

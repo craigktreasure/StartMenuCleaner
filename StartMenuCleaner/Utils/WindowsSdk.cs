@@ -1,7 +1,6 @@
 namespace StartMenuCleaner.Utils;
 
 using System;
-using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Storage.FileSystem;
 using Windows.Win32.System.Com;
@@ -9,25 +8,19 @@ using Windows.Win32.UI.Shell;
 
 internal static class WindowsSdk
 {
-    // CLSID_ShellLink from ShlGuid.h
-    [
-        ComImport(),
-        Guid("00021401-0000-0000-C000-000000000046")
-    ]
-    internal class ShellLink
-    {
-    }
-
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility",
         Justification = "PackAsTool doesn't support targeting specific platforms.")]
     public static unsafe string ResolveShortcut(string shortcutFilePath)
     {
-        ShellLink shellLink = new();
+        // See the following issues for current status and new advice:
+        // https://github.com/microsoft/CsWin32/issues/453
+        // https://github.com/microsoft/CsWin32/discussions/323
+        IPersistFile shellLink = (IPersistFile)(Activator.CreateInstance(Type.GetTypeFromCLSID(typeof(ShellLink).GUID, throwOnError: true)!)
+            ?? throw new InvalidOperationException("Failed to create an instance of ShellLink"));
 
-        IPersistFile persistFile = (IPersistFile)shellLink;
         fixed (char* shortcutFilePathPcwstr = shortcutFilePath)
         {
-            persistFile.Load(shortcutFilePathPcwstr, PInvoke.STGM_READ);
+            shellLink.Load(shortcutFilePathPcwstr, PInvoke.STGM_READ);
         }
 
         Span<char> szShortcutTargetPath = stackalloc char[(int)PInvoke.MAX_PATH];
