@@ -11,7 +11,7 @@ internal static class StartMenuHelper
     /// <summary>
     /// Gets the known start menu folders.
     /// </summary>
-    /// <returns><see cref="IReadOnlyList{string}"/>.</returns>
+    /// <returns>An <see cref="IReadOnlyList{T}"/> of <see cref="string"/>.</returns>
     public static IReadOnlyList<string> GetKnownStartMenuFolders() => new[] {
             Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
             Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu),
@@ -20,7 +20,7 @@ internal static class StartMenuHelper
     /// <summary>
     /// Gets the known start menu programs folders.
     /// </summary>
-    /// <returns><see cref="IEnumerable{string}"/>.</returns>
+    /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="string"/>.</returns>
     public static IReadOnlyList<string> GetKnownStartMenuProgramsFolders() =>
         GetKnownStartMenuFolders()
             .Select(x => System.IO.Path.Combine(x, programsFolderName))

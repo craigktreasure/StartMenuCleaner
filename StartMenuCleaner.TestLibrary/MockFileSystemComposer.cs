@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 
+/// <summary>
+/// Class MockFileSystemComposer.
+/// </summary>
 public class MockFileSystemComposer
 {
     private readonly IReadOnlyList<string> defaultFileSystemNodes;
@@ -33,6 +36,8 @@ public class MockFileSystemComposer
     /// <param name="fileShortcut">The file shortcut.</param>
     public void Add(FileShortcut fileShortcut)
     {
+        ArgumentNullException.ThrowIfNull(fileShortcut);
+
         this.AddFile(fileShortcut.FilePath);
         this.ShortcutHandler.AddShortcutMapping(fileShortcut);
     }
@@ -43,6 +48,8 @@ public class MockFileSystemComposer
     /// <param name="filesAndFolders">The files and folders.</param>
     public void Add(params string[] filesAndFolders)
     {
+        ArgumentNullException.ThrowIfNull(filesAndFolders);
+
         foreach (string path in filesAndFolders)
         {
             if (FileShortcut.TryConvertFrom(path, out FileShortcut? fileShortcut))
@@ -86,7 +93,7 @@ public class MockFileSystemComposer
     /// <summary>
     /// Gets all nodes (excluding default nodes).
     /// </summary>
-    /// <returns><see cref="IEnumerable{string}"/>.</returns>
+    /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="string"/>.</returns>
     public IEnumerable<string> GetAllNodes() =>
         this.FileSystem.AllNodes.Except(this.defaultFileSystemNodes);
 }

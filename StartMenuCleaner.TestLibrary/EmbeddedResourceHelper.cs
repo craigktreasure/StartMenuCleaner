@@ -6,6 +6,9 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Reflection;
 
+/// <summary>
+/// Class EmbeddedResourceHelper.
+/// </summary>
 public class EmbeddedResourceHelper
 {
     private readonly IFileSystem fileSystem;
@@ -48,7 +51,7 @@ public class EmbeddedResourceHelper
     /// <summary>
     /// Gets the embedded resource names.
     /// </summary>
-    /// <returns><see cref="IReadOnlyList{string}"/>.</returns>
+    /// <returns>An <see cref="IReadOnlyList{T}"/> of <see cref="string"/>.</returns>
     public IReadOnlyList<string> GetResourceNames() => this.resourceAssembly.GetManifestResourceNames();
 
     /// <summary>
