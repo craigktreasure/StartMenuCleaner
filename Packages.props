@@ -2,6 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <DotNetPackageVersion>6.0.0</DotNetPackageVersion>
+    <SystemIOAbstractionsVersion>16.1.4</SystemIOAbstractionsVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,16 +24,16 @@
     <PackageReference Update="Serilog.Sinks.Console"                    Version="4.0.1" />
     <PackageReference Update="Serilog.Sinks.File"                       Version="5.0.0" />
     <PackageReference Update="Serilog.Sinks.Trace"                      Version="3.0.0" />
-    <PackageReference Update="System.IO.Abstractions"                   Version="16.1.4" />
+    <PackageReference Update="System.IO.Abstractions"                   Version="$(SystemIOAbstractionsVersion)" />
 
     <!-- Test dependencies -->
     <PackageReference Update="coverlet.collector"                       Version="3.1.0"
                       IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"
                       PrivateAssets="all" />
     <PackageReference Update="Divergic.Logging.Xunit"                   Version="4.0.0" />
-    <PackageReference Update="FluentAssertions"                         Version="6.3.0" />
+    <PackageReference Update="FluentAssertions"                         Version="6.4.0" />
     <PackageReference Update="Microsoft.NET.Test.Sdk"                   Version="17.0.0" />
-    <PackageReference Update="System.IO.Abstractions.TestingHelpers"    Version="16.1.4" />
+    <PackageReference Update="System.IO.Abstractions.TestingHelpers"    Version="$(SystemIOAbstractionsVersion)" />
     <PackageReference Update="xunit"                                    Version="2.4.1" />
     <PackageReference Update="xunit.runner.visualstudio"                Version="2.4.3"
                       IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive"
