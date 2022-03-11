@@ -16,11 +16,7 @@ internal class CsWin32ShortcutHandler : IFileShortcutHandler
             throw new NotSupportedException($"{nameof(ResolveTarget)} is only supported on Windows 5.1.2600+.");
         }
 
-        // See the following issues for current status and new advice:
-        // https://github.com/microsoft/CsWin32/issues/453
-        // https://github.com/microsoft/CsWin32/discussions/323
-        IPersistFile shellLink = (IPersistFile)(Activator.CreateInstance(Type.GetTypeFromCLSID(typeof(ShellLink).GUID, throwOnError: true)!)
-            ?? throw new InvalidOperationException("Failed to create an instance of ShellLink"));
+        IPersistFile shellLink = (IPersistFile)new ShellLink();
 
         fixed (char* shortcutFilePathPcwstr = shortcutPath)
         {
