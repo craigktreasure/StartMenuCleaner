@@ -2,4 +2,4 @@ IPersistFile
 IShellLinkW
 MAX_PATH
 ShellLink
-STGM_READ
+STGM

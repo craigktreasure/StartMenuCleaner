@@ -4,6 +4,7 @@ using System;
 using Windows.Win32;
 using Windows.Win32.Storage.FileSystem;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.UI.Shell;
 
 internal class CsWin32ShortcutHandler : IFileShortcutHandler
@@ -23,7 +24,7 @@ internal class CsWin32ShortcutHandler : IFileShortcutHandler
 
         fixed (char* shortcutFilePathPcwstr = shortcutPath)
         {
-            shellLink.Load(shortcutFilePathPcwstr, PInvoke.STGM_READ);
+            shellLink.Load(shortcutFilePathPcwstr, (uint)STGM.STGM_READ);
         }
 
         Span<char> szShortcutTargetPath = stackalloc char[(int)PInvoke.MAX_PATH];
