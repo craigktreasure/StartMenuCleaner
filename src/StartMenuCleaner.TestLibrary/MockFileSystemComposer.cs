@@ -86,7 +86,7 @@ public class MockFileSystemComposer
         }
         else
         {
-            this.FileSystem.AddFile(filePath, MockFileData.NullObject);
+            this.FileSystem.AddEmptyFile(filePath);
         }
     }
 
