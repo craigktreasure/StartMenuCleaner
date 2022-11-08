@@ -48,6 +48,7 @@ internal interface IFileShortcutHandler
     /// <param name="filePath">The file path.</param>
     /// <param name="shortcut">The shortcut.</param>
     /// <returns><see cref="bool"/>.</returns>
+    [SuppressMessage("Design", "CA1031:Do not catch general exception types")]
     public bool TryCreateShortcut(string filePath, [NotNullWhen(true)] out FileShortcut? shortcut)
     {
         shortcut = null;
