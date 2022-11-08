@@ -4,7 +4,6 @@ using System;
 using Windows.Win32;
 using Windows.Win32.Storage.FileSystem;
 using Windows.Win32.System.Com;
-using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.UI.Shell;
 
 internal class CsWin32ShortcutHandler : IFileShortcutHandler
