@@ -3,6 +3,7 @@ namespace StartMenuCleaner;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Linq;
 using systemIO = System.IO;
@@ -101,6 +102,7 @@ internal class Cleaner
         this.DeleteDirectory(itemToClean.Path);
     }
 
+    [SuppressMessage("Design", "CA1031:Do not catch general exception types")]
     private void CleanItem(ProgramDirectoryItem itemToClean)
     {
         Action<ProgramDirectoryItem> cleanFunction = this.GetCleanFunction(itemToClean.Reason);

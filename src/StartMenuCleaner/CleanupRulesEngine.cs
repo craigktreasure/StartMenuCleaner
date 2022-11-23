@@ -105,8 +105,9 @@ internal class CleanupRulesEngine
         IEnumerable<string> filePaths = this.fileSystem.Directory.EnumerateFiles(directoryPath);
 
         // Classify the files
-        IEnumerable<FileClassificationItem> classifiedFiles = filePaths.Select(x =>
-            new FileClassificationItem(x, this.fileClassifier.ClassifyFile(x)));
+        IReadOnlyList<FileClassificationItem> classifiedFiles = filePaths
+            .Select(x => new FileClassificationItem(x, this.fileClassifier.ClassifyFile(x)))
+            .ToArray();
 
         if (classifiedFiles.Any(x => x.Classification == FileClassification.Other))
         {
@@ -133,14 +134,16 @@ internal class CleanupRulesEngine
             return false;
         }
 
-        IEnumerable<string> filePaths = this.fileSystem.Directory.EnumerateFiles(directoryPath);
+        IReadOnlyList<string> filePaths = this.fileSystem.Directory
+            .EnumerateFiles(directoryPath)
+            .ToArray();
 
-        if (filePaths.Count() != 1)
+        if (filePaths.Count != 1)
         {
             return false;
         }
 
-        string filePath = filePaths.First();
+        string filePath = filePaths[0];
 
         return this.fileClassifier.ClassifyFile(filePath) == FileClassification.App;
     }

@@ -4,6 +4,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using System;
+using System.Globalization;
 using System.IO;
 
 internal static class SerilogLogging
@@ -21,14 +22,18 @@ internal static class SerilogLogging
             .MinimumLevel.ControlledBy(loggingSwitch)
             .WriteTo.Console(
                 outputTemplate: "{Message}{NewLine}{Exception}",
-                restrictedToMinimumLevel: LogEventLevel.Information)
-            .WriteTo.Trace(restrictedToMinimumLevel: LogEventLevel.Verbose)
+                restrictedToMinimumLevel: LogEventLevel.Information,
+                formatProvider: CultureInfo.CurrentCulture)
+            .WriteTo.Trace(
+                restrictedToMinimumLevel: LogEventLevel.Verbose,
+                formatProvider: CultureInfo.CurrentCulture)
             .WriteTo.File(
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"logs\log-.txt"),
                 retainedFileCountLimit: 14,
                 outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}",
                 restrictedToMinimumLevel: LogEventLevel.Debug,
-                rollingInterval: RollingInterval.Day)
+                rollingInterval: RollingInterval.Day,
+                formatProvider: CultureInfo.CurrentCulture)
             .CreateLogger();
     }
 }

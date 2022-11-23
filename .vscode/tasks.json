@@ -7,9 +7,13 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/StartMenuCleaner/StartMenuCleaner.csproj"
+                "${workspaceFolder}/StartMenuCleaner.sln"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
