@@ -83,7 +83,8 @@ internal class Cleaner
             throw new systemIO.InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
         }
 
-        string programRootDir = this.fileSystem.Path.GetDirectoryName(itemToClean.Path);
+        string programRootDir = this.fileSystem.Path.GetDirectoryName(itemToClean.Path)
+            ?? throw new InvalidOperationException($"The directory could not be determined: '{itemToClean.Path}'.");
 
         IEnumerable<FileClassificationItem> files = this.fileSystem.Directory.EnumerateFiles(itemToClean.Path)
             .Select(x => new FileClassificationItem(x, this.fileClassifier.ClassifyFile(x)));
