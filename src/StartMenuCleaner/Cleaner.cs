@@ -16,15 +16,24 @@ internal class Cleaner
 
     private readonly IFileSystem fileSystem;
 
+    private readonly FileSystemOperationHandler fileSystemOperationHandler;
+
     private readonly ILogger<Cleaner> logger;
 
     private readonly CleanerOptions options;
 
-    public Cleaner(CleanerOptions options, IFileSystem fileSystem, FileClassifier fileClassifier, CleanupRulesEngine cleanupEngine, ILogger<Cleaner> logger)
+    public Cleaner(
+        CleanerOptions options,
+        IFileSystem fileSystem,
+        FileClassifier fileClassifier,
+        FileSystemOperationHandler fileSystemOperationHandler,
+        CleanupRulesEngine cleanupEngine,
+        ILogger<Cleaner> logger)
     {
         this.options = options;
         this.fileSystem = fileSystem;
         this.fileClassifier = fileClassifier;
+        this.fileSystemOperationHandler = fileSystemOperationHandler;
         this.logger = logger;
         this.cleanupEngine = cleanupEngine;
     }
@@ -64,11 +73,11 @@ internal class Cleaner
         Func<string, bool> testFunction = this.cleanupEngine.GetReasonTestFunction(CleanReason.Empty);
         if (!testFunction(itemToClean.Path))
         {
-            throw new systemIO.InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
+            throw new InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
         }
 
         // Delete the empty folder.
-        this.DeleteDirectory(itemToClean.Path);
+        this.fileSystemOperationHandler.DeleteDirectory(itemToClean.Path);
     }
 
     private void CleanFewAppsWithCruft(ProgramDirectoryItem itemToClean)
@@ -81,7 +90,7 @@ internal class Cleaner
         Func<string, bool> testFunction = this.cleanupEngine.GetReasonTestFunction(CleanReason.FewAppsWithCruft);
         if (!testFunction(itemToClean.Path))
         {
-            throw new systemIO.InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
+            throw new InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
         }
 
         string programRootDir = this.fileSystem.Path.GetDirectoryName(itemToClean.Path)
@@ -92,14 +101,14 @@ internal class Cleaner
 
         // Move the app items to the program root directory.
         IEnumerable<string> appFilePaths = files.Where(x => x.Classification == FileClassification.App).Select(x => x.Path);
-        this.MoveFilesToDirectory(programRootDir, appFilePaths, replaceExisting: true);
+        this.fileSystemOperationHandler.MoveFilesToDirectory(programRootDir, appFilePaths, replaceExisting: true);
 
         // Delete the rest of the files.
         IEnumerable<string> otherFilePaths = files.Where(x => x.Classification != FileClassification.App).Select(x => x.Path);
-        this.DeleteFiles(otherFilePaths);
+        this.fileSystemOperationHandler.DeleteFiles(otherFilePaths);
 
         // Delete the empty folder.
-        this.DeleteDirectory(itemToClean.Path);
+        this.fileSystemOperationHandler.DeleteDirectory(itemToClean.Path);
     }
 
     [SuppressMessage("Design", "CA1031:Do not catch general exception types")]
@@ -147,10 +156,10 @@ internal class Cleaner
 
         // Move the only file into the program root directory.
         string currentFileLocation = this.fileSystem.Directory.GetFiles(itemToClean.Path).First();
-        this.MoveFileToDirectory(programRootDir, currentFileLocation, replaceExisting: true);
+        this.fileSystemOperationHandler.MoveFileToDirectory(programRootDir, currentFileLocation, replaceExisting: true);
 
         // Delete the empty folder.
-        this.DeleteDirectory(itemToClean.Path);
+        this.fileSystemOperationHandler.DeleteDirectory(itemToClean.Path);
     }
 
     private Action<ProgramDirectoryItem> GetCleanFunction(CleanReason reason)
@@ -168,65 +177,4 @@ internal class Cleaner
         this.options.RootFoldersToClean
             .Where(this.fileSystem.Directory.Exists)
             .SelectMany(this.fileSystem.Directory.GetDirectories);
-
-    #region IO Operation Wrappers
-
-    private void DeleteDirectory(string directoryPath)
-    {
-        if (!this.options.Simulate)
-        {
-            this.fileSystem.Directory.Delete(directoryPath);
-        }
-
-        this.logger.DirectoryDeleted(this.fileSystem.Path.GetFileName(directoryPath));
-    }
-
-    private void DeleteFile(string filePath)
-    {
-        if (!this.fileSystem.File.Exists(filePath))
-        {
-            return;
-        }
-
-        if (!this.options.Simulate)
-        {
-            this.fileSystem.File.Delete(filePath);
-        }
-
-        this.logger.FileDeleted(this.fileSystem.Path.GetFileName(filePath));
-    }
-
-    private void DeleteFiles(IEnumerable<string> filePaths)
-    {
-        foreach (string filePath in filePaths)
-        {
-            this.DeleteFile(filePath);
-        }
-    }
-
-    private void MoveFilesToDirectory(string newDirectory, IEnumerable<string> currentFileLocations, bool replaceExisting = false)
-    {
-        foreach (string currentFileLocation in currentFileLocations)
-        {
-            this.MoveFileToDirectory(newDirectory, currentFileLocation, replaceExisting);
-        }
-    }
-
-    private void MoveFileToDirectory(string newDirectory, string currentFileLocation, bool replaceExisting = false)
-    {
-        string newFileLocation = this.fileSystem.Path.Combine(newDirectory, this.fileSystem.Path.GetFileName(currentFileLocation));
-        if (!this.options.Simulate)
-        {
-            if (replaceExisting && this.fileSystem.File.Exists(newFileLocation))
-            {
-                this.DeleteFile(newFileLocation);
-            }
-
-            this.fileSystem.File.Move(currentFileLocation, newFileLocation);
-        }
-
-        this.logger.FileMoved(this.fileSystem.Path.GetFileName(currentFileLocation), newFileLocation);
-    }
-
-    #endregion IO Operation Wrappers
 }

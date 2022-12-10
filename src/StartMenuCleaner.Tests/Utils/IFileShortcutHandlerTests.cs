@@ -8,9 +8,26 @@ using Xunit;
 
 public class IFileShortcutHandlerTests
 {
+    private readonly TestFileShortcutHandler testShortcutHandler = new();
+
     private IFileShortcutHandler ShortcutHandler => this.testShortcutHandler;
 
-    private readonly TestFileShortcutHandler testShortcutHandler = new();
+    [Fact]
+    public void GetShortcut()
+    {
+        FileShortcut expectedFileShortcut = new(@"C:\StartMenu\MyApp\MyApp.lnk", @"C:\Programs\MyApp\MyApp.exe");
+        this.testShortcutHandler.AddShortcutMapping(expectedFileShortcut);
+
+        FileShortcut shortcut = this.ShortcutHandler.GetShortcut(expectedFileShortcut.FilePath);
+        shortcut.Should().Be(expectedFileShortcut);
+    }
+
+    [Fact]
+    public void GetShortcutFromInvalidPath()
+    {
+        Assert.Throws<ArgumentException>("filePath", () =>
+            this.ShortcutHandler.GetShortcut(@"C:\StartMenu\MyApp\MyApp.txt"));
+    }
 
     [Fact]
     public void IsShortcut()
@@ -20,49 +37,32 @@ public class IFileShortcutHandlerTests
     }
 
     [Fact]
-    public void CreateShortcut()
+    public void TryGetShortcut()
     {
         FileShortcut expectedFileShortcut = new(@"C:\StartMenu\MyApp\MyApp.lnk", @"C:\Programs\MyApp\MyApp.exe");
         this.testShortcutHandler.AddShortcutMapping(expectedFileShortcut);
 
-        FileShortcut shortcut = this.ShortcutHandler.CreateShortcut(expectedFileShortcut.FilePath);
-        shortcut.Should().Be(expectedFileShortcut);
-    }
-
-    [Fact]
-    public void CreateShortcutFromInvalidPath()
-    {
-        Assert.Throws<ArgumentException>("filePath", () =>
-            this.ShortcutHandler.CreateShortcut(@"C:\StartMenu\MyApp\MyApp.txt"));
-    }
-
-    [Fact]
-    public void TryCreateShortcut()
-    {
-        FileShortcut expectedFileShortcut = new(@"C:\StartMenu\MyApp\MyApp.lnk", @"C:\Programs\MyApp\MyApp.exe");
-        this.testShortcutHandler.AddShortcutMapping(expectedFileShortcut);
-
-        this.ShortcutHandler.TryCreateShortcut(expectedFileShortcut.FilePath, out FileShortcut? shortcut)
+        this.ShortcutHandler.TryGetShortcut(expectedFileShortcut.FilePath, out FileShortcut? shortcut)
             .Should().Be(true);
 
         shortcut.Should().Be(expectedFileShortcut);
     }
 
     [Fact]
-    public void TryCreateShortcutFromInvalidPath()
+    public void TryGetShortcutFromInvalidPath()
     {
-        this.ShortcutHandler.TryCreateShortcut(@"C:\StartMenu\MyApp\MyApp.txt", out FileShortcut? shortcut)
+        this.ShortcutHandler.TryGetShortcut(@"C:\StartMenu\MyApp\MyApp.txt", out FileShortcut? shortcut)
             .Should().Be(false);
 
         shortcut.Should().BeNull();
     }
 
     [Fact]
-    public void TryCreateShortcutWithResolutionFailure()
+    public void TryGetShortcutWithResolutionFailure()
     {
         // Don't register the link causing the TestFileShortcutHandler to
         // throw in ResolveTarget.
-        this.ShortcutHandler.TryCreateShortcut(@"C:\StartMenu\MyApp\MyApp.lnk", out FileShortcut? shortcut)
+        this.ShortcutHandler.TryGetShortcut(@"C:\StartMenu\MyApp\MyApp.lnk", out FileShortcut? shortcut)
             .Should().Be(false);
 
         shortcut.Should().BeNull();

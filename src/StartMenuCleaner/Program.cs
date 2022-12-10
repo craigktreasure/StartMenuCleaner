@@ -63,10 +63,11 @@ internal class Program
             })
             .UseFileSystem()
             .RegisterFileShortcutHandler<CsWin32ShortcutHandler>()
-            .AddTransient<FileClassifier>()
-            .AddTransient<CleanupRulesEngine>()
+            .AddSingleton<FileClassifier>()
+            .AddSingleton<CleanupRulesEngine>()
             .AddSingleton(cleanerOptions)
-            .AddTransient<Cleaner>()
+            .AddSingleton<Cleaner>()
+            .AddSingleton<FileSystemOperationHandler>()
             .BuildServiceProvider();
     }
 }

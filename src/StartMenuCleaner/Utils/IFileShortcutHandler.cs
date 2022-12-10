@@ -8,14 +8,14 @@ internal interface IFileShortcutHandler
     private const string lnkFileExtension = ".lnk";
 
     /// <summary>
-    /// Creates a file shortcut.
+    /// Get a file shortcut.
     /// </summary>
     /// <param name="filePath">The file path.</param>
     /// <returns><see cref="FileShortcut"/>.</returns>
     /// <exception cref="ArgumentException"></exception>
-    public FileShortcut CreateShortcut(string filePath)
+    public FileShortcut GetShortcut(string filePath)
     {
-        if (this.TryCreateShortcut(filePath, out FileShortcut? result))
+        if (this.TryGetShortcut(filePath, out FileShortcut? result))
         {
             return result;
         }
@@ -30,7 +30,7 @@ internal interface IFileShortcutHandler
     /// <returns><see cref="bool"/>.</returns>
     public bool IsShortcut(string filePath)
     {
-        string ext = System.IO.Path.GetExtension(filePath);
+        string ext = Path.GetExtension(filePath);
 
         return ext == lnkFileExtension;
     }
@@ -43,13 +43,13 @@ internal interface IFileShortcutHandler
     string ResolveTarget(string shortcutPath);
 
     /// <summary>
-    /// Tries to create a file shortcut.
+    /// Tries to get a file shortcut.
     /// </summary>
     /// <param name="filePath">The file path.</param>
     /// <param name="shortcut">The shortcut.</param>
     /// <returns><see cref="bool"/>.</returns>
     [SuppressMessage("Design", "CA1031:Do not catch general exception types")]
-    public bool TryCreateShortcut(string filePath, [NotNullWhen(true)] out FileShortcut? shortcut)
+    public bool TryGetShortcut(string filePath, [NotNullWhen(true)] out FileShortcut? shortcut)
     {
         shortcut = null;
 

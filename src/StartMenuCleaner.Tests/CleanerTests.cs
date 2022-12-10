@@ -236,11 +236,16 @@ public class CleanerTests
         {
             Simulate = simulate
         };
+        FileSystemOperationHandler fileSystemOperationHandler = new(
+            this.output.BuildLoggerFor<FileSystemOperationHandler>(),
+            mockFileSystem,
+            cleanerOptions);
 
         return new Cleaner(
             cleanerOptions,
             mockFileSystem,
             classifier,
+            fileSystemOperationHandler,
             cleanupEngine,
             logger);
     }
