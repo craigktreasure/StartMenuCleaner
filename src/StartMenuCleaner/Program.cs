@@ -4,8 +4,9 @@ using CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using StartMenuCleaner.Cleaners.Directory;
+using StartMenuCleaner.Cleaners.File;
 using StartMenuCleaner.Utils;
-using System;
 
 internal class Program
 {
@@ -31,7 +32,7 @@ internal class Program
 
         if (options.Debug)
         {
-            SerilogLogging.SetMinLogLevel(Serilog.Events.LogEventLevel.Debug);
+            SerilogLogging.SetMinLogLevel(Serilog.Events.LogEventLevel.Verbose);
             logger.DebugEnabled();
         }
 
@@ -63,10 +64,14 @@ internal class Program
             })
             .UseFileSystem()
             .RegisterFileShortcutHandler<CsWin32ShortcutHandler>()
-            .AddTransient<FileClassifier>()
-            .AddTransient<CleanupRulesEngine>()
+            .AddSingleton<FileClassifier>()
+            .AddSingleton<FileSystemOperationHandler>()
             .AddSingleton(cleanerOptions)
-            .AddTransient<Cleaner>()
+            .AddSingleton<Cleaner>()
+            .AddSingleton<IFileCleaner, BadShortcutFileCleaner>()
+            .AddSingleton<IDirectoryCleaner, EmptyDirectoryCleaner>()
+            .AddSingleton<IDirectoryCleaner, SingleAppDirectoryCleaner>()
+            .AddSingleton<IDirectoryCleaner, FewAppsWithCruftDirectoryCleaner>()
             .BuildServiceProvider();
     }
 }

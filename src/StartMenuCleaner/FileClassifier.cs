@@ -95,7 +95,7 @@ internal class FileClassifier
 
     private bool IsLinkToApp(string filePath)
     {
-        if (this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
+        if (this.shortcutHandler.TryGetShortcut(filePath, out FileShortcut? shortcut))
         {
             string linkExt = this.fileSystem.Path.GetExtension(shortcut.TargetPath);
 
@@ -107,7 +107,7 @@ internal class FileClassifier
 
     private bool IsLinkToDeletableFile(string filePath)
     {
-        if (this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
+        if (this.shortcutHandler.TryGetShortcut(filePath, out FileShortcut? shortcut))
         {
             return this.IsDeletableFile(shortcut.TargetPath);
         }
@@ -117,7 +117,7 @@ internal class FileClassifier
 
     private bool IsLinkToHelp(string filePath)
     {
-        if (this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
+        if (this.shortcutHandler.TryGetShortcut(filePath, out FileShortcut? shortcut))
         {
             string linkExt = this.fileSystem.Path.GetExtension(shortcut.TargetPath);
 
@@ -129,7 +129,7 @@ internal class FileClassifier
 
     private bool IsLinkToUninstaller(string filePath)
     {
-        if (!this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
+        if (!this.shortcutHandler.TryGetShortcut(filePath, out FileShortcut? shortcut))
         {
             return false;
         }
@@ -144,7 +144,7 @@ internal class FileClassifier
 
     private bool IsLinkToWeb(string filePath)
     {
-        if (this.shortcutHandler.TryCreateShortcut(filePath, out FileShortcut? shortcut))
+        if (this.shortcutHandler.TryGetShortcut(filePath, out FileShortcut? shortcut))
         {
             return this.IsWebLink(shortcut.TargetPath);
         }

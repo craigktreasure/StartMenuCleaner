@@ -13,6 +13,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Using Include="Treasure.Utils" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="StartMenuCleaner.Tests" />
+    <InternalsVisibleTo Include="StartMenuCleaner.TestLibrary" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommandLineParser" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
@@ -24,6 +33,7 @@
     <PackageReference Include="Serilog.Sinks.File" />
     <PackageReference Include="Serilog.Sinks.Trace" />
     <PackageReference Include="System.IO.Abstractions" />
+    <PackageReference Include="Treasure.Utils.Argument" />
   </ItemGroup>
 
 </Project>

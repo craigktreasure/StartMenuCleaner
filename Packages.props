@@ -25,6 +25,7 @@
     <PackageReference Update="Serilog.Sinks.File"                       Version="5.0.0" />
     <PackageReference Update="Serilog.Sinks.Trace"                      Version="3.0.0" />
     <PackageReference Update="System.IO.Abstractions"                   Version="$(SystemIOAbstractionsVersion)" />
+    <PackageReference Update="Treasure.Utils.Argument"                  Version="1.0.0" />
 
     <!-- Test dependencies -->
     <PackageReference Update="coverlet.collector"                       Version="3.2.0"

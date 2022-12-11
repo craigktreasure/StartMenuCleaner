@@ -23,6 +23,7 @@ internal static class SerilogLogging
             .WriteTo.Console(
                 outputTemplate: "{Message}{NewLine}{Exception}",
                 restrictedToMinimumLevel: LogEventLevel.Information,
+                levelSwitch: loggingSwitch,
                 formatProvider: CultureInfo.CurrentCulture)
             .WriteTo.Trace(
                 restrictedToMinimumLevel: LogEventLevel.Verbose,

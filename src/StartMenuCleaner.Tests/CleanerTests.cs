@@ -2,11 +2,10 @@ namespace StartMenuCleaner.Tests;
 
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using StartMenuCleaner.Cleaners.Directory;
+using StartMenuCleaner.Cleaners.File;
 using StartMenuCleaner.TestLibrary;
-using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
-using Xunit;
-using Xunit.Abstractions;
 
 public class CleanerTests
 {
@@ -20,6 +19,23 @@ public class CleanerTests
     }
 
     [Fact]
+    public void BadShortcut()
+    {
+        // Arrange
+        Cleaner cleaner = this.GetCleaner();
+        this.fileSystemComposer.Add(@"C:\StartMenu\MyApp.lnk;C:\Programs\MyApp.exe");
+
+        // Act
+        cleaner.Start();
+
+        // Assert
+        this.AssertFileSystemContains(new[]
+        {
+            @"C:\StartMenu"
+        });
+    }
+
+    [Fact]
     public void CleanEmptyFolder()
     {
         Cleaner cleaner = this.GetCleaner();
@@ -30,8 +46,8 @@ public class CleanerTests
 
         this.AssertFileSystemContains(new[]
         {
-                @"C:\StartMenu"
-            });
+            @"C:\StartMenu"
+        });
     }
 
     [Fact]
@@ -41,19 +57,19 @@ public class CleanerTests
 
         this.fileSystemComposer.Add(new[]
         {
-                @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
-                @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
-                @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
-                @"C:\StartMenu\MyApp\MyApp Help.txt",
-            });
+            @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
+            @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
+            @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
+            @"C:\StartMenu\MyApp\MyApp Help.txt",
+        });
 
         cleaner.Start();
 
         this.AssertFileSystemContains(new[]
         {
-                @"C:\StartMenu\MyApp.lnk",
-                @"C:\StartMenu\MyApp2.lnk",
-            });
+            @"C:\StartMenu\MyApp.lnk",
+            @"C:\StartMenu\MyApp2.lnk",
+        });
     }
 
     [Fact]
@@ -63,23 +79,23 @@ public class CleanerTests
 
         this.fileSystemComposer.Add(new[]
         {
-                @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
-                @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
-                @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
-                @"C:\StartMenu\MyApp\MyApp Help.txt",
-                @"C:\StartMenu\MyApp\Foo",
-            });
+            @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
+            @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
+            @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
+            @"C:\StartMenu\MyApp\MyApp Help.txt",
+            @"C:\StartMenu\MyApp\Foo",
+        });
 
         cleaner.Start();
 
         this.AssertFileSystemContains(new[]
         {
-                @"C:\StartMenu\MyApp\MyApp.lnk",
-                @"C:\StartMenu\MyApp\MyApp2.lnk",
-                @"C:\StartMenu\MyApp\MyApp Help.lnk",
-                @"C:\StartMenu\MyApp\MyApp Help.txt",
-                @"C:\StartMenu\MyApp\Foo",
-            });
+            @"C:\StartMenu\MyApp\MyApp.lnk",
+            @"C:\StartMenu\MyApp\MyApp2.lnk",
+            @"C:\StartMenu\MyApp\MyApp Help.lnk",
+            @"C:\StartMenu\MyApp\MyApp Help.txt",
+            @"C:\StartMenu\MyApp\Foo",
+        });
     }
 
     [Fact]
@@ -89,23 +105,23 @@ public class CleanerTests
 
         this.fileSystemComposer.Add(new[]
         {
-                @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
-                @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
-                @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
-                @"C:\StartMenu\MyApp\MyApp Help.txt",
-                @"C:\StartMenu\MyApp\Foo.other",
-            });
+            @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
+            @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
+            @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
+            @"C:\StartMenu\MyApp\MyApp Help.txt",
+            @"C:\StartMenu\MyApp\Foo.other",
+        });
 
         cleaner.Start();
 
         this.AssertFileSystemContains(new[]
         {
-                @"C:\StartMenu\MyApp\MyApp.lnk",
-                @"C:\StartMenu\MyApp\MyApp2.lnk",
-                @"C:\StartMenu\MyApp\MyApp Help.lnk",
-                @"C:\StartMenu\MyApp\MyApp Help.txt",
-                @"C:\StartMenu\MyApp\Foo.other",
-            });
+            @"C:\StartMenu\MyApp\MyApp.lnk",
+            @"C:\StartMenu\MyApp\MyApp2.lnk",
+            @"C:\StartMenu\MyApp\MyApp Help.lnk",
+            @"C:\StartMenu\MyApp\MyApp Help.txt",
+            @"C:\StartMenu\MyApp\Foo.other",
+        });
     }
 
     [Fact]
@@ -121,8 +137,8 @@ public class CleanerTests
 
         this.AssertFileSystemContains(new[]
         {
-                @"C:\StartMenu\Maintenance\MyApp.lnk"
-            });
+            @"C:\StartMenu\Maintenance\MyApp.lnk"
+        });
     }
 
     [Fact]
@@ -138,8 +154,8 @@ public class CleanerTests
 
         this.AssertFileSystemContains(new[]
         {
-                @"C:\StartMenu\MyApp.lnk"
-            });
+            @"C:\StartMenu\MyApp.lnk"
+        });
     }
 
     [Fact]
@@ -149,17 +165,17 @@ public class CleanerTests
 
         this.fileSystemComposer.Add(new[]
         {
-                @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
-                @"C:\StartMenu\MyApp\Foo",
-            });
+            @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
+            @"C:\StartMenu\MyApp\Foo",
+        });
 
         cleaner.Start();
 
         this.AssertFileSystemContains(new[]
         {
-                @"C:\StartMenu\MyApp\MyApp.lnk",
-                @"C:\StartMenu\MyApp\Foo"
-            });
+            @"C:\StartMenu\MyApp\MyApp.lnk",
+            @"C:\StartMenu\MyApp\Foo"
+        });
     }
 
     [Fact]
@@ -169,19 +185,19 @@ public class CleanerTests
 
         this.fileSystemComposer.Add(new[]
         {
-                @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
-                @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
-                @"C:\StartMenu\MyApp\MyApp3.lnk;C:\Programs\MyApp\MyApp3.exe",
-            });
+            @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
+            @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
+            @"C:\StartMenu\MyApp\MyApp3.lnk;C:\Programs\MyApp\MyApp3.exe",
+        });
 
         cleaner.Start();
 
         this.AssertFileSystemContains(new[]
         {
-                @"C:\StartMenu\MyApp\MyApp.lnk",
-                @"C:\StartMenu\MyApp\MyApp2.lnk",
-                @"C:\StartMenu\MyApp\MyApp3.lnk",
-            });
+            @"C:\StartMenu\MyApp\MyApp.lnk",
+            @"C:\StartMenu\MyApp\MyApp2.lnk",
+            @"C:\StartMenu\MyApp\MyApp3.lnk",
+        });
     }
 
     [Fact]
@@ -191,17 +207,17 @@ public class CleanerTests
 
         this.fileSystemComposer.Add(new[]
         {
-                @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
-                @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
-            });
+            @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
+            @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
+        });
 
         cleaner.Start();
 
         this.AssertFileSystemContains(new[]
         {
-                @"C:\StartMenu\MyApp.lnk",
-                @"C:\StartMenu\MyApp2.lnk",
-            });
+            @"C:\StartMenu\MyApp.lnk",
+            @"C:\StartMenu\MyApp2.lnk",
+        });
     }
 
     [Fact]
@@ -215,8 +231,8 @@ public class CleanerTests
 
         this.AssertFileSystemContains(new[]
         {
-                @"C:\StartMenu\MyApp"
-            });
+            @"C:\StartMenu\MyApp"
+        });
     }
 
     private void AssertFileSystemContains(IEnumerable<string> expectedNodes)
@@ -231,17 +247,30 @@ public class CleanerTests
         MockFileSystem mockFileSystem = this.fileSystemComposer.FileSystem;
         TestFileShortcutHandler shortcutHandler = this.fileSystemComposer.ShortcutHandler;
         FileClassifier classifier = new(mockFileSystem, shortcutHandler);
-        CleanupRulesEngine cleanupEngine = new(mockFileSystem, classifier);
         CleanerOptions cleanerOptions = new(new[] { @"C:\StartMenu" })
         {
             Simulate = simulate
         };
+        FileSystemOperationHandler fileSystemOperationHandler = new(
+            this.output.BuildLoggerFor<FileSystemOperationHandler>(),
+            mockFileSystem,
+            cleanerOptions);
+        IFileCleaner[] fileCleaners = new[]
+        {
+            new BadShortcutFileCleaner(mockFileSystem, shortcutHandler, fileSystemOperationHandler),
+        };
+        IDirectoryCleaner[] directoryCleaners = new IDirectoryCleaner[]
+        {
+            new EmptyDirectoryCleaner(mockFileSystem, fileSystemOperationHandler),
+            new SingleAppDirectoryCleaner(mockFileSystem, fileSystemOperationHandler, classifier),
+            new FewAppsWithCruftDirectoryCleaner(mockFileSystem, fileSystemOperationHandler, classifier),
+        };
 
         return new Cleaner(
             cleanerOptions,
+            logger,
             mockFileSystem,
-            classifier,
-            cleanupEngine,
-            logger);
+            fileCleaners,
+            directoryCleaners);
     }
 }
