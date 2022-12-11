@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Using Include="Xunit" />
+    <Using Include="Xunit.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="EmbeddedContent\**\*" />
     <EmbeddedResource Include="EmbeddedContent\**\*">
       <LogicalName>%(Identity)</LogicalName>
