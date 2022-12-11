@@ -51,6 +51,7 @@ internal class DirectoryCleaner
                 if (cleaner.CanClean(subdirectoryPath))
                 {
                     items.Add(new DirectoryItemToClean(subdirectoryPath, cleaner));
+                    break;
                 }
             }
         }

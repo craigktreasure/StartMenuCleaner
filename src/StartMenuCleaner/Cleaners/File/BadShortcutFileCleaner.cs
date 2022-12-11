@@ -55,11 +55,6 @@ internal class BadShortcutFileCleaner : IFileCleaner
     /// <param name="filePath">The file path.</param>
     public void Clean(string filePath)
     {
-        if (!this.fileSystem.File.Exists(filePath))
-        {
-            throw new FileNotFoundException(filePath);
-        }
-
         if (!this.CanClean(filePath))
         {
             throw new InvalidOperationException($"The file cannot be cleaned by the {nameof(BadShortcutFileCleaner)}: '{filePath}'.");

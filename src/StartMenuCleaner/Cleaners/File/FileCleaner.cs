@@ -51,6 +51,7 @@ internal class FileCleaner
                 if (cleaner.CanClean(filePath))
                 {
                     items.Add(new ProgramFileItem(filePath, cleaner));
+                    break;
                 }
             }
         }

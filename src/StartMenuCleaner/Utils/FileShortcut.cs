@@ -1,8 +1,6 @@
 namespace StartMenuCleaner.Utils;
 
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 /// <summary>
 /// A utility class for handling file shortcuts.
@@ -125,7 +123,7 @@ public class FileShortcut : IEquatable<FileShortcut>
         string path = fragments[0];
         string target = fragments[1];
 
-        if (!System.IO.Path.GetExtension(path).Equals(lnkFileExtension, StringComparison.OrdinalIgnoreCase))
+        if (!Path.GetExtension(path).Equals(lnkFileExtension, StringComparison.OrdinalIgnoreCase))
         {
             return false;
         }

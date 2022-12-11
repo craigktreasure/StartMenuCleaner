@@ -100,6 +100,16 @@ public class BadShortcutFileCleanerTests
     }
 
     [Fact]
+    public void Clean_FileNotExist()
+    {
+        // Arrange
+        BadShortcutFileCleaner fileCleaner = this.BuildCleaner();
+
+        // Act and assert
+        Assert.Throws<FileNotFoundException>(() => fileCleaner.Clean(string.Empty));
+    }
+
+    [Fact]
     public void Clean_GoodShortcut()
     {
         // Arrange

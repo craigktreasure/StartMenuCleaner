@@ -67,7 +67,6 @@ internal class Program
             .RegisterFileShortcutHandler<CsWin32ShortcutHandler>()
             .AddSingleton<FileClassifier>()
             .AddSingleton<FileSystemOperationHandler>()
-            .AddSingleton<CleanupRulesEngine>()
             .AddSingleton(cleanerOptions)
             .AddSingleton<Cleaner>()
             .AddSingleton<FileCleaner>()
@@ -75,6 +74,7 @@ internal class Program
             .AddSingleton<DirectoryCleaner>()
             .AddSingleton<IDirectoryCleaner, EmptyDirectoryCleaner>()
             .AddSingleton<IDirectoryCleaner, SingleAppDirectoryCleaner>()
+            .AddSingleton<IDirectoryCleaner, FewAppsWithCruftDirectoryCleaner>()
             .BuildServiceProvider();
     }
 }

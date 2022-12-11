@@ -1,6 +1,5 @@
 namespace StartMenuCleaner.Cleaners.Directory;
 
-using StartMenuCleaner.Extensions;
 using System.IO.Abstractions;
 
 internal class SingleAppDirectoryCleaner : DirectoryCleanerBase
@@ -36,12 +35,6 @@ internal class SingleAppDirectoryCleaner : DirectoryCleanerBase
     {
         if (this.ShouldIgnoreDirectory(directoryPath))
         {
-            return false;
-        }
-
-        if (this.FileSystem.Directory.IsEmpty(directoryPath))
-        {
-            // Avoid collision with EmptyDirectoryCleaner
             return false;
         }
 
