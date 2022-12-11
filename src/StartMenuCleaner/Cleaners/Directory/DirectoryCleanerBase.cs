@@ -7,7 +7,7 @@ internal abstract class DirectoryCleanerBase : IDirectoryCleaner
     /// <summary>
     /// Gets the cleaner type.
     /// </summary>
-    public abstract DirectoryCleanerType CleanerType { get; }
+    public abstract CleanerType CleanerType { get; }
 
     /// <summary>
     /// Gets the file system.

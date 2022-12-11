@@ -255,24 +255,22 @@ public class CleanerTests
             this.output.BuildLoggerFor<FileSystemOperationHandler>(),
             mockFileSystem,
             cleanerOptions);
-        FileCleaner fileCleaner = new(mockFileSystem, new[]
+        IFileCleaner[] fileCleaners = new[]
         {
             new BadShortcutFileCleaner(mockFileSystem, shortcutHandler, fileSystemOperationHandler),
-        });
-        DirectoryCleaner directoryCleaner = new(mockFileSystem, new IDirectoryCleaner[]
+        };
+        IDirectoryCleaner[] directoryCleaners = new IDirectoryCleaner[]
         {
             new EmptyDirectoryCleaner(mockFileSystem, fileSystemOperationHandler),
             new SingleAppDirectoryCleaner(mockFileSystem, fileSystemOperationHandler, classifier),
             new FewAppsWithCruftDirectoryCleaner(mockFileSystem, fileSystemOperationHandler, classifier),
-        });
+        };
 
         return new Cleaner(
             cleanerOptions,
+            logger,
             mockFileSystem,
-            classifier,
-            fileSystemOperationHandler,
-            fileCleaner,
-            directoryCleaner,
-            logger);
+            fileCleaners,
+            directoryCleaners);
     }
 }

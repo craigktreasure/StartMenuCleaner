@@ -7,7 +7,6 @@ using Serilog;
 using StartMenuCleaner.Cleaners.Directory;
 using StartMenuCleaner.Cleaners.File;
 using StartMenuCleaner.Utils;
-using System;
 
 internal class Program
 {
@@ -69,9 +68,7 @@ internal class Program
             .AddSingleton<FileSystemOperationHandler>()
             .AddSingleton(cleanerOptions)
             .AddSingleton<Cleaner>()
-            .AddSingleton<FileCleaner>()
             .AddSingleton<IFileCleaner, BadShortcutFileCleaner>()
-            .AddSingleton<DirectoryCleaner>()
             .AddSingleton<IDirectoryCleaner, EmptyDirectoryCleaner>()
             .AddSingleton<IDirectoryCleaner, SingleAppDirectoryCleaner>()
             .AddSingleton<IDirectoryCleaner, FewAppsWithCruftDirectoryCleaner>()

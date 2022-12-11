@@ -10,7 +10,7 @@ internal class EmptyDirectoryCleaner : DirectoryCleanerBase
     /// <summary>
     /// Gets the cleaner type.
     /// </summary>
-    public override DirectoryCleanerType CleanerType => DirectoryCleanerType.Empty;
+    public override CleanerType CleanerType => CleanerType.EmptyDirectory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EmptyDirectoryCleaner"/> class.

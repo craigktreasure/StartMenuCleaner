@@ -14,7 +14,7 @@ internal class FewAppsWithCruftDirectoryCleaner : DirectoryCleanerBase
     /// <summary>
     /// Gets the cleaner type.
     /// </summary>
-    public override DirectoryCleanerType CleanerType => DirectoryCleanerType.FewAppsWithCruft;
+    public override CleanerType CleanerType => CleanerType.FewAppsWithCruftDirectory;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FewAppsWithCruftDirectoryCleaner"/> class.

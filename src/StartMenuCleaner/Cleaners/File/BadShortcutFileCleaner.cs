@@ -14,7 +14,7 @@ internal class BadShortcutFileCleaner : IFileCleaner
     /// <summary>
     /// Gets the cleaner type.
     /// </summary>
-    public FileCleanerType CleanerType => FileCleanerType.BadShortcut;
+    public CleanerType CleanerType => CleanerType.BadShortcut;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BadShortcutFileCleaner" /> class.

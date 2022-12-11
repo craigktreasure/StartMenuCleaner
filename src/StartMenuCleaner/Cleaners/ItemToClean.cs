@@ -1,13 +1,13 @@
-namespace StartMenuCleaner.Cleaners.Directory;
+namespace StartMenuCleaner.Cleaners;
 
-internal class DirectoryItemToClean
+internal class ItemToClean
 {
-    private readonly IDirectoryCleaner cleaner;
+    private readonly ICleaner cleaner;
 
     /// <summary>
     /// Gets the cleaner type.
     /// </summary>
-    public DirectoryCleanerType CleanerType => this.cleaner.CleanerType;
+    public CleanerType CleanerType => this.cleaner.CleanerType;
 
     /// <summary>
     /// Gets the item path.
@@ -15,11 +15,11 @@ internal class DirectoryItemToClean
     public string Path { get; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="DirectoryItemToClean"/> class.
+    /// Initializes a new instance of the <see cref="ItemToClean"/> class.
     /// </summary>
     /// <param name="path">The path.</param>
     /// <param name="cleaner">The cleaner.</param>
-    public DirectoryItemToClean(string path, IDirectoryCleaner cleaner)
+    public ItemToClean(string path, ICleaner cleaner)
     {
         this.Path = path;
         this.cleaner = cleaner;
@@ -28,8 +28,5 @@ internal class DirectoryItemToClean
     /// <summary>
     /// Cleans this item.
     /// </summary>
-    public void Clean()
-    {
-        this.cleaner.Clean(this.Path);
-    }
+    public void Clean() => this.cleaner.Clean(this.Path);
 }

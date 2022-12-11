@@ -1,11 +1,9 @@
 namespace StartMenuCleaner;
 
 using Microsoft.Extensions.Logging;
+using StartMenuCleaner.Cleaners;
 using StartMenuCleaner.Cleaners.Directory;
 using StartMenuCleaner.Cleaners.File;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 internal static partial class LoggerExtensions
 {
@@ -15,10 +13,7 @@ internal static partial class LoggerExtensions
     [LoggerMessage(Level = LogLevel.Information, Message = "Finished Cleaning.", EventName = nameof(CleaningFinished))]
     public static partial void CleaningFinished(this ILogger logger);
 
-    public static void CleaningItem(this ILogger logger, FileItemToClean item)
-        => logger.CleaningItem(item.CleanerType, item.Path);
-
-    public static void CleaningItem(this ILogger logger, DirectoryItemToClean item)
+    public static void CleaningItem(this ILogger logger, ItemToClean item)
         => logger.CleaningItem(item.CleanerType, item.Path);
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Cleaning.", EventName = nameof(CleaningStarted))]
@@ -39,35 +34,18 @@ internal static partial class LoggerExtensions
     [LoggerMessage(Level = LogLevel.Information, Message = "Finished", EventName = nameof(Finished))]
     public static partial void Finished(this ILogger logger);
 
-    public static void FoundItemsToClean(this ILogger logger, IEnumerable<FileItemToClean> itemsToClean)
+    public static void FoundItemsToClean(this ILogger logger, IEnumerable<ItemToClean> itemsToClean)
     {
-        foreach (IGrouping<FileCleanerType, FileItemToClean> group in itemsToClean.GroupBy(x => x.CleanerType))
+        foreach (IGrouping<CleanerType, ItemToClean> group in itemsToClean.GroupBy(x => x.CleanerType))
         {
             logger.FoundItemsToClean(group);
         }
     }
 
-    public static void FoundItemsToClean(this ILogger logger, IEnumerable<DirectoryItemToClean> itemsToClean)
-    {
-        foreach (IGrouping<DirectoryCleanerType, DirectoryItemToClean> group in itemsToClean.GroupBy(x => x.CleanerType))
-        {
-            logger.FoundItemsToClean(group);
-        }
-    }
-
-    public static void FoundItemsToClean(this ILogger logger, IGrouping<FileCleanerType, FileItemToClean> groupItems)
+    public static void FoundItemsToClean(this ILogger logger, IGrouping<CleanerType, ItemToClean> groupItems)
     {
         logger.FoundItemsToClean(groupItems.Count(), groupItems.Key);
-        foreach (FileItemToClean item in groupItems)
-        {
-            logger.FoundItemsToCleanPath(item.Path);
-        }
-    }
-
-    public static void FoundItemsToClean(this ILogger logger, IGrouping<DirectoryCleanerType, DirectoryItemToClean> groupItems)
-    {
-        logger.FoundItemsToClean(groupItems.Count(), groupItems.Key);
-        foreach (DirectoryItemToClean item in groupItems)
+        foreach (ItemToClean item in groupItems)
         {
             logger.FoundItemsToCleanPath(item.Path);
         }
@@ -86,16 +64,10 @@ internal static partial class LoggerExtensions
     public static partial void Starting(this ILogger logger);
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Cleaning {CleanerType} {Path}", EventName = nameof(CleaningItem))]
-    private static partial void CleaningItem(this ILogger logger, FileCleanerType cleanerType, string path);
-
-    [LoggerMessage(Level = LogLevel.Information, Message = "Cleaning {CleanerType} {Path}", EventName = nameof(CleaningItem))]
-    private static partial void CleaningItem(this ILogger logger, DirectoryCleanerType cleanerType, string path);
+    private static partial void CleaningItem(this ILogger logger, CleanerType cleanerType, string path);
 
     [LoggerMessage(Level = LogLevel.Trace, Message = "Found {Count} {Type} items to clean:", EventName = nameof(FoundItemsToClean))]
-    private static partial void FoundItemsToClean(this ILogger logger, int count, FileCleanerType type);
-
-    [LoggerMessage(Level = LogLevel.Trace, Message = "Found {Count} {Type} items to clean:", EventName = nameof(FoundItemsToClean))]
-    private static partial void FoundItemsToClean(this ILogger logger, int count, DirectoryCleanerType type);
+    private static partial void FoundItemsToClean(this ILogger logger, int count, CleanerType type);
 
     [LoggerMessage(Level = LogLevel.Trace, Message = "\t{Path}", EventName = nameof(FoundItemsToCleanPath))]
     private static partial void FoundItemsToCleanPath(this ILogger logger, string path);

@@ -4,7 +4,7 @@ using System.IO.Abstractions;
 
 internal class SingleAppDirectoryCleaner : DirectoryCleanerBase
 {
-    public override DirectoryCleanerType CleanerType => DirectoryCleanerType.SingleApp;
+    public override CleanerType CleanerType => CleanerType.SingleAppDirectory;
 
     private readonly FileClassifier fileClassifier;
 

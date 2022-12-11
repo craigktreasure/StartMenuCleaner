@@ -1,6 +1,7 @@
 namespace StartMenuCleaner;
 
 using Microsoft.Extensions.Logging;
+using StartMenuCleaner.Cleaners;
 using StartMenuCleaner.Cleaners.Directory;
 using StartMenuCleaner.Cleaners.File;
 using System;
@@ -11,15 +12,11 @@ using System.Linq;
 
 internal class Cleaner
 {
-    private readonly DirectoryCleaner directoryCleaner;
+    private readonly IEnumerable<IDirectoryCleaner> directoryCleaners;
 
-    private readonly FileClassifier fileClassifier;
-
-    private readonly FileCleaner fileCleaner;
+    private readonly IEnumerable<IFileCleaner> fileCleaners;
 
     private readonly IFileSystem fileSystem;
-
-    private readonly FileSystemOperationHandler fileSystemOperationHandler;
 
     private readonly ILogger<Cleaner> logger;
 
@@ -27,19 +24,15 @@ internal class Cleaner
 
     public Cleaner(
         CleanerOptions options,
+        ILogger<Cleaner> logger,
         IFileSystem fileSystem,
-        FileClassifier fileClassifier,
-        FileSystemOperationHandler fileSystemOperationHandler,
-        FileCleaner fileCleaner,
-        DirectoryCleaner directoryCleaner,
-        ILogger<Cleaner> logger)
+        IEnumerable<IFileCleaner> fileCleaners,
+        IEnumerable<IDirectoryCleaner> directoryCleaners)
     {
         this.options = options;
         this.fileSystem = fileSystem;
-        this.fileClassifier = fileClassifier;
-        this.fileSystemOperationHandler = fileSystemOperationHandler;
-        this.fileCleaner = fileCleaner;
-        this.directoryCleaner = directoryCleaner;
+        this.fileCleaners = fileCleaners;
+        this.directoryCleaners = directoryCleaners;
         this.logger = logger;
     }
 
@@ -51,31 +44,26 @@ internal class Cleaner
             Console.WriteLine();
         }
 
-        IReadOnlyList<FileItemToClean> fileItemsToClean = this.fileCleaner.GetItemsToClean(this.options.RootFoldersToClean);
+        IReadOnlyList<ItemToClean> itemsToClean = this.GetItemsToClean(this.options.RootFoldersToClean);
 
-        IReadOnlyList<DirectoryItemToClean> directoryItemsToClean = this.directoryCleaner.GetItemsToClean(this.options.RootFoldersToClean);
-
-        if (fileItemsToClean.Count == 0
-            && directoryItemsToClean.Count == 0)
+        if (itemsToClean.Count == 0)
         {
             this.logger.NothingToClean();
             return;
         }
 
-        this.logger.FoundItemsToClean(fileItemsToClean);
-        this.logger.FoundItemsToClean(directoryItemsToClean);
+        this.logger.FoundItemsToClean(itemsToClean);
 
         this.logger.CleaningStarted();
-        this.CleanItems(fileItemsToClean);
-        this.CleanItems(directoryItemsToClean);
+        this.CleanItems(itemsToClean);
 
         this.logger.CleaningFinished();
     }
 
     [SuppressMessage("Design", "CA1031:Do not catch general exception types")]
-    private void CleanItems(IEnumerable<FileItemToClean> itemsToClean)
+    private void CleanItems(IEnumerable<ItemToClean> itemsToClean)
     {
-        foreach (FileItemToClean item in itemsToClean)
+        foreach (ItemToClean item in itemsToClean)
         {
             this.logger.CleaningItem(item);
 
@@ -90,21 +78,86 @@ internal class Cleaner
         }
     }
 
-    [SuppressMessage("Design", "CA1031:Do not catch general exception types")]
-    private void CleanItems(IEnumerable<DirectoryItemToClean> itemsToClean)
-    {
-        foreach (DirectoryItemToClean item in itemsToClean)
-        {
-            this.logger.CleaningItem(item);
+    /// <summary>
+    /// Gets the directory items to clean.
+    /// </summary>
+    /// <param name="directoryPaths">The directory paths.</param>
+    /// <returns><see cref="IReadOnlyList{ItemToClean}"/>.</returns>
+    private IReadOnlyList<ItemToClean> GetDirectoryItemsToClean(IEnumerable<string> directoryPaths)
+        => directoryPaths
+        .Where(this.fileSystem.Directory.Exists)
+        .SelectMany(this.GetDirectoryItemsToClean)
+        .ToArray();
 
-            try
+    /// <summary>
+    /// Gets the directory items to clean.
+    /// </summary>
+    /// <param name="directoryPath">The directory path.</param>
+    /// <returns><see cref="IReadOnlyList{ItemToClean}"/>.</returns>
+    private IReadOnlyList<ItemToClean> GetDirectoryItemsToClean(string directoryPath)
+    {
+        if (!this.fileSystem.Directory.Exists(directoryPath))
+        {
+            throw new DirectoryNotFoundException(directoryPath);
+        }
+
+        List<ItemToClean> items = new();
+
+        foreach (string subdirectoryPath in this.fileSystem.Directory.GetDirectories(directoryPath))
+        {
+            foreach (IDirectoryCleaner cleaner in this.directoryCleaners)
             {
-                item.Clean();
-            }
-            catch (Exception ex)
-            {
-                this.logger.CleaningFailed(item.Path, ex);
+                if (cleaner.CanClean(subdirectoryPath))
+                {
+                    items.Add(new ItemToClean(subdirectoryPath, cleaner));
+                    break;
+                }
             }
         }
+
+        return items;
     }
+
+    /// <summary>
+    /// Gets the file items to clean.
+    /// </summary>
+    /// <param name="directoryPaths">The directory paths.</param>
+    /// <returns><see cref="IReadOnlyList{ItemToClean}"/>.</returns>
+    private IReadOnlyList<ItemToClean> GetFileItemsToClean(IEnumerable<string> directoryPaths)
+        => directoryPaths
+        .Where(this.fileSystem.Directory.Exists)
+        .SelectMany(this.GetFileItemsToClean)
+        .ToArray();
+
+    /// <summary>
+    /// Gets the file items to clean.
+    /// </summary>
+    /// <param name="directoryPath">The directory path.</param>
+    /// <returns><see cref="IReadOnlyList{ItemToClean}"/>.</returns>
+    private IReadOnlyList<ItemToClean> GetFileItemsToClean(string directoryPath)
+    {
+        if (!this.fileSystem.Directory.Exists(directoryPath))
+        {
+            throw new DirectoryNotFoundException(directoryPath);
+        }
+
+        List<ItemToClean> items = new();
+
+        foreach (string filePath in this.fileSystem.Directory.GetFiles(directoryPath))
+        {
+            foreach (IFileCleaner cleaner in this.fileCleaners)
+            {
+                if (cleaner.CanClean(filePath))
+                {
+                    items.Add(new ItemToClean(filePath, cleaner));
+                    break;
+                }
+            }
+        }
+
+        return items;
+    }
+
+    private IReadOnlyList<ItemToClean> GetItemsToClean(IEnumerable<string> directoryPaths)
+                            => this.GetFileItemsToClean(directoryPaths).Concat(this.GetDirectoryItemsToClean(directoryPaths)).ToArray();
 }
