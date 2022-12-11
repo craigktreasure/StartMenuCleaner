@@ -1,6 +1,7 @@
 namespace StartMenuCleaner;
 
 using Microsoft.Extensions.Logging;
+using StartMenuCleaner.Cleaners.File;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -13,6 +14,8 @@ internal class Cleaner
     private readonly CleanupRulesEngine cleanupEngine;
 
     private readonly FileClassifier fileClassifier;
+
+    private readonly FileCleaner fileCleaner;
 
     private readonly IFileSystem fileSystem;
 
@@ -28,6 +31,7 @@ internal class Cleaner
         FileClassifier fileClassifier,
         FileSystemOperationHandler fileSystemOperationHandler,
         CleanupRulesEngine cleanupEngine,
+        FileCleaner fileCleaner,
         ILogger<Cleaner> logger)
     {
         this.options = options;
@@ -36,6 +40,7 @@ internal class Cleaner
         this.fileSystemOperationHandler = fileSystemOperationHandler;
         this.logger = logger;
         this.cleanupEngine = cleanupEngine;
+        this.fileCleaner = fileCleaner;
     }
 
     public void Start()
@@ -46,21 +51,27 @@ internal class Cleaner
             Console.WriteLine();
         }
 
-        IEnumerable<string> foldersToClean = this.GetFoldersToClean();
-
-        IEnumerable<ProgramDirectoryItem> itemsToClean = foldersToClean
+        IReadOnlyList<ProgramDirectoryItem> directoryItemsToClean = this.GetFoldersToClean()
             .Select(x => new ProgramDirectoryItem(x, this.cleanupEngine.TestForCleanReason(x)))
-            .Where(x => x.Reason != CleanReason.None);
+            .Where(x => x.Reason != CleanReason.None)
+            .ToArray();
 
-        if (!itemsToClean.Any())
+        IReadOnlyList<ProgramFileItem> fileItemsToClean = this.fileCleaner.GetItemsToClean(this.options.RootFoldersToClean);
+
+        if (directoryItemsToClean.Count == 0 && fileItemsToClean.Count == 0)
         {
             this.logger.NothingToClean();
             return;
         }
 
-        this.logger.FoundItemsToClean(itemsToClean);
+        this.logger.FoundItemsToClean(directoryItemsToClean);
+        this.logger.FoundItemsToClean(fileItemsToClean);
 
-        this.CleanItems(itemsToClean);
+        this.logger.CleaningStarted();
+        this.CleanItems(directoryItemsToClean);
+        this.CleanItems(fileItemsToClean);
+
+        this.logger.CleaningFinished();
     }
 
     private void CleanEmptyDirectory(ProgramDirectoryItem itemToClean)
@@ -128,15 +139,20 @@ internal class Cleaner
 
     private void CleanItems(IEnumerable<ProgramDirectoryItem> itemsToClean)
     {
-        this.logger.CleaningStarted();
-
         foreach (ProgramDirectoryItem item in itemsToClean)
         {
             this.logger.CleaningItem(item);
             this.CleanItem(item);
         }
+    }
 
-        this.logger.CleaningFinished();
+    private void CleanItems(IEnumerable<ProgramFileItem> itemsToClean)
+    {
+        foreach (ProgramFileItem item in itemsToClean)
+        {
+            this.logger.CleaningItem(item);
+            item.Clean();
+        }
     }
 
     private void CleanSingleApp(ProgramDirectoryItem itemToClean)

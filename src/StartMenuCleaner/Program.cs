@@ -4,6 +4,7 @@ using CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using StartMenuCleaner.Cleaners.File;
 using StartMenuCleaner.Utils;
 using System;
 
@@ -31,7 +32,7 @@ internal class Program
 
         if (options.Debug)
         {
-            SerilogLogging.SetMinLogLevel(Serilog.Events.LogEventLevel.Debug);
+            SerilogLogging.SetMinLogLevel(Serilog.Events.LogEventLevel.Verbose);
             logger.DebugEnabled();
         }
 
@@ -67,6 +68,8 @@ internal class Program
             .AddSingleton<CleanupRulesEngine>()
             .AddSingleton(cleanerOptions)
             .AddSingleton<Cleaner>()
+            .AddSingleton<FileCleaner>()
+            .AddSingleton<IFileCleaner, BadShortcutFileCleaner>()
             .AddSingleton<FileSystemOperationHandler>()
             .BuildServiceProvider();
     }

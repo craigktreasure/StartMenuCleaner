@@ -2,6 +2,7 @@ namespace StartMenuCleaner.Tests;
 
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using StartMenuCleaner.Cleaners.File;
 using StartMenuCleaner.TestLibrary;
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
@@ -240,6 +241,7 @@ public class CleanerTests
             this.output.BuildLoggerFor<FileSystemOperationHandler>(),
             mockFileSystem,
             cleanerOptions);
+        FileCleaner fileCleaner = new(mockFileSystem, Array.Empty<IFileCleaner>());
 
         return new Cleaner(
             cleanerOptions,
@@ -247,6 +249,7 @@ public class CleanerTests
             classifier,
             fileSystemOperationHandler,
             cleanupEngine,
+            fileCleaner,
             logger);
     }
 }
