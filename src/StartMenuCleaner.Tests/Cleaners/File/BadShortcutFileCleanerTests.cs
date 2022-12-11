@@ -20,7 +20,7 @@ public class BadShortcutFileCleanerTests
         // Arrange
         const string shortcutFilePath = @"C:\StartMenu\Shortcut.lnk";
         const string appFilePath = @"C:\Programs\App.exe";
-        BadShortcutFileCleaner fileCleaner = this.BuildFileCleaner();
+        BadShortcutFileCleaner fileCleaner = this.BuildCleaner();
         this.fileSystemComposer.Add($"{shortcutFilePath};{appFilePath}");
 
         // Act
@@ -35,7 +35,7 @@ public class BadShortcutFileCleanerTests
     {
         // Arrange
         const string shortcutFilePath = @"C:\StartMenu\Shortcut.lnk";
-        BadShortcutFileCleaner fileCleaner = this.BuildFileCleaner();
+        BadShortcutFileCleaner fileCleaner = this.BuildCleaner();
         this.fileSystemComposer.Add($"{shortcutFilePath};");
 
         // Act
@@ -49,7 +49,7 @@ public class BadShortcutFileCleanerTests
     public void CanClean_FileNotExist()
     {
         // Arrange
-        BadShortcutFileCleaner fileCleaner = this.BuildFileCleaner();
+        BadShortcutFileCleaner fileCleaner = this.BuildCleaner();
 
         // Act and assert
         Assert.Throws<FileNotFoundException>(() => fileCleaner.CanClean(string.Empty));
@@ -61,7 +61,7 @@ public class BadShortcutFileCleanerTests
         // Arrange
         const string shortcutFilePath = @"C:\StartMenu\Shortcut.lnk";
         const string appFilePath = @"C:\Programs\App.exe";
-        BadShortcutFileCleaner fileCleaner = this.BuildFileCleaner();
+        BadShortcutFileCleaner fileCleaner = this.BuildCleaner();
         this.fileSystemComposer.Add($"{shortcutFilePath};{appFilePath}", appFilePath);
 
         // Act
@@ -76,7 +76,7 @@ public class BadShortcutFileCleanerTests
     {
         // Arrange
         const string shortcutFilePath = @"C:\StartMenu\Shortcut.lnk";
-        BadShortcutFileCleaner fileCleaner = this.BuildFileCleaner();
+        BadShortcutFileCleaner fileCleaner = this.BuildCleaner();
         this.fileSystemComposer.Add($@"{shortcutFilePath};C:\Programs\App.exe");
 
         // Act
@@ -91,7 +91,7 @@ public class BadShortcutFileCleanerTests
     {
         // Arrange
         const string shortcutFilePath = @"C:\StartMenu\Shortcut.lnk";
-        BadShortcutFileCleaner fileCleaner = this.BuildFileCleaner();
+        BadShortcutFileCleaner fileCleaner = this.BuildCleaner();
         this.fileSystemComposer.Add($"{shortcutFilePath};");
 
         // Act and assert
@@ -105,7 +105,7 @@ public class BadShortcutFileCleanerTests
         // Arrange
         const string shortcutFilePath = @"C:\StartMenu\Shortcut.lnk";
         const string appFilePath = @"C:\Programs\App.exe";
-        BadShortcutFileCleaner fileCleaner = this.BuildFileCleaner();
+        BadShortcutFileCleaner fileCleaner = this.BuildCleaner();
         this.fileSystemComposer.Add($"{shortcutFilePath};{appFilePath}", appFilePath);
 
         // Act and assert
@@ -113,13 +113,13 @@ public class BadShortcutFileCleanerTests
         Assert.True(this.fileSystemComposer.FileSystem.FileExists(shortcutFilePath));
     }
 
-    private BadShortcutFileCleaner BuildFileCleaner()
+    private BadShortcutFileCleaner BuildCleaner()
     {
         CleanerOptions cleanerOptions = new(new[] { @"C:\StartMenu" })
         {
             Simulate = false
         };
-        BadShortcutFileCleaner fileCleaner = new(
+        BadShortcutFileCleaner cleaner = new(
             this.fileSystemComposer.FileSystem,
             this.fileSystemComposer.ShortcutHandler,
             new FileSystemOperationHandler(
@@ -127,6 +127,6 @@ public class BadShortcutFileCleanerTests
                 this.fileSystemComposer.FileSystem,
                 cleanerOptions));
 
-        return fileCleaner;
+        return cleaner;
     }
 }

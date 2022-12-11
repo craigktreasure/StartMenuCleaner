@@ -2,12 +2,10 @@ namespace StartMenuCleaner.Tests;
 
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using StartMenuCleaner.Cleaners.Directory;
 using StartMenuCleaner.Cleaners.File;
 using StartMenuCleaner.TestLibrary;
-using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
-using Xunit;
-using Xunit.Abstractions;
 
 public class CleanerTests
 {
@@ -18,6 +16,23 @@ public class CleanerTests
     public CleanerTests(ITestOutputHelper output)
     {
         this.output = output;
+    }
+
+    [Fact]
+    public void BadShortcut()
+    {
+        // Arrange
+        Cleaner cleaner = this.GetCleaner();
+        this.fileSystemComposer.Add(@"C:\StartMenu\MyApp.lnk;C:\Programs\MyApp.exe");
+
+        // Act
+        cleaner.Start();
+
+        // Assert
+        this.AssertFileSystemContains(new[]
+        {
+            @"C:\StartMenu"
+        });
     }
 
     [Fact]
@@ -32,7 +47,7 @@ public class CleanerTests
         this.AssertFileSystemContains(new[]
         {
                 @"C:\StartMenu"
-            });
+        });
     }
 
     [Fact]
@@ -241,7 +256,14 @@ public class CleanerTests
             this.output.BuildLoggerFor<FileSystemOperationHandler>(),
             mockFileSystem,
             cleanerOptions);
-        FileCleaner fileCleaner = new(mockFileSystem, Array.Empty<IFileCleaner>());
+        FileCleaner fileCleaner = new(mockFileSystem, new[]
+        {
+            new BadShortcutFileCleaner(mockFileSystem, shortcutHandler, fileSystemOperationHandler),
+        });
+        DirectoryCleaner directoryCleaner = new(mockFileSystem, new[]
+        {
+            new EmptyDirectoryCleaner(mockFileSystem, fileSystemOperationHandler),
+        });
 
         return new Cleaner(
             cleanerOptions,
@@ -250,6 +272,7 @@ public class CleanerTests
             fileSystemOperationHandler,
             cleanupEngine,
             fileCleaner,
+            directoryCleaner,
             logger);
     }
 }

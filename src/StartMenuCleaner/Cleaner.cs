@@ -1,17 +1,19 @@
 namespace StartMenuCleaner;
 
 using Microsoft.Extensions.Logging;
+using StartMenuCleaner.Cleaners.Directory;
 using StartMenuCleaner.Cleaners.File;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Linq;
-using systemIO = System.IO;
 
 internal class Cleaner
 {
     private readonly CleanupRulesEngine cleanupEngine;
+
+    private readonly DirectoryCleaner directoryCleaner;
 
     private readonly FileClassifier fileClassifier;
 
@@ -32,6 +34,7 @@ internal class Cleaner
         FileSystemOperationHandler fileSystemOperationHandler,
         CleanupRulesEngine cleanupEngine,
         FileCleaner fileCleaner,
+        DirectoryCleaner directoryCleaner,
         ILogger<Cleaner> logger)
     {
         this.options = options;
@@ -41,6 +44,7 @@ internal class Cleaner
         this.logger = logger;
         this.cleanupEngine = cleanupEngine;
         this.fileCleaner = fileCleaner;
+        this.directoryCleaner = directoryCleaner;
     }
 
     public void Start()
@@ -58,7 +62,11 @@ internal class Cleaner
 
         IReadOnlyList<ProgramFileItem> fileItemsToClean = this.fileCleaner.GetItemsToClean(this.options.RootFoldersToClean);
 
-        if (directoryItemsToClean.Count == 0 && fileItemsToClean.Count == 0)
+        IReadOnlyList<DirectoryItemToClean> directoryItemsToClean2 = this.directoryCleaner.GetItemsToClean(this.options.RootFoldersToClean);
+
+        if (directoryItemsToClean.Count == 0
+            && fileItemsToClean.Count == 0
+            && directoryItemsToClean2.Count == 0)
         {
             this.logger.NothingToClean();
             return;
@@ -66,29 +74,14 @@ internal class Cleaner
 
         this.logger.FoundItemsToClean(directoryItemsToClean);
         this.logger.FoundItemsToClean(fileItemsToClean);
+        this.logger.FoundItemsToClean(directoryItemsToClean2);
 
         this.logger.CleaningStarted();
         this.CleanItems(directoryItemsToClean);
         this.CleanItems(fileItemsToClean);
+        this.CleanItems(directoryItemsToClean2);
 
         this.logger.CleaningFinished();
-    }
-
-    private void CleanEmptyDirectory(ProgramDirectoryItem itemToClean)
-    {
-        if (CleanReason.Empty != itemToClean.Reason)
-        {
-            throw new ArgumentException($"The item {nameof(itemToClean.Reason)} is not {CleanReason.Empty}.", nameof(itemToClean));
-        }
-
-        Func<string, bool> testFunction = this.cleanupEngine.GetReasonTestFunction(CleanReason.Empty);
-        if (!testFunction(itemToClean.Path))
-        {
-            throw new InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
-        }
-
-        // Delete the empty folder.
-        this.fileSystemOperationHandler.DeleteDirectory(itemToClean.Path);
     }
 
     private void CleanFewAppsWithCruft(ProgramDirectoryItem itemToClean)
@@ -155,6 +148,15 @@ internal class Cleaner
         }
     }
 
+    private void CleanItems(IEnumerable<DirectoryItemToClean> itemsToClean)
+    {
+        foreach (DirectoryItemToClean item in itemsToClean)
+        {
+            this.logger.CleaningItem(item);
+            item.Clean();
+        }
+    }
+
     private void CleanSingleApp(ProgramDirectoryItem itemToClean)
     {
         if (CleanReason.SingleApp != itemToClean.Reason)
@@ -165,7 +167,7 @@ internal class Cleaner
         Func<string, bool> testFunction = this.cleanupEngine.GetReasonTestFunction(CleanReason.SingleApp);
         if (!testFunction(itemToClean.Path))
         {
-            throw new systemIO.InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
+            throw new InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
         }
 
         string programRootDir = this.fileSystem.Path.GetDirectoryName(itemToClean.Path)!;
@@ -182,7 +184,6 @@ internal class Cleaner
     {
         return reason switch
         {
-            CleanReason.Empty => this.CleanEmptyDirectory,
             CleanReason.SingleApp => this.CleanSingleApp,
             CleanReason.FewAppsWithCruft => this.CleanFewAppsWithCruft,
             _ => throw new ArgumentException("No cleanup function was available.", nameof(reason)),

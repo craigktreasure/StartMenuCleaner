@@ -4,6 +4,7 @@ using CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using StartMenuCleaner.Cleaners.Directory;
 using StartMenuCleaner.Cleaners.File;
 using StartMenuCleaner.Utils;
 using System;
@@ -65,12 +66,14 @@ internal class Program
             .UseFileSystem()
             .RegisterFileShortcutHandler<CsWin32ShortcutHandler>()
             .AddSingleton<FileClassifier>()
+            .AddSingleton<FileSystemOperationHandler>()
             .AddSingleton<CleanupRulesEngine>()
             .AddSingleton(cleanerOptions)
             .AddSingleton<Cleaner>()
             .AddSingleton<FileCleaner>()
             .AddSingleton<IFileCleaner, BadShortcutFileCleaner>()
-            .AddSingleton<FileSystemOperationHandler>()
+            .AddSingleton<DirectoryCleaner>()
+            .AddSingleton<IDirectoryCleaner, EmptyDirectoryCleaner>()
             .BuildServiceProvider();
     }
 }

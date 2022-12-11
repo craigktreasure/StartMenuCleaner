@@ -16,17 +16,6 @@ public class CleanupRulesEngineTests
     }
 
     [Fact]
-    public void TestEmpty()
-    {
-        const string directoryPath = @"C:\StartMenu\MyApp";
-        this.fileSystemComposer.Add(directoryPath);
-
-        CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
-
-        Assert.Equal(CleanReason.Empty, actual);
-    }
-
-    [Fact]
     public void TestFewAppsWithCruft()
     {
         const string directoryPath = @"C:\StartMenu\MyApp";

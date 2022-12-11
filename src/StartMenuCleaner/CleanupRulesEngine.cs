@@ -1,5 +1,6 @@
 namespace StartMenuCleaner;
 
+using StartMenuCleaner.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
@@ -39,7 +40,6 @@ internal class CleanupRulesEngine
     {
         return reason switch
         {
-            CleanReason.Empty => this.TestForEmpty,
             CleanReason.FewAppsWithCruft => this.TestForFewAppsWithCruft,
             CleanReason.SingleApp => this.TestForSingleApp,
             CleanReason.None => x => this.TestForCleanReason(x) == CleanReason.None,
@@ -52,11 +52,6 @@ internal class CleanupRulesEngine
         if (this.ShouldIgnoreDirectory(directoryPath))
         {
             return CleanReason.None;
-        }
-
-        if (this.TestForEmpty(directoryPath))
-        {
-            return CleanReason.Empty;
         }
 
         if (this.TestForSingleApp(directoryPath))
@@ -89,15 +84,14 @@ internal class CleanupRulesEngine
         return directories.Any();
     }
 
-    private bool TestForEmpty(string directoryPath)
-    {
-        return !this.fileSystem.Directory.EnumerateFileSystemEntries(
-            directoryPath, "*", System.IO.SearchOption.AllDirectories).Any();
-    }
-
     private bool TestForFewAppsWithCruft(string directoryPath)
     {
         if (this.TestForDirectories(directoryPath))
+        {
+            return false;
+        }
+
+        if (this.fileSystem.Directory.IsEmpty(directoryPath))
         {
             return false;
         }
@@ -130,6 +124,11 @@ internal class CleanupRulesEngine
     private bool TestForSingleApp(string directoryPath)
     {
         if (this.TestForDirectories(directoryPath))
+        {
+            return false;
+        }
+
+        if (this.fileSystem.Directory.IsEmpty(directoryPath))
         {
             return false;
         }
