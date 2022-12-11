@@ -15,7 +15,7 @@ internal static partial class LoggerExtensions
     [LoggerMessage(Level = LogLevel.Information, Message = "Finished Cleaning.", EventName = nameof(CleaningFinished))]
     public static partial void CleaningFinished(this ILogger logger);
 
-    public static void CleaningItem(this ILogger logger, ProgramFileItem item)
+    public static void CleaningItem(this ILogger logger, FileItemToClean item)
         => logger.CleaningItem(item.CleanerType, item.Path);
 
     public static void CleaningItem(this ILogger logger, DirectoryItemToClean item)
@@ -39,9 +39,9 @@ internal static partial class LoggerExtensions
     [LoggerMessage(Level = LogLevel.Information, Message = "Finished", EventName = nameof(Finished))]
     public static partial void Finished(this ILogger logger);
 
-    public static void FoundItemsToClean(this ILogger logger, IEnumerable<ProgramFileItem> itemsToClean)
+    public static void FoundItemsToClean(this ILogger logger, IEnumerable<FileItemToClean> itemsToClean)
     {
-        foreach (IGrouping<FileCleanerType, ProgramFileItem> group in itemsToClean.GroupBy(x => x.CleanerType))
+        foreach (IGrouping<FileCleanerType, FileItemToClean> group in itemsToClean.GroupBy(x => x.CleanerType))
         {
             logger.FoundItemsToClean(group);
         }
@@ -55,10 +55,10 @@ internal static partial class LoggerExtensions
         }
     }
 
-    public static void FoundItemsToClean(this ILogger logger, IGrouping<FileCleanerType, ProgramFileItem> groupItems)
+    public static void FoundItemsToClean(this ILogger logger, IGrouping<FileCleanerType, FileItemToClean> groupItems)
     {
         logger.FoundItemsToClean(groupItems.Count(), groupItems.Key);
-        foreach (ProgramFileItem item in groupItems)
+        foreach (FileItemToClean item in groupItems)
         {
             logger.FoundItemsToCleanPath(item.Path);
         }

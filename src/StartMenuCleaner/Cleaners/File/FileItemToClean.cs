@@ -1,6 +1,6 @@
 namespace StartMenuCleaner.Cleaners.File;
 
-internal class ProgramFileItem
+internal class FileItemToClean
 {
     private readonly IFileCleaner cleaner;
 
@@ -15,11 +15,11 @@ internal class ProgramFileItem
     public string Path { get; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ProgramFileItem"/> class.
+    /// Initializes a new instance of the <see cref="FileItemToClean"/> class.
     /// </summary>
     /// <param name="path">The path.</param>
     /// <param name="cleaner">The cleaner.</param>
-    public ProgramFileItem(string path, IFileCleaner cleaner)
+    public FileItemToClean(string path, IFileCleaner cleaner)
     {
         this.Path = path;
         this.cleaner = cleaner;

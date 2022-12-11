@@ -51,7 +51,7 @@ internal class Cleaner
             Console.WriteLine();
         }
 
-        IReadOnlyList<ProgramFileItem> fileItemsToClean = this.fileCleaner.GetItemsToClean(this.options.RootFoldersToClean);
+        IReadOnlyList<FileItemToClean> fileItemsToClean = this.fileCleaner.GetItemsToClean(this.options.RootFoldersToClean);
 
         IReadOnlyList<DirectoryItemToClean> directoryItemsToClean = this.directoryCleaner.GetItemsToClean(this.options.RootFoldersToClean);
 
@@ -73,9 +73,9 @@ internal class Cleaner
     }
 
     [SuppressMessage("Design", "CA1031:Do not catch general exception types")]
-    private void CleanItems(IEnumerable<ProgramFileItem> itemsToClean)
+    private void CleanItems(IEnumerable<FileItemToClean> itemsToClean)
     {
-        foreach (ProgramFileItem item in itemsToClean)
+        foreach (FileItemToClean item in itemsToClean)
         {
             this.logger.CleaningItem(item);
 

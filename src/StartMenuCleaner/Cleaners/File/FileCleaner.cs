@@ -24,7 +24,7 @@ internal class FileCleaner
     /// </summary>
     /// <param name="directoryPaths">The directory paths.</param>
     /// <returns><see cref="IReadOnlyList{ProgramFileItem}"/>.</returns>
-    public IReadOnlyList<ProgramFileItem> GetItemsToClean(IEnumerable<string> directoryPaths)
+    public IReadOnlyList<FileItemToClean> GetItemsToClean(IEnumerable<string> directoryPaths)
         => directoryPaths
         .Where(this.fileSystem.Directory.Exists)
         .SelectMany(this.GetItemsToClean)
@@ -35,14 +35,14 @@ internal class FileCleaner
     /// </summary>
     /// <param name="directoryPath">The directory path.</param>
     /// <returns><see cref="IReadOnlyList{ProgramFileItem}"/>.</returns>
-    public IReadOnlyList<ProgramFileItem> GetItemsToClean(string directoryPath)
+    public IReadOnlyList<FileItemToClean> GetItemsToClean(string directoryPath)
     {
         if (!this.fileSystem.Directory.Exists(directoryPath))
         {
             throw new DirectoryNotFoundException(directoryPath);
         }
 
-        List<ProgramFileItem> items = new();
+        List<FileItemToClean> items = new();
 
         foreach (string filePath in this.fileSystem.Directory.GetFiles(directoryPath))
         {
@@ -50,7 +50,7 @@ internal class FileCleaner
             {
                 if (cleaner.CanClean(filePath))
                 {
-                    items.Add(new ProgramFileItem(filePath, cleaner));
+                    items.Add(new FileItemToClean(filePath, cleaner));
                     break;
                 }
             }

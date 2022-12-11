@@ -20,7 +20,7 @@ public class FileCleanerTests
         };
 
         // Act
-        IReadOnlyList<ProgramFileItem> itemsToClean = fileCleaner.GetItemsToClean(directoryPaths);
+        IReadOnlyList<FileItemToClean> itemsToClean = fileCleaner.GetItemsToClean(directoryPaths);
 
         // Assert
         Assert.Single(itemsToClean);
@@ -34,7 +34,7 @@ public class FileCleanerTests
         FileCleaner fileCleaner = this.BuildFileCleaner();
 
         // Act
-        IReadOnlyList<ProgramFileItem> itemsToClean = fileCleaner.GetItemsToClean(@"C:\StartMenu");
+        IReadOnlyList<FileItemToClean> itemsToClean = fileCleaner.GetItemsToClean(@"C:\StartMenu");
 
         // Assert
         Assert.Single(itemsToClean);
