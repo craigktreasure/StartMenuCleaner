@@ -74,6 +74,7 @@ internal class Program
             .AddSingleton<IFileCleaner, BadShortcutFileCleaner>()
             .AddSingleton<DirectoryCleaner>()
             .AddSingleton<IDirectoryCleaner, EmptyDirectoryCleaner>()
+            .AddSingleton<IDirectoryCleaner, SingleAppDirectoryCleaner>()
             .BuildServiceProvider();
     }
 }

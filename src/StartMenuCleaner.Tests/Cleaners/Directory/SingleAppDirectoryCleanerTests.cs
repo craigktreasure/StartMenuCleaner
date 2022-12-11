@@ -2,13 +2,28 @@ namespace StartMenuCleaner.Tests.Cleaners.Directory;
 
 using StartMenuCleaner.Cleaners.Directory;
 
-public class EmptyDirectoryCleanerTests : DirectoryCleanerTestBase
+public class SingleAppDirectoryCleanerTests : DirectoryCleanerTestBase
 {
     private readonly ITestOutputHelper output;
 
-    public EmptyDirectoryCleanerTests(ITestOutputHelper output)
+    public SingleAppDirectoryCleanerTests(ITestOutputHelper output)
     {
         this.output = output;
+    }
+
+    [Fact]
+    public void CanClean_ContainsDirectories()
+    {
+        // Arrange
+        const string directoryPath = @"C:\StartMenu\Folder";
+        IDirectoryCleaner cleaner = this.BuildCleaner();
+        this.FileSystemComposer.Add(directoryPath, $@"{directoryPath}\Subfolder");
+
+        // Act
+        bool result = cleaner.CanClean(directoryPath);
+
+        // Assert
+        Assert.False(result);
     }
 
     [Fact]
@@ -23,16 +38,19 @@ public class EmptyDirectoryCleanerTests : DirectoryCleanerTestBase
         bool result = cleaner.CanClean(directoryPath);
 
         // Assert
-        Assert.True(result);
+        Assert.False(result);
     }
 
     [Fact]
-    public void CanClean_NonEmptyDirectory()
+    public void CanClean_MultipleApps()
     {
         // Arrange
         const string directoryPath = @"C:\StartMenu\Folder";
         IDirectoryCleaner cleaner = this.BuildCleaner();
-        this.FileSystemComposer.Add($@"{directoryPath}\something.txt");
+        this.FileSystemComposer.Add(
+            directoryPath,
+            $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp.exe",
+            $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp2.exe");
 
         // Act
         bool result = cleaner.CanClean(directoryPath);
@@ -42,31 +60,35 @@ public class EmptyDirectoryCleanerTests : DirectoryCleanerTestBase
     }
 
     [Fact]
-    public void Clean_EmptyDirectory()
+    public void CanClean_SingleApp()
     {
         // Arrange
         const string directoryPath = @"C:\StartMenu\Folder";
         IDirectoryCleaner cleaner = this.BuildCleaner();
-        this.FileSystemComposer.Add(directoryPath);
+        this.FileSystemComposer.Add(directoryPath, $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp.exe");
 
         // Act
-        cleaner.Clean(directoryPath);
+        bool result = cleaner.CanClean(directoryPath);
 
         // Assert
-        Assert.False(this.FileSystemComposer.FileSystem.Directory.Exists(directoryPath));
+        Assert.True(result);
     }
 
     [Fact]
-    public void Clean_NonEmptyDirectory()
+    public void CanClean_SingleNonApp()
     {
         // Arrange
         const string directoryPath = @"C:\StartMenu\Folder";
         IDirectoryCleaner cleaner = this.BuildCleaner();
-        this.FileSystemComposer.Add($@"{directoryPath}\something.txt");
+        this.FileSystemComposer.Add(
+            directoryPath,
+            $@"{directoryPath}\MyApp.lnk;C:\Programs\Foo.txt");
 
-        // Act and assert
-        Assert.Throws<InvalidOperationException>(() => cleaner.Clean(directoryPath));
-        Assert.True(this.FileSystemComposer.FileSystem.Directory.Exists(directoryPath));
+        // Act
+        bool result = cleaner.CanClean(directoryPath);
+
+        // Assert
+        Assert.False(result);
     }
 
     private protected override IDirectoryCleaner BuildCleaner()
@@ -75,12 +97,16 @@ public class EmptyDirectoryCleanerTests : DirectoryCleanerTestBase
         {
             Simulate = false
         };
-        EmptyDirectoryCleaner cleaner = new(
+        FileClassifier fileClassifier = new(
+            this.FileSystem,
+            this.FileSystemComposer.ShortcutHandler);
+        SingleAppDirectoryCleaner cleaner = new(
             this.FileSystem,
             new FileSystemOperationHandler(
                 this.output.BuildLoggerFor<FileSystemOperationHandler>(),
                 this.FileSystem,
-                cleanerOptions));
+                cleanerOptions),
+            fileClassifier);
 
         return cleaner;
     }

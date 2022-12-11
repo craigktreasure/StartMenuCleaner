@@ -157,34 +157,10 @@ internal class Cleaner
         }
     }
 
-    private void CleanSingleApp(ProgramDirectoryItem itemToClean)
-    {
-        if (CleanReason.SingleApp != itemToClean.Reason)
-        {
-            throw new ArgumentException($"The item {nameof(itemToClean.Reason)} is not {CleanReason.SingleApp}.", nameof(itemToClean));
-        }
-
-        Func<string, bool> testFunction = this.cleanupEngine.GetReasonTestFunction(CleanReason.SingleApp);
-        if (!testFunction(itemToClean.Path))
-        {
-            throw new InvalidDataException($"The path is not a valid {itemToClean.Reason} folder.");
-        }
-
-        string programRootDir = this.fileSystem.Path.GetDirectoryName(itemToClean.Path)!;
-
-        // Move the only file into the program root directory.
-        string currentFileLocation = this.fileSystem.Directory.GetFiles(itemToClean.Path).First();
-        this.fileSystemOperationHandler.MoveFileToDirectory(programRootDir, currentFileLocation, replaceExisting: true);
-
-        // Delete the empty folder.
-        this.fileSystemOperationHandler.DeleteDirectory(itemToClean.Path);
-    }
-
     private Action<ProgramDirectoryItem> GetCleanFunction(CleanReason reason)
     {
         return reason switch
         {
-            CleanReason.SingleApp => this.CleanSingleApp,
             CleanReason.FewAppsWithCruft => this.CleanFewAppsWithCruft,
             _ => throw new ArgumentException("No cleanup function was available.", nameof(reason)),
         };

@@ -41,7 +41,6 @@ internal class CleanupRulesEngine
         return reason switch
         {
             CleanReason.FewAppsWithCruft => this.TestForFewAppsWithCruft,
-            CleanReason.SingleApp => this.TestForSingleApp,
             CleanReason.None => x => this.TestForCleanReason(x) == CleanReason.None,
             _ => throw new ArgumentException("An invalid reason was encountered.", nameof(reason)),
         };
@@ -52,11 +51,6 @@ internal class CleanupRulesEngine
         if (this.ShouldIgnoreDirectory(directoryPath))
         {
             return CleanReason.None;
-        }
-
-        if (this.TestForSingleApp(directoryPath))
-        {
-            return CleanReason.SingleApp;
         }
 
         if (this.TestForFewAppsWithCruft(directoryPath))
@@ -96,7 +90,14 @@ internal class CleanupRulesEngine
             return false;
         }
 
-        IEnumerable<string> filePaths = this.fileSystem.Directory.EnumerateFiles(directoryPath);
+        IReadOnlyList<string> filePaths = this.fileSystem.Directory.EnumerateFiles(directoryPath)
+            .ToArray();
+
+        if (filePaths.Count == 1)
+        {
+            // Handled by SingleAppDirectoryCleaner.
+            return false;
+        }
 
         // Classify the files
         IReadOnlyList<FileClassificationItem> classifiedFiles = filePaths
@@ -119,31 +120,5 @@ internal class CleanupRulesEngine
             .Where(x => x.Classification != FileClassification.App && !CanBeRemoved(x.Classification));
 
         return !unremovableFiles.Any();
-    }
-
-    private bool TestForSingleApp(string directoryPath)
-    {
-        if (this.TestForDirectories(directoryPath))
-        {
-            return false;
-        }
-
-        if (this.fileSystem.Directory.IsEmpty(directoryPath))
-        {
-            return false;
-        }
-
-        IReadOnlyList<string> filePaths = this.fileSystem.Directory
-            .EnumerateFiles(directoryPath)
-            .ToArray();
-
-        if (filePaths.Count != 1)
-        {
-            return false;
-        }
-
-        string filePath = filePaths[0];
-
-        return this.fileClassifier.ClassifyFile(filePath) == FileClassification.App;
     }
 }

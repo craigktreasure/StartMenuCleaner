@@ -82,19 +82,6 @@ public class CleanupRulesEngineTests
     }
 
     [Fact]
-    public void TestSingleApp()
-    {
-        const string directoryPath = @"C:\StartMenu\MyApp";
-        this.fileSystemComposer.Add(
-            $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe"
-        );
-
-        CleanReason actual = this.cleanupEngine.TestForCleanReason(directoryPath);
-
-        Assert.Equal(CleanReason.SingleApp, actual);
-    }
-
-    [Fact]
     public void TestSingleAppWithExtraDirectory()
     {
         const string directoryPath = @"C:\StartMenu\MyApp";

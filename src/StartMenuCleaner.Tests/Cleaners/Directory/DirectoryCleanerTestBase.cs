@@ -2,10 +2,13 @@ namespace StartMenuCleaner.Tests.Cleaners.Directory;
 
 using StartMenuCleaner.Cleaners.Directory;
 using StartMenuCleaner.TestLibrary;
+using System.IO.Abstractions.TestingHelpers;
 
 public abstract class DirectoryCleanerTestBase
 {
     public static IEnumerable<object[]> DirectoriesToIgnoreTestData => Constants.DirectoriesToIgnore.Select(d => new object[] { d });
+
+    protected MockFileSystem FileSystem => this.FileSystemComposer.FileSystem;
 
     protected MockFileSystemComposer FileSystemComposer { get; } = new MockFileSystemComposer();
 
@@ -54,7 +57,7 @@ public abstract class DirectoryCleanerTestBase
 
         // Act and assert
         Assert.Throws<InvalidOperationException>(() => cleaner.Clean(directoryPath));
-        Assert.True(this.FileSystemComposer.FileSystem.Directory.Exists(directoryPath));
+        Assert.True(this.FileSystem.Directory.Exists(directoryPath));
     }
 
     private protected abstract IDirectoryCleaner BuildCleaner();

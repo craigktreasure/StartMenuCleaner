@@ -260,9 +260,10 @@ public class CleanerTests
         {
             new BadShortcutFileCleaner(mockFileSystem, shortcutHandler, fileSystemOperationHandler),
         });
-        DirectoryCleaner directoryCleaner = new(mockFileSystem, new[]
+        DirectoryCleaner directoryCleaner = new(mockFileSystem, new IDirectoryCleaner[]
         {
             new EmptyDirectoryCleaner(mockFileSystem, fileSystemOperationHandler),
+            new SingleAppDirectoryCleaner(mockFileSystem, fileSystemOperationHandler, classifier),
         });
 
         return new Cleaner(
