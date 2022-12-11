@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="EmbeddedContent\**\*" />
     <EmbeddedResource Include="EmbeddedContent\**\*">
       <LogicalName>%(Identity)</LogicalName>

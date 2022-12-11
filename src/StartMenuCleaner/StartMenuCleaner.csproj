@@ -17,6 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="StartMenuCleaner.Tests" />
+    <InternalsVisibleTo Include="StartMenuCleaner.TestLibrary" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommandLineParser" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
