@@ -13,7 +13,7 @@
     <LangVersion>11.0</LangVersion>
 
     <!-- Enable implicit usings:
-      https://docs.microsoft.com/dotnet/core/compatibility/sdk/6.0/implicit-namespaces-rc1
+      https://docs.microsoft.com/dotnet/core/project-sdk/overview#implicit-using-directives
     -->
     <ImplicitUsings>enable</ImplicitUsings>
 
@@ -35,6 +35,13 @@
 
     <!-- Normalize file paths on CI builds. -->
     <ContinuousIntegrationBuild>$(IsCIBuild)</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn Condition=" '$(NoWarn)' == '' ">1701;1702</NoWarn>
+
+    <!-- Disable SYSLIB1006: Multiple logging methods cannot use the same event ID -->
+    <NoWarn>$(NoWarn);SYSLIB1006</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>
