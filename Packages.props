@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <DotNetPackageVersion>7.0.0</DotNetPackageVersion>
-    <SystemIOAbstractionsVersion>19.0.1</SystemIOAbstractionsVersion>
+    <SystemIOAbstractionsVersion>19.1.5</SystemIOAbstractionsVersion>
   </PropertyGroup>
 
   <ItemGroup>
