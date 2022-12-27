@@ -11,11 +11,12 @@ This is a .NET Core Global Tool that cleans your Windows start menu using a few 
     - [Update the tool](#update-the-tool)
     - [Uninstall the tool](#uninstall-the-tool)
   - [Running the tool](#running-the-tool)
-  - [Manually configure items to cleanup](#manually-configure-items-to-cleanup)
+  - [Configuration](#configuration)
+    - [Ignore a directory](#ignore-a-directory)
     - [Add a file for cleanup](#add-a-file-for-cleanup)
     - [Add a directory for cleanup](#add-a-directory-for-cleanup)
       - [Promote directory items before removal](#promote-directory-items-before-removal)
-      - [Show current configurations](#show-current-configurations)
+    - [Show current configurations](#show-current-configurations)
   - [Scheduling the tool using Task Scheduler](#scheduling-the-tool-using-task-scheduler)
 
 ## Tool management
@@ -80,7 +81,7 @@ Copyright (C) 2021 Craig Treasure
   --version         Display version information.
 ```
 
-## Manually configure items to cleanup
+## Configuration
 
 This tool uses [.netconfig][dotnetconfig] to configure files and folders you want to cleanup.
 
@@ -89,6 +90,40 @@ Install the `dotnet-config` tool by running the following:
 ```powershell
 dotnet tool install -g dotnet-config
 ```
+
+### Ignore a directory
+
+There is a default set of folders that are ignored by default:
+
+```text
+chrome apps
+startup
+maintenance
+accessories
+windows accessories
+windows administrative tools
+windows ease of access
+windows powershell
+windows system
+accessibility
+administrative tools
+system tools
+```
+
+You can add to this list by adding a new `ignore` variable to the `startmenucleaner` section:
+
+```powershell
+dotnet config --global --add startmenucleaner.ignore "My App"
+```
+
+This will result in a `.netconfig` file that looks something like:
+
+```text
+[startmenucleaner]
+  ignore = My App
+```
+
+The above configuration would cause the "My App" folder to be ignored and never cleaned.
 
 ### Add a file for cleanup
 
@@ -165,7 +200,7 @@ This will result in a `.netconfig` file that looks something like:
   promote = Subfolder/My App.lnk
 ```
 
-#### Show current configurations
+### Show current configurations
 
 To list all of your current configurations, you can run the following:
 

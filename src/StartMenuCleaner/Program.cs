@@ -51,10 +51,7 @@ internal class Program
 
     private static IServiceProvider ConfigureServices(ProgramOptions options)
     {
-        CleanerOptions cleanerOptions = new(StartMenuHelper.GetKnownStartMenuProgramsFolders(), Constants.DirectoriesToIgnore)
-        {
-            Simulate = options.Simulate,
-        };
+        CleanerOptions cleanerOptions = CleanerOptions.Load(options.Simulate);
 
         return new ServiceCollection()
             .AddLogging(loggingBuilder =>

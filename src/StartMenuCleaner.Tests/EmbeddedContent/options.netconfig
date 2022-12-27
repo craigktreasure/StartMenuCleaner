@@ -1,0 +1,7 @@
+# Don't load global or system configuration files.
+[config]
+  global = false
+  system = false
+[startmenucleaner]
+  ignore = App
+  ignore = App 2

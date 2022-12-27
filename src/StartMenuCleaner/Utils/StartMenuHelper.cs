@@ -1,9 +1,5 @@
 namespace StartMenuCleaner.Utils;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 internal static class StartMenuHelper
 {
     private const string programsFolderName = "Programs";
@@ -23,6 +19,6 @@ internal static class StartMenuHelper
     /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="string"/>.</returns>
     public static IReadOnlyList<string> GetKnownStartMenuProgramsFolders() =>
         GetKnownStartMenuFolders()
-            .Select(x => System.IO.Path.Combine(x, programsFolderName))
+            .Select(x => Path.Combine(x, programsFolderName))
             .ToArray();
 }

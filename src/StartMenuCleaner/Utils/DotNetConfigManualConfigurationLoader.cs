@@ -5,8 +5,6 @@ using StartMenuCleaner.Extensions;
 
 internal class DotNetConfigManualConfigurationLoader : IManualConfigurationLoader
 {
-    private const string ConfigurationSectionName = "startmenucleaner";
-
     private readonly Config configuration;
 
     /// <summary>
@@ -40,7 +38,7 @@ internal class DotNetConfigManualConfigurationLoader : IManualConfigurationLoade
             ?? throw new InvalidOperationException("The subsection cannot be null.");
 
         IEnumerable<string> filesToPromote = config
-            .GetAll(ConfigurationSectionName, directoryName, "promote")
+            .GetAll(Constants.ConfigurationSectionName, directoryName, "promote")
             .Select(x => x.GetString());
 
         return new ManualDirectoryRemoveConfiguration(directoryName.Trim('/'), filesToPromote);
@@ -49,7 +47,7 @@ internal class DotNetConfigManualConfigurationLoader : IManualConfigurationLoade
     private static IEnumerable<ManualDirectoryRemoveConfiguration> LoadDirectoryItems(Config config)
     {
         IEnumerable<ConfigEntry> configuredDirectories = config
-            .GetAllFromAnySubsection(ConfigurationSectionName, "remove")
+            .GetAllFromAnySubsection(Constants.ConfigurationSectionName, "remove")
             .Where(c => (c.Subsection?.EndsWith('/') ?? false) && c.GetBoolean());
 
         foreach (ConfigEntry entry in configuredDirectories)
@@ -66,7 +64,7 @@ internal class DotNetConfigManualConfigurationLoader : IManualConfigurationLoade
     private static IEnumerable<ManualFileRemoveConfiguration> LoadFileItems(Config config)
     {
         IEnumerable<ConfigEntry> configuredFiles = config
-            .GetAllFromAnySubsection(ConfigurationSectionName, "remove")
+            .GetAllFromAnySubsection(Constants.ConfigurationSectionName, "remove")
             .Where(c => c.Subsection is not null && !c.Subsection.EndsWith('/') && c.GetBoolean());
 
         foreach (ConfigEntry entry in configuredFiles)

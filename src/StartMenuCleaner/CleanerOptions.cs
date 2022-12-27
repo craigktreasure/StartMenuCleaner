@@ -1,6 +1,7 @@
 namespace StartMenuCleaner;
 
-using StartMenuCleaner.Cleaners.Directory;
+using DotNetConfig;
+using StartMenuCleaner.Utils;
 
 internal class CleanerOptions
 {
@@ -38,4 +39,27 @@ internal class CleanerOptions
         this.RootFoldersToClean = Argument.NotNull(rootFoldersToClean);
         this.FoldersToIgnore = new HashSet<string>(Argument.NotNull(foldersToIgnore), StringComparer.CurrentCultureIgnoreCase);
     }
+
+    /// <summary>
+    /// Loads the <see cref="CleanerOptions" />.
+    /// </summary>
+    /// <param name="simulate">if set to <c>true</c> [simulate].</param>
+    /// <param name="configurationPath">The configuration path.</param>
+    /// <returns><see cref="CleanerOptions"/>.</returns>
+    public static CleanerOptions Load(bool simulate = false, string? configurationPath = null)
+    {
+        Config config = Config.Build(configurationPath);
+
+        IReadOnlyList<string> rootFoldersToClean = StartMenuHelper.GetKnownStartMenuProgramsFolders();
+        IReadOnlyList<string> foldersToIgnoreFromConfig = LoadFoldersToIgnoreFromConfiguration(config);
+        IReadOnlyList<string> foldersToIgnore = Constants.DirectoriesToIgnore.Concat(foldersToIgnoreFromConfig).ToArray();
+
+        return new(rootFoldersToClean, foldersToIgnore)
+        {
+            Simulate = simulate,
+        };
+    }
+
+    private static IReadOnlyList<string> LoadFoldersToIgnoreFromConfiguration(Config config)
+        => config.GetAll(Constants.ConfigurationSectionName, "ignore").Select(x => x.GetString()).ToArray();
 }
