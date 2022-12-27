@@ -36,10 +36,7 @@ internal class FewAppsWithCruftDirectoryCleaner : DirectoryCleanerBase
     /// <returns><c>true</c> if the cleaner can clean the directory path, <c>false</c> otherwise.</returns>
     public override bool CanClean(string directoryPath)
     {
-        if (this.ShouldIgnoreDirectory(directoryPath))
-        {
-            return false;
-        }
+        this.ValidateDirectory(directoryPath);
 
         if (this.FileSystem.Directory.EnumerateDirectories(directoryPath).Any())
         {

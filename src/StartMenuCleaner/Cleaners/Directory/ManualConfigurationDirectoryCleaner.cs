@@ -67,12 +67,7 @@ internal class ManualConfigurationDirectoryCleaner : DirectoryCleanerBase
 
     private bool CanClean(string directoryPath, [NotNullWhen(true)] out ManualDirectoryRemoveConfiguration? configuration)
     {
-        configuration = null;
-
-        if (this.ShouldIgnoreDirectory(directoryPath))
-        {
-            return false;
-        }
+        this.ValidateDirectory(directoryPath);
 
         string directoryName = this.FileSystem.Path.GetFileName(directoryPath)
             ?? throw new InvalidOperationException();
