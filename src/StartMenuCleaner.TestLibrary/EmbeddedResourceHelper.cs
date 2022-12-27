@@ -123,4 +123,16 @@ public class EmbeddedResourceHelper
 
         return temporaryFileName;
     }
+
+    /// <summary>
+    /// Gets the specified embedded resource as a <see cref="TemporaryFile" />.
+    /// </summary>
+    /// <param name="embeddedResourcePath">The embedded resource path.</param>
+    /// <returns><see cref="TemporaryFile"/>.</returns>
+    public TemporaryFile ToTemporaryFile(string embeddedResourcePath)
+    {
+        string temporaryFilePath = this.CopyToTempFile(embeddedResourcePath);
+
+        return new TemporaryFile(temporaryFilePath);
+    }
 }

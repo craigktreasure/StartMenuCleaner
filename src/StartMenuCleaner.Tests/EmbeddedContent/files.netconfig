@@ -1,0 +1,14 @@
+# Don't load global or system configuration files.
+[config]
+  global = false
+  system = false
+[startmenucleaner "File"]
+  remove = true
+[startmenucleaner "File with remove disabled"]
+  remove = false
+[startmenucleaner "File with missing remove variable"]
+  something = value
+[startmenucleaner "File with trailing slash/"]
+  remove = true
+[startmenucleaner] ; missing subsection
+  remove = true

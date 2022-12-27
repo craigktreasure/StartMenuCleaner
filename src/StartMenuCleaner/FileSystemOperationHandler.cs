@@ -19,11 +19,11 @@ internal class FileSystemOperationHandler
         this.simulate = options.Simulate;
     }
 
-    public void DeleteDirectory(string directoryPath)
+    public void DeleteDirectory(string directoryPath, bool recurse = false)
     {
         if (!this.simulate)
         {
-            this.fileSystem.Directory.Delete(directoryPath);
+            this.fileSystem.Directory.Delete(directoryPath, recurse);
         }
 
         this.logger.DirectoryDeleted(this.fileSystem.Path.GetFileName(directoryPath));
