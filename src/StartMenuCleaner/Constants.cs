@@ -1,7 +1,9 @@
-namespace StartMenuCleaner.Cleaners.Directory;
+namespace StartMenuCleaner;
 
 internal static class Constants
 {
+    public const string ConfigurationSectionName = "startmenucleaner";
+
     public static readonly string[] DirectoriesToIgnore = new string[]
     {
             "chrome apps",

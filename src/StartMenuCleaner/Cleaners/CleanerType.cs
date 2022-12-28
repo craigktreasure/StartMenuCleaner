@@ -6,4 +6,5 @@ internal enum CleanerType
     EmptyDirectory,
     SingleAppDirectory,
     FewAppsWithCruftDirectory,
+    ManualConfiguration,
 }

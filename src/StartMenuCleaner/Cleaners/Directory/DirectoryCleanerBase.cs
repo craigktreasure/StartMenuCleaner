@@ -37,19 +37,14 @@ internal abstract class DirectoryCleanerBase : IDirectoryCleaner
     public abstract void Clean(string directoryPath);
 
     /// <summary>
-    /// Determines if the directory should be ignored.
+    /// Validates the directory.
     /// </summary>
     /// <param name="directoryPath">The directory path.</param>
-    /// <returns><c>true</c> if the directory should be ignored, <c>false</c> otherwise.</returns>
-    protected bool ShouldIgnoreDirectory(string directoryPath)
+    protected void ValidateDirectory(string directoryPath)
     {
         if (!this.FileSystem.Directory.Exists(directoryPath))
         {
             throw new DirectoryNotFoundException(directoryPath);
         }
-
-        string directoryName = this.FileSystem.Path.GetFileName(directoryPath);
-
-        return Constants.DirectoriesToIgnore.Contains(directoryName, StringComparer.CurrentCultureIgnoreCase);
     }
 }

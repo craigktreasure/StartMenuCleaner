@@ -1,0 +1,25 @@
+# Don't load global or system configuration files.
+[config]
+  global = false
+  system = false
+[startmenucleaner "Directory/"]
+  remove = true
+[startmenucleaner] ; missing subsection
+  remove = true
+[startmenucleaner "Directory with remove disabled/"]
+  remove = false
+[startmenucleaner "Directory with missing remove variable/"]
+  promote = App1.lnk
+[startmenucleaner "Directory with missing trailing slash"]
+  remove = true
+[startmenucleaner "Directory with promotions/"]
+  remove = true
+  promote = App1.lnk
+  promote = App2.lnk
+[startmenucleaner "Directory with duplicate promotions/"]
+  remove = true
+  promote = App1.lnk
+  promote = App1.lnk
+[startmenucleaner "Directory with promotion in subfolder/"]
+  remove = true
+  promote = Subfolder/App1.lnk

@@ -30,10 +30,7 @@ internal class EmptyDirectoryCleaner : DirectoryCleanerBase
     /// <returns><c>true</c> if the cleaner can clean the directory path, <c>false</c> otherwise.</returns>
     public override bool CanClean(string directoryPath)
     {
-        if (this.ShouldIgnoreDirectory(directoryPath))
-        {
-            return false;
-        }
+        this.ValidateDirectory(directoryPath);
 
         return this.FileSystem.Directory.IsEmpty(directoryPath);
     }

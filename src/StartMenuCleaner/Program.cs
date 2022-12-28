@@ -51,10 +51,7 @@ internal class Program
 
     private static IServiceProvider ConfigureServices(ProgramOptions options)
     {
-        CleanerOptions cleanerOptions = new(StartMenuHelper.GetKnownStartMenuProgramsFolders())
-        {
-            Simulate = options.Simulate,
-        };
+        CleanerOptions cleanerOptions = CleanerOptions.Load(options.Simulate);
 
         return new ServiceCollection()
             .AddLogging(loggingBuilder =>
@@ -68,7 +65,10 @@ internal class Program
             .AddSingleton<FileSystemOperationHandler>()
             .AddSingleton(cleanerOptions)
             .AddSingleton<Cleaner>()
+            .AddSingleton<IManualConfigurationLoader, DotNetConfigManualConfigurationLoader>()
+            .AddSingleton<IFileCleaner, ManualConfigurationFileCleaner>()
             .AddSingleton<IFileCleaner, BadShortcutFileCleaner>()
+            .AddSingleton<IDirectoryCleaner, ManualConfigurationDirectoryCleaner>()
             .AddSingleton<IDirectoryCleaner, EmptyDirectoryCleaner>()
             .AddSingleton<IDirectoryCleaner, SingleAppDirectoryCleaner>()
             .AddSingleton<IDirectoryCleaner, FewAppsWithCruftDirectoryCleaner>()

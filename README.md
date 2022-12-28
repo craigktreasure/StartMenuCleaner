@@ -11,6 +11,12 @@ This is a .NET Core Global Tool that cleans your Windows start menu using a few 
     - [Update the tool](#update-the-tool)
     - [Uninstall the tool](#uninstall-the-tool)
   - [Running the tool](#running-the-tool)
+  - [Configuration](#configuration)
+    - [Ignore a directory](#ignore-a-directory)
+    - [Add a file for cleanup](#add-a-file-for-cleanup)
+    - [Add a directory for cleanup](#add-a-directory-for-cleanup)
+      - [Promote directory items before removal](#promote-directory-items-before-removal)
+    - [Show current configurations](#show-current-configurations)
   - [Scheduling the tool using Task Scheduler](#scheduling-the-tool-using-task-scheduler)
 
 ## Tool management
@@ -73,7 +79,136 @@ Copyright (C) 2021 Craig Treasure
   --help            Display this help screen.
 
   --version         Display version information.
-  ```
+```
+
+## Configuration
+
+This tool uses [.netconfig][dotnetconfig] to configure files and folders you want to cleanup.
+
+Install the `dotnet-config` tool by running the following:
+
+```powershell
+dotnet tool install -g dotnet-config
+```
+
+### Ignore a directory
+
+There is a default set of folders that are ignored by default:
+
+```text
+chrome apps
+startup
+maintenance
+accessories
+windows accessories
+windows administrative tools
+windows ease of access
+windows powershell
+windows system
+accessibility
+administrative tools
+system tools
+```
+
+You can add to this list by adding a new `ignore` variable to the `startmenucleaner` section:
+
+```powershell
+dotnet config --global --add startmenucleaner.ignore "My App"
+```
+
+This will result in a `.netconfig` file that looks something like:
+
+```text
+[startmenucleaner]
+  ignore = My App
+```
+
+The above configuration would cause the "My App" folder to be ignored and never cleaned.
+
+### Add a file for cleanup
+
+You can add a file for explicit removal by adding the file to your `.netconfig` file with a `remove` variable set to
+`true`:
+
+```powershell
+dotnet config --global --set startmenucleaner."My App Shortcut.lnk".remove true
+```
+
+This will result in a `.netconfig` file that looks something like:
+
+```text
+[startmenucleaner "My App Shortcut.lnk"]
+  remove = true
+```
+
+This will cause the `My App Shortcut.lnk` file be to removed if it exists.
+
+### Add a directory for cleanup
+
+You can add a directory for explicit removal by adding the directory to your `.netconfig` file with a `remove` variable
+set to `true`:
+
+```powershell
+dotnet config --global --set startmenucleaner."My App/".remove true
+```
+
+Note the `/` at the end of the directory name, which is used to distinguish it from a file.
+
+This will result in a `.netconfig` file that looks something like:
+
+```text
+[startmenucleaner "My App/"]
+  remove = true
+```
+
+This will cause the entire `My App` directory be to removed if it exists.
+
+#### Promote directory items before removal
+
+There are often files from a folder you want to keep and move to the main programs folder before removing the folder.
+
+You can do so by adding a `promote` variable with the path to the file. For example:
+
+```powershell
+dotnet config --global --add startmenucleaner."My App/".promote "My App.lnk"
+```
+
+This will result in a `.netconfig` file that looks something like:
+
+```text
+[startmenucleaner "My App/"]
+  remove = true
+  promote = My App.lnk
+```
+
+Note the different between using the `--add` argument used here and the `--set` argument used previously. The `--add`
+argument allows you to add multiple `promote` variables. You can add as many `promote` variables as you'd like.
+
+If the file happens to be in a nested folder, you would add the subfolder to the `promote` value using the `/`
+directory separator:
+
+```powershell
+dotnet config --global --add startmenucleaner."My App/".promote "Subfolder/My App.lnk"
+```
+
+This will result in a `.netconfig` file that looks something like:
+
+```text
+[startmenucleaner "My App/"]
+  remove = true
+  promote = My App.lnk
+  promote = Subfolder/My App.lnk
+```
+
+### Show current configurations
+
+To list all of your current configurations, you can run the following:
+
+```powershell
+dotnet config --global --list
+```
+
+All lines starting with `startmenucleaner.` will be considered as the tool runs.
 
 ## Scheduling the tool using Task Scheduler
 
@@ -87,3 +222,5 @@ Copyright (C) 2021 Craig Treasure
         and in some cases this causes issues. The solution is to log out and log back in to Windows
         using your username and password as opposed to Windows Hello. Repeat the steps and and enter
         your password to save the task.
+
+[dotnetconfig]: https://dotnetconfig.org/ "dotnet-config"

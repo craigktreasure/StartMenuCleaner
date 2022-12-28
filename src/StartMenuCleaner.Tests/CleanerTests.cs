@@ -125,6 +125,22 @@ public class CleanerTests
     }
 
     [Fact]
+    public void CleanIgnored()
+    {
+        Cleaner cleaner = this.GetCleaner();
+
+        string[] ignoredDirectoryPaths = Constants.DirectoriesToIgnore.Select(d => $@"C:\StartMenu\{d}").ToArray();
+        foreach (string ignoredDirectoryPath in ignoredDirectoryPaths)
+        {
+            this.fileSystemComposer.AddDirectory(ignoredDirectoryPath);
+        }
+
+        cleaner.Start();
+
+        this.AssertFileSystemContains(ignoredDirectoryPaths);
+    }
+
+    [Fact]
     public void CleanIgnoredFolderName()
     {
         Cleaner cleaner = this.GetCleaner();

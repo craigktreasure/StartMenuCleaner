@@ -105,6 +105,13 @@ internal class Cleaner
 
         foreach (string subdirectoryPath in this.fileSystem.Directory.GetDirectories(directoryPath))
         {
+            string subdirectoryName = this.fileSystem.Path.GetFileName(subdirectoryPath);
+
+            if (this.options.FoldersToIgnore.Contains(subdirectoryName))
+            {
+                continue;
+            }
+
             foreach (IDirectoryCleaner cleaner in this.directoryCleaners)
             {
                 if (cleaner.CanClean(subdirectoryPath))
