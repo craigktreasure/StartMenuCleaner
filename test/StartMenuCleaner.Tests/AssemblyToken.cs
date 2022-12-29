@@ -1,4 +1,4 @@
-namespace StartMenuCleaner.Tests;
+﻿namespace StartMenuCleaner.Tests;
 
 using System.Diagnostics.CodeAnalysis;
 

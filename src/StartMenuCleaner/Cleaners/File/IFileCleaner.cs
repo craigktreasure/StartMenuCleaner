@@ -1,4 +1,4 @@
-namespace StartMenuCleaner.Cleaners.File;
+﻿namespace StartMenuCleaner.Cleaners.File;
 
 internal interface IFileCleaner : ICleaner
 {

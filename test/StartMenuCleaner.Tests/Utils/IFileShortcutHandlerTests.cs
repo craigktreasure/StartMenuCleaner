@@ -1,4 +1,4 @@
-namespace StartMenuCleaner.Tests.Utils;
+﻿namespace StartMenuCleaner.Tests.Utils;
 
 using FluentAssertions;
 using StartMenuCleaner.TestLibrary;

@@ -1,4 +1,4 @@
-namespace StartMenuCleaner.Utils;
+﻿namespace StartMenuCleaner.Utils;
 
 internal static class StartMenuHelper
 {
