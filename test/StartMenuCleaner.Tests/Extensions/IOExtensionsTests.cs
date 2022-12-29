@@ -1,7 +1,7 @@
-namespace StartMenuCleaner.Tests.Extensions;
+﻿namespace StartMenuCleaner.Tests.Extensions;
 
 using StartMenuCleaner.Extensions;
-using StartMenuCleaner.TestLibrary;
+using StartMenuCleaner.TestLibrary.Extensions;
 using System.IO.Abstractions.TestingHelpers;
 
 public class IOExtensionsTests

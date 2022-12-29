@@ -1,4 +1,4 @@
-namespace StartMenuCleaner;
+﻿namespace StartMenuCleaner.Extensions;
 
 using Microsoft.Extensions.DependencyInjection;
 using StartMenuCleaner.Utils;

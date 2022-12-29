@@ -1,4 +1,4 @@
-namespace StartMenuCleaner;
+﻿namespace StartMenuCleaner;
 
 using CommandLine;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using StartMenuCleaner.Cleaners.Directory;
 using StartMenuCleaner.Cleaners.File;
+using StartMenuCleaner.Extensions;
 using StartMenuCleaner.Utils;
 
 internal class Program
