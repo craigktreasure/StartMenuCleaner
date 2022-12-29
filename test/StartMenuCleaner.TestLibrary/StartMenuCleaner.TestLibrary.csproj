@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StartMenuCleaner\StartMenuCleaner.csproj" />
+    <ProjectReference Include="..\..\src\StartMenuCleaner\StartMenuCleaner.csproj" />
   </ItemGroup>
 
 </Project>
