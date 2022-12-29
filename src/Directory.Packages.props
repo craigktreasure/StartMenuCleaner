@@ -1,0 +1,34 @@
+<Project>
+
+  <Import Project="$([MSBuild]::GetPathOfFileAbove(Directory.Packages.props, $(MSBuildThisFileDirectory)..))" />
+
+  <PropertyGroup>
+    <DotNetPackageVersion>7.0.0</DotNetPackageVersion>
+  </PropertyGroup>
+
+  <!--
+    Global pacakge references
+    https://learn.microsoft.com/nuget/consume-packages/central-package-management#global-package-references
+    -->
+  <ItemGroup>
+    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+    <GlobalPackageReference Include="Nerdbank.GitVersioning" Version="3.5.119" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="CommandLineParser"                                 Version="2.9.1" />
+    <PackageVersion Include="DotNetConfig"                                      Version="1.0.6" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection"          Version="$(DotNetPackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Logging"                      Version="$(DotNetPackageVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug"                Version="$(DotNetPackageVersion)" />
+    <PackageVersion Include="Microsoft.Windows.CsWin32"                         Version="0.2.138-beta" />
+    <PackageVersion Include="Serilog"                                           Version="2.12.0" />
+    <PackageVersion Include="Serilog.Extensions.Logging"                        Version="3.1.0" />
+    <PackageVersion Include="Serilog.Sinks.Console"                             Version="4.1.0" />
+    <PackageVersion Include="Serilog.Sinks.File"                                Version="5.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Trace"                               Version="3.0.0" />
+    <PackageVersion Include="System.IO.Abstractions"                            Version="$(SystemIOAbstractionsVersion)" />
+    <PackageVersion Include="Treasure.Utils.Argument"                           Version="1.0.0" />
+  </ItemGroup>
+
+</Project>
