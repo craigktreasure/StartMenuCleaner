@@ -1,6 +1,7 @@
 ﻿namespace StartMenuCleaner;
 
 using Microsoft.Extensions.Logging;
+
 using StartMenuCleaner.Cleaners;
 
 internal static partial class LoggerExtensions

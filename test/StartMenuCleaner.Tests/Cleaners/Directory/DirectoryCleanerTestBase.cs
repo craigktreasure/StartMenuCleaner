@@ -1,8 +1,9 @@
 ﻿namespace StartMenuCleaner.Tests.Cleaners.Directory;
 
+using System.IO.Abstractions.TestingHelpers;
+
 using StartMenuCleaner.Cleaners.Directory;
 using StartMenuCleaner.TestLibrary;
-using System.IO.Abstractions.TestingHelpers;
 
 public abstract class DirectoryCleanerTestBase
 {

@@ -1,8 +1,9 @@
 ﻿namespace StartMenuCleaner.Tests.Extensions;
 
+using System.IO.Abstractions.TestingHelpers;
+
 using StartMenuCleaner.Extensions;
 using StartMenuCleaner.TestLibrary.Extensions;
-using System.IO.Abstractions.TestingHelpers;
 
 public class IOExtensionsTests
 {

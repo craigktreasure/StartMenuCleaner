@@ -1,14 +1,16 @@
 ﻿namespace StartMenuCleaner;
 
-using Microsoft.Extensions.Logging;
-using StartMenuCleaner.Cleaners;
-using StartMenuCleaner.Cleaners.Directory;
-using StartMenuCleaner.Cleaners.File;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using System.Linq;
+
+using Microsoft.Extensions.Logging;
+
+using StartMenuCleaner.Cleaners;
+using StartMenuCleaner.Cleaners.Directory;
+using StartMenuCleaner.Cleaners.File;
 
 internal class Cleaner
 {

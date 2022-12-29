@@ -1,6 +1,7 @@
 ﻿namespace StartMenuCleaner;
 
 using DotNetConfig;
+
 using StartMenuCleaner.Utils;
 
 internal class CleanerOptions

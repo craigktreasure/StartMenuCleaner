@@ -1,9 +1,12 @@
 ﻿namespace StartMenuCleaner.Tests.Utils;
 
+using System.IO;
+
 using FluentAssertions;
+
 using StartMenuCleaner.TestLibrary;
 using StartMenuCleaner.Utils;
-using System.IO;
+
 using Xunit;
 
 public class CsWin32ShortcutHandlerTests

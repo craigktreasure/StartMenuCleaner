@@ -1,7 +1,8 @@
 ﻿namespace StartMenuCleaner.Cleaners.Directory;
 
-using StartMenuCleaner.Extensions;
 using System.IO.Abstractions;
+
+using StartMenuCleaner.Extensions;
 
 internal class EmptyDirectoryCleaner : DirectoryCleanerBase
 {

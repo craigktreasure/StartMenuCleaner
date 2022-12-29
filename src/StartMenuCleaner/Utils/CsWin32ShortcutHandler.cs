@@ -1,6 +1,7 @@
 ﻿namespace StartMenuCleaner.Utils;
 
 using System;
+
 using Windows.Win32;
 using Windows.Win32.Storage.FileSystem;
 using Windows.Win32.System.Com;

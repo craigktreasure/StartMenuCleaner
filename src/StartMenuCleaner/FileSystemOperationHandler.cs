@@ -1,8 +1,9 @@
 ﻿namespace StartMenuCleaner;
 
-using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.IO.Abstractions;
+
+using Microsoft.Extensions.Logging;
 
 internal class FileSystemOperationHandler
 {

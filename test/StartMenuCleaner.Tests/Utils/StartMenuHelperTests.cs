@@ -1,7 +1,9 @@
 ﻿namespace StartMenuCleaner.Tests.Utils;
 
 using FluentAssertions;
+
 using StartMenuCleaner.Utils;
+
 using Xunit;
 
 public class StartMenuHelperTests

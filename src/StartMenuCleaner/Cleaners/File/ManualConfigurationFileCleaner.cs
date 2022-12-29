@@ -1,8 +1,9 @@
 ﻿namespace StartMenuCleaner.Cleaners.File;
 
-using StartMenuCleaner.Utils;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
+
+using StartMenuCleaner.Utils;
 
 internal class ManualConfigurationFileCleaner : IFileCleaner
 {

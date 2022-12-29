@@ -1,9 +1,10 @@
 ﻿namespace StartMenuCleaner.Tests.Cleaners.File;
 
+using System.Collections.Generic;
+
 using StartMenuCleaner.Cleaners;
 using StartMenuCleaner.Cleaners.File;
 using StartMenuCleaner.TestLibrary;
-using System.Collections.Generic;
 
 public class ManualConfigurationFileCleanerTests : FileCleanerTestBase
 {

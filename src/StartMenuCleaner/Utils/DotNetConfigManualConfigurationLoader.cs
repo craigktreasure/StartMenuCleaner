@@ -1,6 +1,7 @@
 ﻿namespace StartMenuCleaner.Utils;
 
 using DotNetConfig;
+
 using StartMenuCleaner.Extensions;
 
 internal class DotNetConfigManualConfigurationLoader : IManualConfigurationLoader

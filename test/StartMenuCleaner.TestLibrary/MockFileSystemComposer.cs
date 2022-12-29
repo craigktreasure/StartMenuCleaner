@@ -1,10 +1,10 @@
 ﻿namespace StartMenuCleaner.TestLibrary;
 
-using StartMenuCleaner.TestLibrary.Extensions;
-using StartMenuCleaner.Utils;
-using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
+
+using StartMenuCleaner.TestLibrary.Extensions;
+using StartMenuCleaner.Utils;
 
 /// <summary>
 /// Class MockFileSystemComposer.
