@@ -1,4 +1,4 @@
-namespace StartMenuCleaner.Tests.Cleaners.File;
+﻿namespace StartMenuCleaner.Tests.Cleaners.File;
 
 using StartMenuCleaner.Cleaners.File;
 using StartMenuCleaner.TestLibrary;

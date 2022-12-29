@@ -1,4 +1,4 @@
-namespace StartMenuCleaner.Cleaners.Directory;
+﻿namespace StartMenuCleaner.Cleaners.Directory;
 
 using StartMenuCleaner.Utils;
 using System;

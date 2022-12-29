@@ -1,4 +1,4 @@
-namespace StartMenuCleaner.Utils;
+﻿namespace StartMenuCleaner.Utils;
 
 using System;
 using Windows.Win32;
