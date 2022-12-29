@@ -1,11 +1,14 @@
 ﻿namespace StartMenuCleaner.Tests;
 
+using System.IO.Abstractions.TestingHelpers;
+
 using FluentAssertions;
+
 using Microsoft.Extensions.Logging;
+
 using StartMenuCleaner.Cleaners.Directory;
 using StartMenuCleaner.Cleaners.File;
 using StartMenuCleaner.TestLibrary;
-using System.IO.Abstractions.TestingHelpers;
 
 public class CleanerTests
 {

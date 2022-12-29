@@ -1,8 +1,9 @@
 ﻿namespace StartMenuCleaner.Tests.Cleaners.File;
 
+using System.IO.Abstractions.TestingHelpers;
+
 using StartMenuCleaner.Cleaners.File;
 using StartMenuCleaner.TestLibrary;
-using System.IO.Abstractions.TestingHelpers;
 
 public abstract class FileCleanerTestBase
 {

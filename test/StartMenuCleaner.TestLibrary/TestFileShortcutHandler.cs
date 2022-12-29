@@ -1,8 +1,9 @@
 ﻿namespace StartMenuCleaner.TestLibrary;
 
-using StartMenuCleaner.Utils;
 using System;
 using System.Collections.Generic;
+
+using StartMenuCleaner.Utils;
 
 /// <summary>
 /// Class TestFileShortcutHandler.

@@ -1,9 +1,12 @@
 ﻿namespace StartMenuCleaner.Tests.Utils;
 
+using System;
+
 using FluentAssertions;
+
 using StartMenuCleaner.TestLibrary;
 using StartMenuCleaner.Utils;
-using System;
+
 using Xunit;
 
 public class IFileShortcutHandlerTests

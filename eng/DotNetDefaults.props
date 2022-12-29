@@ -42,9 +42,6 @@
       https://github.com/dotnet/sdk/blob/5f64de40b65f5e1154b3309339563335d8b15d3e/src/Tasks/Microsoft.NET.Build.Tasks/targets/Microsoft.NET.Sdk.CSharp.props#L15
     -->
     <NoWarn Condition=" '$(NoWarn)' == '' ">1701;1702</NoWarn>
-
-    <!-- Disable SYSLIB1006: Multiple logging methods cannot use the same event ID -->
-    <NoWarn>$(NoWarn);SYSLIB1006</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>

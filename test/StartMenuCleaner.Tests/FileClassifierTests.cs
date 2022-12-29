@@ -1,8 +1,10 @@
 ﻿namespace StartMenuCleaner.Tests;
 
+using System;
+
 using StartMenuCleaner.TestLibrary;
 using StartMenuCleaner.Utils;
-using System;
+
 using Xunit;
 
 public class FileClassifierTests

@@ -1,9 +1,10 @@
 ﻿namespace StartMenuCleaner.Cleaners.Directory;
 
-using StartMenuCleaner.Utils;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
+
+using StartMenuCleaner.Utils;
 
 internal class ManualConfigurationDirectoryCleaner : DirectoryCleanerBase
 {

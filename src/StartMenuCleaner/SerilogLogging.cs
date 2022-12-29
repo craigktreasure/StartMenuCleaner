@@ -1,11 +1,12 @@
 ﻿namespace StartMenuCleaner;
 
-using Serilog;
-using Serilog.Core;
-using Serilog.Events;
 using System;
 using System.Globalization;
 using System.IO;
+
+using Serilog;
+using Serilog.Core;
+using Serilog.Events;
 
 internal static class SerilogLogging
 {

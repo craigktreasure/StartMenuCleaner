@@ -1,8 +1,10 @@
 ﻿namespace StartMenuCleaner.Extensions;
 
-using Microsoft.Extensions.DependencyInjection;
-using StartMenuCleaner.Utils;
 using System.IO.Abstractions;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using StartMenuCleaner.Utils;
 
 internal static class SericeCollectionExtensions
 {
