@@ -1,0 +1,55 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- Determine if this is a CI build. -->
+    <IsCIBuild>false</IsCIBuild>
+    <IsCIBuild Condition="'$(FORCE_CI)' == 'true'"></IsCIBuild>
+    <IsCIBuild Condition="'$(TF_BUILD)' == 'true'">true</IsCIBuild>
+    <IsCIBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</IsCIBuild>
+
+    <!-- Sets the C# language version:
+      https://docs.microsoft.com/dotnet/csharp/language-reference/configure-language-version#c-language-version-reference
+    -->
+    <LangVersion>11.0</LangVersion>
+
+    <!-- Enable implicit usings:
+      https://docs.microsoft.com/dotnet/core/project-sdk/overview#implicit-using-directives
+    -->
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Enable nullable reference types: https://docs.microsoft.com/dotnet/csharp/nullable-references -->
+    <Nullable>enable</Nullable>
+
+    <!-- Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element). -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Embed source files that are not tracked by the source control manager in the PDB. -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Embed symbols containing Source Link in the main file (exe/dll). -->
+    <DebugType>embedded</DebugType>
+
+    <!-- Generate XML documentation for not test projects. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateDocumentationFile Condition="$(MSBuildProjectName.EndsWith('.Tests'))">false</GenerateDocumentationFile>
+
+    <!-- Normalize file paths on CI builds. -->
+    <ContinuousIntegrationBuild>$(IsCIBuild)</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Make sure the default for NoWarn is maintained:
+      https://github.com/dotnet/sdk/blob/5f64de40b65f5e1154b3309339563335d8b15d3e/src/Tasks/Microsoft.NET.Build.Tasks/targets/Microsoft.NET.Sdk.CSharp.props#L15
+    -->
+    <NoWarn Condition=" '$(NoWarn)' == '' ">1701;1702</NoWarn>
+
+    <!-- Disable SYSLIB1006: Multiple logging methods cannot use the same event ID -->
+    <NoWarn>$(NoWarn);SYSLIB1006</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <MSBuildTreatWarningsAsErrors>$(IsCIBuild)</MSBuildTreatWarningsAsErrors>
+    <TreatWarningsAsErrors>$(IsCIBuild)</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+</Project>
