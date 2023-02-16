@@ -61,16 +61,8 @@ public class EmbeddedResourceHelper
     /// <returns><see cref="ManifestResourceInfo"/>.</returns>
     /// <exception cref="ArgumentException"></exception>
     public ManifestResourceInfo GetResourceInfo(string embeddedResourcePath)
-    {
-        ManifestResourceInfo? resourceInfo = this.resourceAssembly.GetManifestResourceInfo(embeddedResourcePath);
-
-        if (resourceInfo is null)
-        {
-            throw new ArgumentException($"The embedded resource could not be found in {this.resourceAssembly.FullName}: '{embeddedResourcePath}'.", nameof(embeddedResourcePath));
-        }
-
-        return resourceInfo;
-    }
+        => this.resourceAssembly.GetManifestResourceInfo(embeddedResourcePath)
+            ?? throw new ArgumentException($"The embedded resource could not be found in {this.resourceAssembly.FullName}: '{embeddedResourcePath}'.", nameof(embeddedResourcePath));
 
     /// <summary>
     /// Loads the embedded resource  to a stream.
@@ -79,16 +71,8 @@ public class EmbeddedResourceHelper
     /// <returns><see cref="Stream"/>.</returns>
     /// <exception cref="ArgumentException"></exception>
     public Stream LoadStream(string embeddedResourcePath)
-    {
-        Stream? embeddedResourceStream = this.resourceAssembly.GetManifestResourceStream(embeddedResourcePath);
-
-        if (embeddedResourceStream is null)
-        {
-            throw new ArgumentException($"The embedded resource could not be found in {this.resourceAssembly.FullName}: '{embeddedResourcePath}'.", nameof(embeddedResourcePath));
-        }
-
-        return embeddedResourceStream;
-    }
+        => this.resourceAssembly.GetManifestResourceStream(embeddedResourcePath)
+            ?? throw new ArgumentException($"The embedded resource could not be found in {this.resourceAssembly.FullName}: '{embeddedResourcePath}'.", nameof(embeddedResourcePath));
 
     /// <summary>
     /// Copies the embedded resource to the file system.
