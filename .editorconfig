@@ -63,6 +63,9 @@ dotnet_diagnostic.IDE0058.severity = suggestion
 # IDE0059: Remove unnecessary value assignment
 dotnet_diagnostic.IDE0059.severity = suggestion
 
+# IDE0270: Null check can be simplified
+dotnet_diagnostic.IDE0270.severity = suggestion
+
 #### Naming styles ####
 
 # Naming rules
