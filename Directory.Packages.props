@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <SystemIOAbstractionsVersion>19.2.1</SystemIOAbstractionsVersion>
+    <SystemIOAbstractionsVersion>19.2.4</SystemIOAbstractionsVersion>
   </PropertyGroup>
 
 </Project>
