@@ -28,7 +28,7 @@
     <PackageVersion Include="Serilog.Sinks.File"                                Version="5.0.0" />
     <PackageVersion Include="Serilog.Sinks.Trace"                               Version="3.0.0" />
     <PackageVersion Include="System.IO.Abstractions"                            Version="$(SystemIOAbstractionsVersion)" />
-    <PackageVersion Include="Treasure.Utils.Argument"                           Version="1.0.0" />
+    <PackageVersion Include="Treasure.Utils.Argument"                           Version="1.0.33" />
   </ItemGroup>
 
 </Project>
