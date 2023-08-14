@@ -3,7 +3,6 @@
 using System.IO.Abstractions.TestingHelpers;
 
 using StartMenuCleaner.Extensions;
-using StartMenuCleaner.TestLibrary.Extensions;
 
 public class IOExtensionsTests
 {
