@@ -1,0 +1,10 @@
+<Project>
+
+  <Import Project="$([MSBuild]::GetPathOfFileAbove(Directory.Build.props, $(MSBuildThisFileDirectory)..))" />
+
+  <PropertyGroup>
+    <!-- For some reason, the SDK on Windows fails to respect the suppressions in the .editorconfig. -->
+    <NoWarn>$(NoWarn);CS1591;CA1707</NoWarn>
+  </PropertyGroup>
+
+</Project>
