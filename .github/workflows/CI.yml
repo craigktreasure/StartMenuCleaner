@@ -71,6 +71,8 @@ jobs:
     name: 'Release StartMenuCleaner'
     runs-on: windows-latest
     needs: build
+    permissions:
+      packages: write
 
     env:
       PACKAGE_VERSION: ${{ needs.build.outputs.package_version }}
