@@ -12,6 +12,22 @@ updates:
     - craigktreasure
   assignees:
     - craigktreasure
+  groups:
+    coverlet:
+      patterns:
+      - "coverlet*"
+    Microsoft.Extensions:
+      patterns:
+      - "Microsoft.Extensions*"
+    Serilog:
+      patterns:
+      - "Serilog*"
+    System.IO.Abstractions:
+      patterns:
+        - "System.IO.Abstractions*"
+    xunit:
+      patterns:
+      - "xunit*"
 
 - package-ecosystem: github-actions
   directory: "/"
