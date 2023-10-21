@@ -1,5 +1,8 @@
 ﻿namespace StartMenuCleaner;
 
+using System.Diagnostics.CodeAnalysis;
+using System.IO.Abstractions;
+
 using CommandLine;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -14,16 +17,9 @@ using StartMenuCleaner.Utils;
 
 internal class Program
 {
-    private static void Main(string[] args)
+    public static void Run(ProgramOptions options, IFileSystem fileSystem)
     {
-        Console.Title = "Start Menu Cleaner";
-
-        Parser.Default.ParseArguments<ProgramOptions>(args).WithParsed(Run);
-    }
-
-    private static void Run(ProgramOptions options)
-    {
-        IServiceProvider services = ConfigureServices(options);
+        IServiceProvider services = ConfigureServices(options, fileSystem);
         ILogger<Program> logger = services.GetRequiredService<ILogger<Program>>();
 
         if (!OperatingSystem.IsWindows())
@@ -53,7 +49,7 @@ internal class Program
         }
     }
 
-    private static IServiceProvider ConfigureServices(ProgramOptions options)
+    private static IServiceProvider ConfigureServices(ProgramOptions options, IFileSystem fileSystem)
     {
         CleanerOptions cleanerOptions = CleanerOptions.Load(options.Simulate);
 
@@ -63,7 +59,7 @@ internal class Program
                 loggingBuilder.AddDebug();
                 loggingBuilder.AddSerilog(SerilogLogging.Create(), dispose: true);
             })
-            .UseFileSystem()
+            .UseFileSystem(fileSystem)
             .RegisterFileShortcutHandler<CsWin32ShortcutHandler>()
             .AddSingleton<FileClassifier>()
             .AddSingleton<FileSystemOperationHandler>()
@@ -77,5 +73,14 @@ internal class Program
             .AddSingleton<IDirectoryCleaner, SingleAppDirectoryCleaner>()
             .AddSingleton<IDirectoryCleaner, FewAppsWithCruftDirectoryCleaner>()
             .BuildServiceProvider();
+    }
+
+    [ExcludeFromCodeCoverage]
+    private static void Main(string[] args)
+    {
+        Console.Title = "Start Menu Cleaner";
+
+        IFileSystem fileSystem = new FileSystem();
+        Parser.Default.ParseArguments<ProgramOptions>(args).WithParsed(o => Run(o, fileSystem));
     }
 }
