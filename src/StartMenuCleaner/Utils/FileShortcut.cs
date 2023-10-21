@@ -35,18 +35,6 @@ public class FileShortcut : IEquatable<FileShortcut>
     }
 
     /// <summary>
-    /// Determines whether the specified value contains shortcut path syntax ("{file_path};{target_path}").
-    /// </summary>
-    /// <param name="value">The value.</param>
-    /// <returns>True if the value contains shortcut path syntax; otherwise false.</returns>
-    public static bool ContainsShortcutPathSyntax(string value)
-    {
-        return value is not null
-            && value.Count(x => x == fragmentSeparator) == 1
-            && value.Contains($"{lnkFileExtension}{fragmentSeparator}", StringComparison.OrdinalIgnoreCase);
-    }
-
-    /// <summary>
     /// Performs an explicit conversion from <see cref="string"/> to <see cref="FileShortcut"/>.
     /// </summary>
     /// <param name="value">The value.</param>
@@ -71,11 +59,6 @@ public class FileShortcut : IEquatable<FileShortcut>
         if (shortcutPathSyntax is null)
         {
             throw new ArgumentNullException(nameof(shortcutPathSyntax));
-        }
-
-        if (!ContainsShortcutPathSyntax(shortcutPathSyntax))
-        {
-            throw new ArgumentException($"Value specified does not contain shortcut path syntax: {shortcutPathSyntax}.", nameof(shortcutPathSyntax));
         }
 
         string[] fragments = shortcutPathSyntax.Split(fragmentSeparator, StringSplitOptions.TrimEntries);
@@ -107,11 +90,6 @@ public class FileShortcut : IEquatable<FileShortcut>
         Argument.NotNullOrWhiteSpace(shortcutPathSyntax);
 
         fileShortcut = null;
-
-        if (!ContainsShortcutPathSyntax(shortcutPathSyntax))
-        {
-            return false;
-        }
 
         string[] fragments = shortcutPathSyntax.Split(fragmentSeparator, StringSplitOptions.TrimEntries);
 

@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using StartMenuCleaner.Utils;
 
-internal static class SericeCollectionExtensions
+internal static class ServiceCollectionExtensions
 {
     /// <summary>
     /// Registers the file shortcut handler.
@@ -22,7 +22,10 @@ internal static class SericeCollectionExtensions
     /// Adds the file system to the service collection.
     /// </summary>
     /// <param name="services">The services.</param>
-    /// <returns><see cref="IServiceCollection"/>.</returns>
-    public static IServiceCollection UseFileSystem(this IServiceCollection services)
-        => services.AddSingleton<IFileSystem>(new FileSystem());
+    /// <param name="fileSystem">The file system.</param>
+    /// <returns><see cref="IServiceCollection" />.</returns>
+    public static IServiceCollection UseFileSystem(
+        this IServiceCollection services,
+        IFileSystem? fileSystem = null)
+        => services.AddSingleton(fileSystem ?? new FileSystem());
 }
