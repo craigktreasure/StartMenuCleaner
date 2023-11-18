@@ -3,7 +3,7 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove(Directory.Packages.props, $(MSBuildThisFileDirectory)..))" />
 
   <PropertyGroup>
-    <DotNetPackageVersion>7.0.0</DotNetPackageVersion>
+    <DotNetPackageVersion>8.0.0</DotNetPackageVersion>
   </PropertyGroup>
 
   <!--
