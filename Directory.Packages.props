@@ -8,8 +8,4 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <SystemIOAbstractionsVersion>19.2.69</SystemIOAbstractionsVersion>
-  </PropertyGroup>
-
 </Project>
