@@ -2,10 +2,6 @@
 
   <Import Project="$([MSBuild]::GetPathOfFileAbove(Directory.Packages.props, $(MSBuildThisFileDirectory)..))" />
 
-  <PropertyGroup>
-    <DotNetPackageVersion>8.0.0</DotNetPackageVersion>
-  </PropertyGroup>
-
   <!--
     Global pacakge references
     https://learn.microsoft.com/nuget/consume-packages/central-package-management#global-package-references
@@ -18,17 +14,17 @@
   <ItemGroup>
     <PackageVersion Include="CommandLineParser"                                 Version="2.9.1" />
     <PackageVersion Include="DotNetConfig"                                      Version="1.0.6" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection"          Version="$(DotNetPackageVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.Logging"                      Version="$(DotNetPackageVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Debug"                Version="$(DotNetPackageVersion)" />
-    <PackageVersion Include="Microsoft.Windows.CsWin32"                         Version="0.3.46-beta" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection"          Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging"                      Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug"                Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Windows.CsWin32"                         Version="0.3.49-beta" />
     <PackageVersion Include="Serilog"                                           Version="3.1.1" />
     <PackageVersion Include="Serilog.Extensions.Logging"                        Version="8.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console"                             Version="5.0.0" />
     <PackageVersion Include="Serilog.Sinks.File"                                Version="5.0.0" />
     <PackageVersion Include="Serilog.Sinks.Trace"                               Version="3.0.0" />
-    <PackageVersion Include="System.IO.Abstractions"                            Version="$(SystemIOAbstractionsVersion)" />
-    <PackageVersion Include="Treasure.Utils.Argument"                           Version="1.0.44" />
+    <PackageVersion Include="System.IO.Abstractions"                            Version="19.2.87" />
+    <PackageVersion Include="Treasure.Utils.Argument"                           Version="1.1.0" />
   </ItemGroup>
 
 </Project>
