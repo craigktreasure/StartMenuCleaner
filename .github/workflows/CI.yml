@@ -1,96 +1,30 @@
-name: 'StartMenuCleaner-CI'
+name: StartMenuCleaner-CI
 
 on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '.config/**'
+      - '.github/dependabot.yml'
+      - '.vscode/**'
+      - 'docs/**'
+      - 'README.md'
 
-env:
-  # Stop wasting time caching packages
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-  # GitHub Packages Feed settings
-  GH_FEED: https://nuget.pkg.github.com/craigktreasure/StartMenuCleaner/
-  GH_USER: craigktreasure
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
-  build:
-    name: 'Build StartMenuCleaner'
-    runs-on: windows-latest
+  build_ci:
+    name: Build StartMenuCleaner
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    uses: ./.github/workflows/workflow_build.yml
+    secrets: inherit
+    with:
+      # don't check format on CI builds due to common breaking changes in the .NET SDK
+      checkFormat: false
 
-    outputs:
-      package_version: ${{steps.version.outputs.package_version}}
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup .NET 7
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 7.x
-
-      - name: Set version
-        id: version
-        shell: pwsh
-        run: |
-          dotnet tool restore
-          $packageVersion = dotnet nbgv get-version --variable NuGetPackageVersion
-          "package_version=$packageVersion" >> $env:GITHUB_OUTPUT
-
-      - name: Install dependencies
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Test
-        run: dotnet test --configuration Release --no-build --verbosity normal /p:CollectCoverage=true
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          name: codecov
-          directory: __test-results
-          fail_ci_if_error: true
-          verbose: true
-
-      - name: Upload output artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: __output
-          path: __output
-
-      - name: Upload package artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: __packages
-          path: __packages
-
-  release:
-    name: 'Release StartMenuCleaner'
-    runs-on: windows-latest
-    needs: build
-    permissions:
-      packages: write
-
-    env:
-      PACKAGE_VERSION: ${{ needs.build.outputs.package_version }}
-
-    steps:
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v1
-        with:
-          nuget-version: latest
-
-      - name: Download __packages
-        uses: actions/download-artifact@v3
-        with:
-          name: __packages
-          path: __packages
-
-      - name: Configure GitHub NuGet registry
-        run: nuget sources add -name github -source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -username ${{ github.repository_owner }} -password ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push to GitHub package registry
-        run: nuget push __packages\NuGet\Release\*.nupkg -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source github
+  release_ci:
+    name: Release StartMenuCleaner to NuGet.org
+    needs: build_ci
+    uses: ./.github/workflows/workflow_release.yml
+    secrets: inherit
+    with:
+      package-version: ${{ needs.build_ci.outputs.package_version }}
