@@ -11,9 +11,8 @@ jobs:
   release:
     name: Release
     runs-on: windows-latest
-    environment:
-      name: NuGet.org
-      url: https://www.nuget.org
+    permissions:
+      packages: write
 
     steps:
       - name: Setup NuGet
