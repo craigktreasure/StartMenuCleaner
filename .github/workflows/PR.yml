@@ -1,53 +1,9 @@
-name: 'StartMenuCleaner-PR'
+name: StartMenuCleaner-PR
 
 on: pull_request
 
-env:
-  # Stop wasting time caching packages
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-
 jobs:
-  build:
-    name: 'Build StartMenuCleaner'
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup .NET 7
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 7.x
-
-      - name: Install dependencies
-        run: dotnet restore
-
-      - name: DotNet Format
-        run: dotnet format --no-restore --verify-no-changes
-
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Test
-        run: dotnet test --configuration Release --no-build --verbosity normal /p:CollectCoverage=true
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          name: codecov-${{ matrix.platform }}
-          directory: __test-results
-          fail_ci_if_error: true
-          verbose: true
-
-      - name: Upload output artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: __output
-          path: __output
-
-      - name: Upload packages artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: __packages
-          path: __packages
+  build_pr:
+    name: Build StartMenuCleaner
+    uses: ./.github/workflows/workflow_build.yml
+    secrets: inherit

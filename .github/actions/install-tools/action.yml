@@ -1,0 +1,13 @@
+name: Install tools
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.x
+
+    - name: Install .NET tools
+      shell: pwsh
+      run: dotnet tool restore
