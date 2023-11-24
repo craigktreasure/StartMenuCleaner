@@ -22,7 +22,7 @@ jobs:
       checkFormat: false
 
   release_ci:
-    name: Release StartMenuCleaner to NuGet.org
+    name: Release StartMenuCleaner to GitHub package registry
     needs: build_ci
     uses: ./.github/workflows/workflow_release.yml
     secrets: inherit

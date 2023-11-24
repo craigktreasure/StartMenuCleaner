@@ -29,7 +29,7 @@ To build the tool, run the following command:
 dotnet build ./StartMenuCleaner/ -c Release
 ```
 
-The tool will be packed into a `nupkg` file at `./__packages/NuGet/Release/`.
+The tool will be packed into a `nupkg` file at `./__artifacts/package/release/`.
 
 ### Install the tool
 
@@ -38,7 +38,7 @@ These instructions assume you have previously [built](#build-the-tool) the tool.
 To install the tool, run the following command:
 
 ``` shell
-dotnet tool install -g StartMenuCleaner --add-source ./__packages/NuGet/Release/ --version <version number>
+dotnet tool install -g StartMenuCleaner --add-source ./__artifacts/package/release/ --version <version number>
 ```
 
 ### Update the tool
@@ -48,7 +48,7 @@ These instructions assume you have previously [built](#build-the-tool) and [inst
 For stable release versions, run the following command:
 
 ``` shell
-dotnet tool update -g StartMenuCleaner --add-source ./__packages/NuGet/Release/
+dotnet tool update -g StartMenuCleaner --add-source ./__artifacts/package/release/
 ```
 
 For pre-release versions, there is currently no way to update to a pre-release version. See [here](https://github.com/dotnet/sdk/issues/2551) for updates on this issue. For the time being, you need to [uninstall](#uninstall-the-tool) the previous version of the tool and then [install](#install-the-tool) the tool again.
