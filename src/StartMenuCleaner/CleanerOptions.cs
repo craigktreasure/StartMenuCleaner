@@ -24,7 +24,7 @@ internal class CleanerOptions
     /// <summary>
     /// Initializes a new instance of the <see cref="CleanerOptions" /> class.
     /// </summary>
-    /// <param name="rootFoldersToClean">The contents of these foldres will be searched and cleaned.</param>
+    /// <param name="rootFoldersToClean">The contents of these folders will be searched and cleaned.</param>
     public CleanerOptions(IReadOnlyList<string> rootFoldersToClean)
         : this(rootFoldersToClean, Constants.DirectoriesToIgnore)
     {
@@ -33,7 +33,7 @@ internal class CleanerOptions
     /// <summary>
     /// Initializes a new instance of the <see cref="CleanerOptions" /> class.
     /// </summary>
-    /// <param name="rootFoldersToClean">The contents of these foldres will be searched and cleaned.</param>
+    /// <param name="rootFoldersToClean">The contents of these folders will be searched and cleaned.</param>
     /// <param name="foldersToIgnore">The folders to ignore.</param>
     public CleanerOptions(IReadOnlyList<string> rootFoldersToClean, IReadOnlyList<string> foldersToIgnore)
     {
@@ -61,6 +61,6 @@ internal class CleanerOptions
         };
     }
 
-    private static IReadOnlyList<string> LoadFoldersToIgnoreFromConfiguration(Config config)
+    private static string[] LoadFoldersToIgnoreFromConfiguration(Config config)
         => config.GetAll(Constants.ConfigurationSectionName, "ignore").Select(x => x.GetString()).ToArray();
 }

@@ -1,11 +1,17 @@
 ﻿namespace StartMenuCleaner.Utils;
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 
-internal interface IFileShortcutHandler
+internal abstract class FileShortcutHandler
 {
     private const string lnkFileExtension = ".lnk";
+
+    /// <summary>
+    /// Resolves the target path of the specified shortcut.
+    /// </summary>
+    /// <param name="shortcutPath">The shortcut path.</param>
+    /// <returns><see cref="string"/>.</returns>
+    public abstract string ResolveTarget(string shortcutPath);
 
     /// <summary>
     /// Get a file shortcut.
@@ -28,19 +34,12 @@ internal interface IFileShortcutHandler
     /// </summary>
     /// <param name="filePath">The file path.</param>
     /// <returns><see cref="bool"/>.</returns>
-    public bool IsShortcut(string filePath)
+    public static bool IsShortcut(string filePath)
     {
         string ext = Path.GetExtension(filePath);
 
         return ext == lnkFileExtension;
     }
-
-    /// <summary>
-    /// Resolves the target path of the specified shortcut.
-    /// </summary>
-    /// <param name="shortcutPath">The shortcut path.</param>
-    /// <returns><see cref="string"/>.</returns>
-    string ResolveTarget(string shortcutPath);
 
     /// <summary>
     /// Tries to get a file shortcut.
@@ -53,7 +52,7 @@ internal interface IFileShortcutHandler
     {
         shortcut = null;
 
-        if (!this.IsShortcut(filePath))
+        if (!IsShortcut(filePath))
         {
             return false;
         }

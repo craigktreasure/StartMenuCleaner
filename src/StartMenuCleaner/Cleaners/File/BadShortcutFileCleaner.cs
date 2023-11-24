@@ -10,7 +10,7 @@ internal class BadShortcutFileCleaner : IFileCleaner
 
     private readonly FileSystemOperationHandler fileSystemOperationHandler;
 
-    private readonly IFileShortcutHandler shortcutHandler;
+    private readonly FileShortcutHandler shortcutHandler;
 
     /// <summary>
     /// Gets the cleaner type.
@@ -25,7 +25,7 @@ internal class BadShortcutFileCleaner : IFileCleaner
     /// <param name="fileSystemOperationHandler">The file system operation handler.</param>
     public BadShortcutFileCleaner(
         IFileSystem fileSystem,
-        IFileShortcutHandler shortcutHandler,
+        FileShortcutHandler shortcutHandler,
         FileSystemOperationHandler fileSystemOperationHandler)
     {
         this.fileSystem = fileSystem;

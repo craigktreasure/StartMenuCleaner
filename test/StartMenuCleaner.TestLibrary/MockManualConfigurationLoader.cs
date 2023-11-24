@@ -25,14 +25,14 @@ public class MockManualConfigurationLoader : IManualConfigurationLoader
                 f => f,
                 f => new ManualFileRemoveConfiguration(f),
                 StringComparer.OrdinalIgnoreCase)
-            ?? new();
+            ?? [];
 
         this.directoryConfigurations = directories?
             .ToDictionary(
                 d => d.Key,
                 d => new ManualDirectoryRemoveConfiguration(d.Key, d.Value ?? Array.Empty<string>()),
                 StringComparer.OrdinalIgnoreCase)
-            ?? new();
+            ?? [];
     }
 
     /// <summary>

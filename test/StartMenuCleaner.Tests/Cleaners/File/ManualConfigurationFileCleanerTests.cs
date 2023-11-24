@@ -21,7 +21,7 @@ public class ManualConfigurationFileCleanerTests : FileCleanerTestBase
         // Arrange
         const string shortcutFilePath = @"C:\StartMenu\Shortcut.lnk";
         const string appFilePath = @"C:\Programs\App.exe";
-        IFileCleaner fileCleaner = this.BuildCleaner(new[] { "Shortcut.lnk" });
+        ManualConfigurationFileCleaner fileCleaner = this.BuildCleaner(new[] { "Shortcut.lnk" });
         this.FileSystemComposer.Add($"{shortcutFilePath};{appFilePath}");
 
         // Act
@@ -53,7 +53,7 @@ public class ManualConfigurationFileCleanerTests : FileCleanerTestBase
         // Arrange
         const string shortcutFilePath = @"C:\StartMenu\Shortcut.lnk";
         const string appFilePath = @"C:\Programs\App.exe";
-        IFileCleaner fileCleaner = this.BuildCleaner(new[] { "Shortcut.lnk" });
+        ManualConfigurationFileCleaner fileCleaner = this.BuildCleaner(new[] { "Shortcut.lnk" });
         this.FileSystemComposer.Add($"{shortcutFilePath};{appFilePath}");
 
         // Act
@@ -88,7 +88,7 @@ public class ManualConfigurationFileCleanerTests : FileCleanerTestBase
 
     private protected override IFileCleaner BuildCleaner() => this.BuildCleaner(null);
 
-    private IFileCleaner BuildCleaner(IEnumerable<string>? files)
+    private ManualConfigurationFileCleaner BuildCleaner(IEnumerable<string>? files)
     {
         CleanerOptions cleanerOptions = new(new[] { @"C:\StartMenu" })
         {

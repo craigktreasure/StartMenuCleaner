@@ -8,7 +8,7 @@ using StartMenuCleaner.Utils;
 /// <summary>
 /// Class MockFileSystemComposer.
 /// </summary>
-public class MockFileSystemComposer
+internal class MockFileSystemComposer
 {
     private readonly IReadOnlyList<string> defaultFileSystemNodes;
 
