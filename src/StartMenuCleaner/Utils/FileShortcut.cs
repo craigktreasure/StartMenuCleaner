@@ -56,10 +56,7 @@ public class FileShortcut : IEquatable<FileShortcut>
     /// <exception cref="ArgumentNullException"></exception>
     public static FileShortcut FromString(string shortcutPathSyntax)
     {
-        if (shortcutPathSyntax is null)
-        {
-            throw new ArgumentNullException(nameof(shortcutPathSyntax));
-        }
+        ArgumentNullException.ThrowIfNull(shortcutPathSyntax);
 
         string[] fragments = shortcutPathSyntax.Split(fragmentSeparator, StringSplitOptions.TrimEntries);
 

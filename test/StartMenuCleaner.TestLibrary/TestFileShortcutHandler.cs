@@ -7,10 +7,10 @@ using StartMenuCleaner.Utils;
 
 /// <summary>
 /// Class TestFileShortcutHandler.
-/// Implements the <see cref="IFileShortcutHandler" />
+/// Implements the <see cref="FileShortcutHandler" />
 /// </summary>
-/// <seealso cref="IFileShortcutHandler" />
-public class TestFileShortcutHandler : IFileShortcutHandler
+/// <seealso cref="FileShortcutHandler" />
+internal class TestFileShortcutHandler : FileShortcutHandler
 {
     private readonly IDictionary<string, string> shortcutMap;
 
@@ -52,7 +52,7 @@ public class TestFileShortcutHandler : IFileShortcutHandler
     /// <param name="shortcutPath">The shortcut path.</param>
     /// <returns><see cref="string" />.</returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public string ResolveTarget(string shortcutPath)
+    public override string ResolveTarget(string shortcutPath)
     {
         if (this.shortcutMap.TryGetValue(shortcutPath, out string? shortcutTarget))
         {

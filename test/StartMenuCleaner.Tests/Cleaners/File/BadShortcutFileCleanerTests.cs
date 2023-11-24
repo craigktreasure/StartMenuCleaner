@@ -102,7 +102,7 @@ public class BadShortcutFileCleanerTests : FileCleanerTestBase
 
     private protected override IFileCleaner BuildCleaner()
     {
-        CleanerOptions cleanerOptions = new(new[] { @"C:\StartMenu" })
+        CleanerOptions cleanerOptions = new([@"C:\StartMenu"])
         {
             Simulate = false
         };

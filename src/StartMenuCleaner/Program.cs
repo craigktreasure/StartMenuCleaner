@@ -49,7 +49,7 @@ internal class Program
         }
     }
 
-    private static IServiceProvider ConfigureServices(ProgramOptions options, IFileSystem fileSystem)
+    private static ServiceProvider ConfigureServices(ProgramOptions options, IFileSystem fileSystem)
     {
         CleanerOptions cleanerOptions = CleanerOptions.Load(options.Simulate);
 

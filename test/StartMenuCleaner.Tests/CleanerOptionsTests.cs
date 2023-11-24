@@ -9,8 +9,8 @@ public class CleanerOptionsTests
     public void Constructor()
     {
         // Arrange
-        IReadOnlyList<string> rootFoldersToClean = new[] { "foo" };
-        IReadOnlyList<string> foldersToIgnore = new[] { "foo" }.Concat(Constants.DirectoriesToIgnore).ToArray();
+        IReadOnlyList<string> rootFoldersToClean = ["foo"];
+        IReadOnlyList<string> foldersToIgnore = ["foo", .. Constants.DirectoriesToIgnore];
 
         // Act and assert
         CleanerOptions options = new(rootFoldersToClean);
@@ -31,7 +31,7 @@ public class CleanerOptionsTests
         // Arrange
         bool simulate = true;
         IReadOnlyList<string> expectedRootFoldersToClean = StartMenuHelper.GetKnownStartMenuProgramsFolders();
-        string[] expectedFoldersToIgnore = Constants.DirectoriesToIgnore.Concat(new[] { "App", "App 2" }).ToArray();
+        string[] expectedFoldersToIgnore = [.. Constants.DirectoriesToIgnore, "App", "App 2"];
         EmbeddedResourceHelper embeddedResourceHelper = new(typeof(AssemblyToken).Assembly);
         using TemporaryFile tempFile = embeddedResourceHelper.ToTemporaryFile(@"EmbeddedContent\options.netconfig");
 

@@ -32,10 +32,7 @@ public class CleanerTests
         cleaner.Start();
 
         // Assert
-        this.AssertFileSystemContains(new[]
-        {
-            @"C:\StartMenu"
-        });
+        this.AssertFileSystemContains([@"C:\StartMenu"]);
     }
 
     [Fact]
@@ -47,10 +44,7 @@ public class CleanerTests
 
         cleaner.Start();
 
-        this.AssertFileSystemContains(new[]
-        {
-            @"C:\StartMenu"
-        });
+        this.AssertFileSystemContains([@"C:\StartMenu"]);
     }
 
     [Fact]
@@ -58,21 +52,21 @@ public class CleanerTests
     {
         Cleaner cleaner = this.GetCleaner();
 
-        this.fileSystemComposer.Add(new[]
-        {
+        this.fileSystemComposer.Add(
+        [
             @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
             @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
             @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
             @"C:\StartMenu\MyApp\MyApp Help.txt",
-        });
+        ]);
 
         cleaner.Start();
 
-        this.AssertFileSystemContains(new[]
-        {
+        this.AssertFileSystemContains(
+        [
             @"C:\StartMenu\MyApp.lnk",
             @"C:\StartMenu\MyApp2.lnk",
-        });
+        ]);
     }
 
     [Fact]
@@ -80,25 +74,25 @@ public class CleanerTests
     {
         Cleaner cleaner = this.GetCleaner();
 
-        this.fileSystemComposer.Add(new[]
-        {
+        this.fileSystemComposer.Add(
+        [
             @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
             @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
             @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
             @"C:\StartMenu\MyApp\MyApp Help.txt",
             @"C:\StartMenu\MyApp\Foo",
-        });
+        ]);
 
         cleaner.Start();
 
-        this.AssertFileSystemContains(new[]
-        {
+        this.AssertFileSystemContains(
+        [
             @"C:\StartMenu\MyApp\MyApp.lnk",
             @"C:\StartMenu\MyApp\MyApp2.lnk",
             @"C:\StartMenu\MyApp\MyApp Help.lnk",
             @"C:\StartMenu\MyApp\MyApp Help.txt",
             @"C:\StartMenu\MyApp\Foo",
-        });
+        ]);
     }
 
     [Fact]
@@ -106,25 +100,25 @@ public class CleanerTests
     {
         Cleaner cleaner = this.GetCleaner();
 
-        this.fileSystemComposer.Add(new[]
-        {
+        this.fileSystemComposer.Add(
+        [
             @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
             @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
             @"C:\StartMenu\MyApp\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
             @"C:\StartMenu\MyApp\MyApp Help.txt",
             @"C:\StartMenu\MyApp\Foo.other",
-        });
+        ]);
 
         cleaner.Start();
 
-        this.AssertFileSystemContains(new[]
-        {
+        this.AssertFileSystemContains(
+        [
             @"C:\StartMenu\MyApp\MyApp.lnk",
             @"C:\StartMenu\MyApp\MyApp2.lnk",
             @"C:\StartMenu\MyApp\MyApp Help.lnk",
             @"C:\StartMenu\MyApp\MyApp Help.txt",
             @"C:\StartMenu\MyApp\Foo.other",
-        });
+        ]);
     }
 
     [Fact]
@@ -154,10 +148,10 @@ public class CleanerTests
 
         cleaner.Start();
 
-        this.AssertFileSystemContains(new[]
-        {
+        this.AssertFileSystemContains(
+        [
             @"C:\StartMenu\Maintenance\MyApp.lnk"
-        });
+        ]);
     }
 
     [Fact]
@@ -171,10 +165,10 @@ public class CleanerTests
 
         cleaner.Start();
 
-        this.AssertFileSystemContains(new[]
-        {
+        this.AssertFileSystemContains(
+        [
             @"C:\StartMenu\MyApp.lnk"
-        });
+        ]);
     }
 
     [Fact]
@@ -182,19 +176,19 @@ public class CleanerTests
     {
         Cleaner cleaner = this.GetCleaner();
 
-        this.fileSystemComposer.Add(new[]
-        {
+        this.fileSystemComposer.Add(
+        [
             @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
             @"C:\StartMenu\MyApp\Foo",
-        });
+        ]);
 
         cleaner.Start();
 
-        this.AssertFileSystemContains(new[]
-        {
+        this.AssertFileSystemContains(
+        [
             @"C:\StartMenu\MyApp\MyApp.lnk",
             @"C:\StartMenu\MyApp\Foo"
-        });
+        ]);
     }
 
     [Fact]
@@ -202,21 +196,21 @@ public class CleanerTests
     {
         Cleaner cleaner = this.GetCleaner();
 
-        this.fileSystemComposer.Add(new[]
-        {
+        this.fileSystemComposer.Add(
+        [
             @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
             @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
             @"C:\StartMenu\MyApp\MyApp3.lnk;C:\Programs\MyApp\MyApp3.exe",
-        });
+        ]);
 
         cleaner.Start();
 
-        this.AssertFileSystemContains(new[]
-        {
+        this.AssertFileSystemContains(
+        [
             @"C:\StartMenu\MyApp\MyApp.lnk",
             @"C:\StartMenu\MyApp\MyApp2.lnk",
             @"C:\StartMenu\MyApp\MyApp3.lnk",
-        });
+        ]);
     }
 
     [Fact]
@@ -224,19 +218,19 @@ public class CleanerTests
     {
         Cleaner cleaner = this.GetCleaner();
 
-        this.fileSystemComposer.Add(new[]
-        {
+        this.fileSystemComposer.Add(
+        [
             @"C:\StartMenu\MyApp\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
             @"C:\StartMenu\MyApp\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
-        });
+        ]);
 
         cleaner.Start();
 
-        this.AssertFileSystemContains(new[]
-        {
+        this.AssertFileSystemContains(
+        [
             @"C:\StartMenu\MyApp.lnk",
             @"C:\StartMenu\MyApp2.lnk",
-        });
+        ]);
     }
 
     [Fact]
@@ -248,10 +242,7 @@ public class CleanerTests
 
         cleaner.Start();
 
-        this.AssertFileSystemContains(new[]
-        {
-            @"C:\StartMenu\MyApp"
-        });
+        this.AssertFileSystemContains([@"C:\StartMenu\MyApp"]);
     }
 
     private void AssertFileSystemContains(IEnumerable<string> expectedNodes)
@@ -266,7 +257,7 @@ public class CleanerTests
         MockFileSystem mockFileSystem = this.fileSystemComposer.FileSystem;
         TestFileShortcutHandler shortcutHandler = this.fileSystemComposer.ShortcutHandler;
         FileClassifier classifier = new(mockFileSystem, shortcutHandler);
-        CleanerOptions cleanerOptions = new(new[] { @"C:\StartMenu" })
+        CleanerOptions cleanerOptions = new([@"C:\StartMenu"])
         {
             Simulate = simulate
         };
@@ -278,12 +269,12 @@ public class CleanerTests
         {
             new BadShortcutFileCleaner(mockFileSystem, shortcutHandler, fileSystemOperationHandler),
         };
-        IDirectoryCleaner[] directoryCleaners = new IDirectoryCleaner[]
-        {
+        IDirectoryCleaner[] directoryCleaners =
+        [
             new EmptyDirectoryCleaner(mockFileSystem, fileSystemOperationHandler),
             new SingleAppDirectoryCleaner(mockFileSystem, fileSystemOperationHandler, classifier),
             new FewAppsWithCruftDirectoryCleaner(mockFileSystem, fileSystemOperationHandler, classifier),
-        };
+        ];
 
         return new Cleaner(
             cleanerOptions,

@@ -9,7 +9,7 @@ public abstract class DirectoryCleanerTestBase
 {
     protected MockFileSystem FileSystem => this.FileSystemComposer.FileSystem;
 
-    protected MockFileSystemComposer FileSystemComposer { get; } = new MockFileSystemComposer();
+    private protected MockFileSystemComposer FileSystemComposer { get; } = new MockFileSystemComposer();
 
     [Fact]
     public void CanClean_DirectoryNotFound()

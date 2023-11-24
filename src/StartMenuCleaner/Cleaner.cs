@@ -84,8 +84,8 @@ internal class Cleaner
     /// Gets the directory items to clean.
     /// </summary>
     /// <param name="directoryPaths">The directory paths.</param>
-    /// <returns><see cref="IReadOnlyList{ItemToClean}"/>.</returns>
-    private IReadOnlyList<ItemToClean> GetDirectoryItemsToClean(IEnumerable<string> directoryPaths)
+    /// <returns>An array of <see cref="ItemToClean"/>.</returns>
+    private ItemToClean[] GetDirectoryItemsToClean(IEnumerable<string> directoryPaths)
         => directoryPaths
         .Where(this.fileSystem.Directory.Exists)
         .SelectMany(this.GetDirectoryItemsToClean)
@@ -103,7 +103,7 @@ internal class Cleaner
             throw new DirectoryNotFoundException(directoryPath);
         }
 
-        List<ItemToClean> items = new();
+        List<ItemToClean> items = [];
 
         foreach (string subdirectoryPath in this.fileSystem.Directory.GetDirectories(directoryPath))
         {
@@ -131,8 +131,8 @@ internal class Cleaner
     /// Gets the file items to clean.
     /// </summary>
     /// <param name="directoryPaths">The directory paths.</param>
-    /// <returns><see cref="IReadOnlyList{ItemToClean}"/>.</returns>
-    private IReadOnlyList<ItemToClean> GetFileItemsToClean(IEnumerable<string> directoryPaths)
+    /// <returns>An array of <see cref="ItemToClean"/>.</returns>
+    private ItemToClean[] GetFileItemsToClean(IEnumerable<string> directoryPaths)
         => directoryPaths
         .Where(this.fileSystem.Directory.Exists)
         .SelectMany(this.GetFileItemsToClean)
@@ -150,7 +150,7 @@ internal class Cleaner
             throw new DirectoryNotFoundException(directoryPath);
         }
 
-        List<ItemToClean> items = new();
+        List<ItemToClean> items = [];
 
         foreach (string filePath in this.fileSystem.Directory.GetFiles(directoryPath))
         {
@@ -167,6 +167,6 @@ internal class Cleaner
         return items;
     }
 
-    private IReadOnlyList<ItemToClean> GetItemsToClean(IEnumerable<string> directoryPaths)
-                            => this.GetFileItemsToClean(directoryPaths).Concat(this.GetDirectoryItemsToClean(directoryPaths)).ToArray();
+    private ItemToClean[] GetItemsToClean(IEnumerable<string> directoryPaths)
+        => this.GetFileItemsToClean(directoryPaths).Concat(this.GetDirectoryItemsToClean(directoryPaths)).ToArray();
 }

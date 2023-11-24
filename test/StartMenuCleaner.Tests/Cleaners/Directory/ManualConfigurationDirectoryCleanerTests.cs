@@ -22,7 +22,7 @@ public class ManualConfigurationDirectoryCleanerTests : DirectoryCleanerTestBase
         string shortcutDirectoryPath = Path.GetDirectoryName(shortcutFilePath)!;
         const string appFilePath = @"C:\Programs\App.exe";
         this.FileSystemComposer.Add($"{shortcutFilePath};{appFilePath}");
-        IDirectoryCleaner directoryCleaner = this.BuildCleaner(new[] { "App" });
+        ManualConfigurationDirectoryCleaner directoryCleaner = this.BuildCleaner(["App"]);
 
         // Act
         bool result = directoryCleaner.CanClean(shortcutDirectoryPath);
@@ -56,7 +56,7 @@ public class ManualConfigurationDirectoryCleanerTests : DirectoryCleanerTestBase
         string shortcutDirectoryPath = Path.GetDirectoryName(shortcutFilePath)!;
         const string appFilePath = @"C:\Programs\App.exe";
         this.FileSystemComposer.Add($"{shortcutFilePath};{appFilePath}");
-        IDirectoryCleaner directoryCleaner = this.BuildCleaner(new[] { "App" });
+        ManualConfigurationDirectoryCleaner directoryCleaner = this.BuildCleaner(["App"]);
 
         // Act
         directoryCleaner.Clean(shortcutDirectoryPath);
@@ -74,7 +74,7 @@ public class ManualConfigurationDirectoryCleanerTests : DirectoryCleanerTestBase
         const string appFilePath = @"C:\Programs\App.exe";
         this.FileSystemComposer.Add($"{shortcutFilePath};{appFilePath}");
         this.FileSystemComposer.Add(@"C:\StartMenu\App\File.txt");
-        IDirectoryCleaner directoryCleaner = this.BuildCleaner(new Dictionary<string, IEnumerable<string>?>
+        ManualConfigurationDirectoryCleaner directoryCleaner = this.BuildCleaner(new Dictionary<string, IEnumerable<string>?>
         {
             ["App"] = new[] { Path.GetFileName(shortcutFilePath) }
         });
@@ -115,9 +115,9 @@ public class ManualConfigurationDirectoryCleanerTests : DirectoryCleanerTestBase
     private protected override IDirectoryCleaner BuildCleaner()
         => this.BuildCleaner((IDictionary<string, IEnumerable<string>?>?)null);
 
-    private IDirectoryCleaner BuildCleaner(IDictionary<string, IEnumerable<string>?>? directories)
+    private ManualConfigurationDirectoryCleaner BuildCleaner(IDictionary<string, IEnumerable<string>?>? directories)
     {
-        CleanerOptions cleanerOptions = new(new[] { @"C:\StartMenu" })
+        CleanerOptions cleanerOptions = new([@"C:\StartMenu"])
         {
             Simulate = false
         };
@@ -132,6 +132,6 @@ public class ManualConfigurationDirectoryCleanerTests : DirectoryCleanerTestBase
         return cleaner;
     }
 
-    private IDirectoryCleaner BuildCleaner(IEnumerable<string> directories)
-        => this.BuildCleaner(directories.ToDictionary(d => d, _ => (IEnumerable<string>?)Array.Empty<string>(), StringComparer.OrdinalIgnoreCase));
+    private ManualConfigurationDirectoryCleaner BuildCleaner(IEnumerable<string> directories)
+        => this.BuildCleaner(directories.ToDictionary(d => d, _ => (IEnumerable<string>?)[], StringComparer.OrdinalIgnoreCase));
 }

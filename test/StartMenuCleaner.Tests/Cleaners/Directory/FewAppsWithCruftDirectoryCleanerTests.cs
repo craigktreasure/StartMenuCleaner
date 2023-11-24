@@ -16,10 +16,10 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
     {
         // Arrange
         const string directoryPath = @"C:\StartMenu\MyApp";
-        this.FileSystemComposer.Add(new[]
-        {
+        this.FileSystemComposer.Add(
+        [
             $@"{directoryPath}\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
-        });
+        ]);
         IDirectoryCleaner cleaner = this.BuildCleaner();
 
         // Act
@@ -34,14 +34,14 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
     {
         // Arrange
         const string directoryPath = @"C:\StartMenu\MyApp";
-        this.FileSystemComposer.Add(new[]
-        {
+        this.FileSystemComposer.Add(
+        [
             $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
             $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
             $@"{directoryPath}\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
             $@"{directoryPath}\MyApp Help.txt",
             $@"{directoryPath}\Foo.other",
-        });
+        ]);
         IDirectoryCleaner cleaner = this.BuildCleaner();
 
         // Act
@@ -56,10 +56,10 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
     {
         // Arrange
         const string directoryPath = @"C:\StartMenu\MyApp";
-        this.FileSystemComposer.Add(new[]
-        {
+        this.FileSystemComposer.Add(
+        [
             $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
-        });
+        ]);
         IDirectoryCleaner cleaner = this.BuildCleaner();
 
         // Act
@@ -74,10 +74,10 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
     {
         // Arrange
         const string directoryPath = @"C:\StartMenu\MyApp";
-        this.FileSystemComposer.Add(new[]
-        {
+        this.FileSystemComposer.Add(
+        [
             $@"{directoryPath}\MyApp Help.txt",
-        });
+        ]);
         IDirectoryCleaner cleaner = this.BuildCleaner();
 
         // Act
@@ -92,12 +92,12 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
     {
         // Arrange
         const string directoryPath = @"C:\StartMenu\MyApp";
-        this.FileSystemComposer.Add(new[]
-        {
+        this.FileSystemComposer.Add(
+        [
             $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
             $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
             $@"{directoryPath}\MyApp3.lnk;C:\Programs\MyApp\MyApp3.exe",
-        });
+        ]);
         IDirectoryCleaner cleaner = this.BuildCleaner();
 
         // Act
@@ -112,11 +112,11 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
     {
         // Arrange
         const string directoryPath = @"C:\StartMenu\MyApp";
-        this.FileSystemComposer.Add(new[]
-        {
+        this.FileSystemComposer.Add(
+        [
             $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
             $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
-        });
+        ]);
         IDirectoryCleaner cleaner = this.BuildCleaner();
 
         // Act
@@ -131,13 +131,13 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
     {
         // Arrange
         const string directoryPath = @"C:\StartMenu\MyApp";
-        this.FileSystemComposer.Add(new[]
-        {
+        this.FileSystemComposer.Add(
+        [
             $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
             $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
             $@"{directoryPath}\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
             $@"{directoryPath}\MyApp Help.txt",
-        });
+        ]);
         IDirectoryCleaner cleaner = this.BuildCleaner();
 
         // Act
@@ -153,10 +153,10 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
         // Arrange
         const string directoryPath = @"C:\StartMenu\MyApp";
         string filePath = $@"{directoryPath}\MyApp Help.lnk";
-        this.FileSystemComposer.Add(new[]
-        {
+        this.FileSystemComposer.Add(
+        [
             $@"{filePath};C:\Programs\MyApp\MyApp Help.chm",
-        });
+        ]);
         IDirectoryCleaner cleaner = this.BuildCleaner();
 
         // Act
@@ -171,14 +171,14 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
     {
         // Arrange
         const string directoryPath = @"C:\StartMenu\MyApp";
-        this.FileSystemComposer.Add(new[]
-        {
+        this.FileSystemComposer.Add(
+        [
             $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
             $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
             $@"{directoryPath}\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
             $@"{directoryPath}\MyApp Help.txt",
             $@"{directoryPath}\Foo.other",
-        });
+        ]);
         IDirectoryCleaner cleaner = this.BuildCleaner();
 
         // Act and assert
@@ -196,10 +196,10 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
         // Arrange
         const string directoryPath = @"C:\StartMenu\MyApp";
         string filePath = $@"{directoryPath}\MyApp.lnk";
-        this.FileSystemComposer.Add(new[]
-        {
+        this.FileSystemComposer.Add(
+        [
             $@"{filePath};C:\Programs\MyApp\MyApp.exe",
-        });
+        ]);
         IDirectoryCleaner cleaner = this.BuildCleaner();
 
         // Act
@@ -215,10 +215,10 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
         // Arrange
         const string directoryPath = @"C:\StartMenu\MyApp";
         string filePath = $@"{directoryPath}\MyApp Help.txt";
-        this.FileSystemComposer.Add(new[]
-        {
+        this.FileSystemComposer.Add(
+        [
             filePath,
-        });
+        ]);
         IDirectoryCleaner cleaner = this.BuildCleaner();
 
         // Act
@@ -233,12 +233,12 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
     {
         // Arrange
         const string directoryPath = @"C:\StartMenu\MyApp";
-        this.FileSystemComposer.Add(new[]
-        {
+        this.FileSystemComposer.Add(
+        [
             $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
             $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
             $@"{directoryPath}\MyApp3.lnk;C:\Programs\MyApp\MyApp3.exe",
-        });
+        ]);
         IDirectoryCleaner cleaner = this.BuildCleaner();
 
         // Act and assert
@@ -253,11 +253,11 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
     {
         // Arrange
         const string directoryPath = @"C:\StartMenu\MyApp";
-        this.FileSystemComposer.Add(new[]
-        {
+        this.FileSystemComposer.Add(
+        [
             $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
             $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
-        });
+        ]);
         IDirectoryCleaner cleaner = this.BuildCleaner();
 
         // Act
@@ -273,13 +273,13 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
     {
         // Arrange
         const string directoryPath = @"C:\StartMenu\MyApp";
-        this.FileSystemComposer.Add(new[]
-        {
+        this.FileSystemComposer.Add(
+        [
             $@"{directoryPath}\MyApp.lnk;C:\Programs\MyApp\MyApp.exe",
             $@"{directoryPath}\MyApp2.lnk;C:\Programs\MyApp\MyApp2.exe",
             $@"{directoryPath}\MyApp Help.lnk;C:\Programs\MyApp\MyApp Help.chm",
             $@"{directoryPath}\MyApp Help.txt",
-        });
+        ]);
         IDirectoryCleaner cleaner = this.BuildCleaner();
 
         // Act
@@ -294,7 +294,7 @@ public class FewAppsWithCruftDirectoryCleanerTests : DirectoryCleanerTestBase
 
     private protected override IDirectoryCleaner BuildCleaner()
     {
-        CleanerOptions cleanerOptions = new(new[] { @"C:\StartMenu" })
+        CleanerOptions cleanerOptions = new([@"C:\StartMenu"])
         {
             Simulate = false
         };

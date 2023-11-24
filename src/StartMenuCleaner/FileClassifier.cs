@@ -23,28 +23,28 @@ internal class FileClassifier
 
     private const string urlFileExtension = ".url";
 
-    private static readonly string[] appExtensions = new string[]
-    {
-            exeFileExtension,
-            apprefmsFileExtension
-    };
+    private static readonly string[] appExtensions =
+    [
+        exeFileExtension,
+        apprefmsFileExtension
+    ];
 
-    private static readonly string[] deletableExtensions = new string[]
-    {
-            txtFileExtension
-    };
+    private static readonly string[] deletableExtensions =
+    [
+        txtFileExtension
+    ];
 
-    private static readonly ISet<string> uninstallerExtensions = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
-        {
-            exeFileExtension,
-            msiFileExtension
-        };
+    private static readonly HashSet<string> uninstallerExtensions = new(StringComparer.InvariantCultureIgnoreCase)
+    {
+        exeFileExtension,
+        msiFileExtension
+    };
 
     private readonly IFileSystem fileSystem;
 
-    private readonly IFileShortcutHandler shortcutHandler;
+    private readonly FileShortcutHandler shortcutHandler;
 
-    public FileClassifier(IFileSystem fileSystem, IFileShortcutHandler shortcutHandler)
+    public FileClassifier(IFileSystem fileSystem, FileShortcutHandler shortcutHandler)
     {
         this.fileSystem = fileSystem;
         this.shortcutHandler = shortcutHandler;

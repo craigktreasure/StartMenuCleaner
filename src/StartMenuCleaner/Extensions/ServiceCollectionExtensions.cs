@@ -15,8 +15,8 @@ internal static class ServiceCollectionExtensions
     /// <param name="services">The services.</param>
     /// <returns><see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection RegisterFileShortcutHandler<TShortcutHandler>(this IServiceCollection services)
-        where TShortcutHandler : class, IFileShortcutHandler
-        => services.AddSingleton<IFileShortcutHandler, TShortcutHandler>();
+        where TShortcutHandler : FileShortcutHandler
+        => services.AddSingleton<FileShortcutHandler, TShortcutHandler>();
 
     /// <summary>
     /// Adds the file system to the service collection.

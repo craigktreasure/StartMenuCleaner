@@ -34,15 +34,8 @@ public class EmbeddedResourceHelper
     /// </exception>
     public EmbeddedResourceHelper(Assembly resourceAssembly, IFileSystem fileSystem)
     {
-        if (resourceAssembly is null)
-        {
-            throw new ArgumentNullException(nameof(resourceAssembly));
-        }
-
-        if (fileSystem is null)
-        {
-            throw new ArgumentNullException(nameof(fileSystem));
-        }
+        ArgumentNullException.ThrowIfNull(resourceAssembly);
+        ArgumentNullException.ThrowIfNull(fileSystem);
 
         this.resourceAssembly = resourceAssembly;
         this.fileSystem = fileSystem;

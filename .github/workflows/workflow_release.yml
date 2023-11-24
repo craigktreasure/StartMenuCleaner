@@ -25,10 +25,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: packages
-          path: __packages
+          path: __artifacts/package
 
       - name: Configure GitHub NuGet registry
         run: nuget sources add -name github -source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -username ${{ github.repository_owner }} -password ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push ${{ inputs.package-version }} to GitHub package registry
-        run: nuget push __packages\NuGet\Release\*.nupkg -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source github
+        run: nuget push __artifacts/package/release/*.nupkg -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source github

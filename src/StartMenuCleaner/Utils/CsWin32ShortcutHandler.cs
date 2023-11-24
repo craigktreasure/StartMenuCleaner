@@ -7,9 +7,9 @@ using Windows.Win32.Storage.FileSystem;
 using Windows.Win32.System.Com;
 using Windows.Win32.UI.Shell;
 
-internal class CsWin32ShortcutHandler : IFileShortcutHandler
+internal class CsWin32ShortcutHandler : FileShortcutHandler
 {
-    public unsafe string ResolveTarget(string shortcutPath)
+    public override unsafe string ResolveTarget(string shortcutPath)
     {
         if (!OperatingSystem.IsWindowsVersionAtLeast(5, 1, 2600))
         {
