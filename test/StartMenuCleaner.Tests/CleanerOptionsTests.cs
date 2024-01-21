@@ -15,11 +15,11 @@ public class CleanerOptionsTests
         // Act and assert
         CleanerOptions options = new(rootFoldersToClean);
         Assert.Same(rootFoldersToClean, options.RootFoldersToClean);
-        Assert.Equal(Constants.DirectoriesToIgnore, options.FoldersToIgnore);
+        Assert.Equal(Constants.DirectoriesToIgnore, options.FoldersToIgnore.Order());
 
         options = new(rootFoldersToClean, foldersToIgnore);
         Assert.Same(rootFoldersToClean, options.RootFoldersToClean);
-        Assert.Equal(foldersToIgnore, options.FoldersToIgnore);
+        Assert.Equal(foldersToIgnore.Order(), options.FoldersToIgnore.Order());
 
         Assert.Throws<ArgumentNullException>(nameof(rootFoldersToClean), () => new CleanerOptions(null!, foldersToIgnore));
         Assert.Throws<ArgumentNullException>(nameof(foldersToIgnore), () => new CleanerOptions(rootFoldersToClean, null!));

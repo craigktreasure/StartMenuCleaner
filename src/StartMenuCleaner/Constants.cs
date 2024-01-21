@@ -6,17 +6,17 @@ internal static class Constants
 
     public static readonly string[] DirectoriesToIgnore =
     [
-        "chrome apps",
-        "startup",
-        "maintenance",
+        "accessibility",
         "accessories",
+        "administrative tools",
+        "chrome apps",
+        "maintenance",
+        "startup",
+        "system tools",
         "windows accessories",
         "windows administrative tools",
         "windows ease of access",
         "windows powershell",
         "windows system",
-        "accessibility",
-        "administrative tools",
-        "system tools"
     ];
 }
