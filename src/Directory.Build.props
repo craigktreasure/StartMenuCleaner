@@ -1,0 +1,13 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- Enable source only packages. -->
+    <SourceOnlyPackagesEnabled>true</SourceOnlyPackagesEnabled>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)/../Directory.Build.props" />
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(AssemblyName).Tests" />
+  </ItemGroup>
+</Project>
