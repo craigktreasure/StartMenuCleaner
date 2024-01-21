@@ -8,4 +8,45 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <SystemIOAbstractionsVersion>20.0.4</SystemIOAbstractionsVersion>
+  </PropertyGroup>
+
+  <!--
+    Global package references for source only
+    https://learn.microsoft.com/nuget/consume-packages/central-package-management#global-package-references
+    -->
+  <ItemGroup Label="Source Only Global Packages" Condition=" '$(SourceOnlyPackagesEnabled)' == 'true' ">
+    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+    <GlobalPackageReference Include="Nerdbank.GitVersioning" Version="3.6.133" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="CommandLineParser"                                 Version="2.9.1" />
+    <PackageVersion Include="DotNetConfig"                                      Version="1.0.6" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection"          Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging"                      Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug"                Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Windows.CsWin32"                         Version="0.3.49-beta" />
+    <PackageVersion Include="Serilog"                                           Version="3.1.1" />
+    <PackageVersion Include="Serilog.Extensions.Logging"                        Version="8.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Console"                             Version="5.0.1" />
+    <PackageVersion Include="Serilog.Sinks.File"                                Version="5.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Trace"                               Version="3.0.0" />
+    <PackageVersion Include="System.IO.Abstractions"                            Version="$(SystemIOAbstractionsVersion)" />
+    <PackageVersion Include="Treasure.Utils.Argument"                           Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Test Only Packages" Condition=" '$(TestOnlyPackagesEnabled)' == 'true' ">
+    <PackageVersion Include="coverlet.collector"                                Version="6.0.0" />
+    <PackageVersion Include="coverlet.msbuild"                                  Version="6.0.0" />
+    <PackageVersion Include="Divergic.Logging.Xunit"                            Version="4.3.0" />
+    <PackageVersion Include="FluentAssertions"                                  Version="6.12.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing"                  Version="8.0.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk"                            Version="17.8.0" />
+    <PackageVersion Include="System.IO.Abstractions.TestingHelpers"             Version="$(SystemIOAbstractionsVersion)" />
+    <PackageVersion Include="xunit"                                             Version="2.6.6" />
+    <PackageVersion Include="xunit.runner.visualstudio"                         Version="2.5.6" />
+  </ItemGroup>
+
 </Project>
