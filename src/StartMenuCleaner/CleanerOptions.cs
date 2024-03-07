@@ -53,7 +53,7 @@ internal class CleanerOptions
 
         IReadOnlyList<string> rootFoldersToClean = StartMenuHelper.GetKnownStartMenuProgramsFolders();
         IReadOnlyList<string> foldersToIgnoreFromConfig = LoadFoldersToIgnoreFromConfiguration(config);
-        IReadOnlyList<string> foldersToIgnore = Constants.DirectoriesToIgnore.Concat(foldersToIgnoreFromConfig).ToArray();
+        IReadOnlyList<string> foldersToIgnore = [.. Constants.DirectoriesToIgnore, .. foldersToIgnoreFromConfig];
 
         return new(rootFoldersToClean, foldersToIgnore)
         {

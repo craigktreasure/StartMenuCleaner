@@ -71,7 +71,7 @@ public class EmptyDirectoryCleanerTests : DirectoryCleanerTestBase
 
     private protected override IDirectoryCleaner BuildCleaner()
     {
-        CleanerOptions cleanerOptions = new(new[] { @"C:\StartMenu" })
+        CleanerOptions cleanerOptions = new([@"C:\StartMenu"])
         {
             Simulate = false
         };
