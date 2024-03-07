@@ -168,5 +168,5 @@ internal class Cleaner
     }
 
     private ItemToClean[] GetItemsToClean(IEnumerable<string> directoryPaths)
-        => this.GetFileItemsToClean(directoryPaths).Concat(this.GetDirectoryItemsToClean(directoryPaths)).ToArray();
+        => [.. this.GetFileItemsToClean(directoryPaths), .. this.GetDirectoryItemsToClean(directoryPaths)];
 }

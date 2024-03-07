@@ -76,7 +76,7 @@ public class ManualConfigurationDirectoryCleanerTests : DirectoryCleanerTestBase
         this.FileSystemComposer.Add(@"C:\StartMenu\App\File.txt");
         ManualConfigurationDirectoryCleaner directoryCleaner = this.BuildCleaner(new Dictionary<string, IEnumerable<string>?>
         {
-            ["App"] = new[] { Path.GetFileName(shortcutFilePath) }
+            ["App"] = [Path.GetFileName(shortcutFilePath)]
         });
 
         // Act

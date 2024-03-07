@@ -30,7 +30,7 @@ public class MockManualConfigurationLoader : IManualConfigurationLoader
         this.directoryConfigurations = directories?
             .ToDictionary(
                 d => d.Key,
-                d => new ManualDirectoryRemoveConfiguration(d.Key, d.Value ?? Array.Empty<string>()),
+                d => new ManualDirectoryRemoveConfiguration(d.Key, d.Value ?? []),
                 StringComparer.OrdinalIgnoreCase)
             ?? [];
     }
