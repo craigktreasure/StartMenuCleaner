@@ -265,10 +265,10 @@ public class CleanerTests
             this.output.BuildLoggerFor<FileSystemOperationHandler>(),
             mockFileSystem,
             cleanerOptions);
-        IFileCleaner[] fileCleaners = new[]
-        {
+        IFileCleaner[] fileCleaners =
+        [
             new BadShortcutFileCleaner(mockFileSystem, shortcutHandler, fileSystemOperationHandler),
-        };
+        ];
         IDirectoryCleaner[] directoryCleaners =
         [
             new EmptyDirectoryCleaner(mockFileSystem, fileSystemOperationHandler),
