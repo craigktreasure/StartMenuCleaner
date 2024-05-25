@@ -17,6 +17,6 @@ public static class MockFileSystemExtensions
     {
         ArgumentNullException.ThrowIfNull(mockFileSystem);
 
-        mockFileSystem.AddFile(path, new MockFileData(Array.Empty<byte>()));
+        mockFileSystem.AddFile(path, new MockFileData([]));
     }
 }
