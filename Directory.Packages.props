@@ -31,7 +31,7 @@
     <PackageVersion Include="Serilog"                                           Version="4.0.0" />
     <PackageVersion Include="Serilog.Extensions.Logging"                        Version="8.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console"                             Version="6.0.0" />
-    <PackageVersion Include="Serilog.Sinks.File"                                Version="5.0.0" />
+    <PackageVersion Include="Serilog.Sinks.File"                                Version="6.0.0" />
     <PackageVersion Include="Serilog.Sinks.Trace"                               Version="4.0.0" />
     <PackageVersion Include="System.IO.Abstractions"                            Version="$(SystemIOAbstractionsVersion)" />
     <PackageVersion Include="Treasure.Utils.Argument"                           Version="1.1.0" />
