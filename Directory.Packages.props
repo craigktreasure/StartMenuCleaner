@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <PackageVersion Include="CommandLineParser"                                 Version="2.9.1" />
-    <PackageVersion Include="DotNetConfig"                                      Version="1.0.6" />
+    <PackageVersion Include="DotNetConfig"                                      Version="1.1.1" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection"          Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging"                      Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug"                Version="8.0.0" />
