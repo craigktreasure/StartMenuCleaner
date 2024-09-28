@@ -45,7 +45,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk"                            Version="17.11.1" />
     <PackageVersion Include="Neovolve.Logging.Xunit"                            Version="6.1.0" />
     <PackageVersion Include="System.IO.Abstractions.TestingHelpers"             Version="$(SystemIOAbstractionsVersion)" />
-    <PackageVersion Include="xunit"                                             Version="2.9.0" />
+    <PackageVersion Include="xunit"                                             Version="2.9.2" />
     <PackageVersion Include="xunit.runner.visualstudio"                         Version="2.8.2" />
   </ItemGroup>
 
