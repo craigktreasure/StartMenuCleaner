@@ -46,9 +46,9 @@ internal class Cleaner
             Console.WriteLine();
         }
 
-        IReadOnlyList<ItemToClean> itemsToClean = this.GetItemsToClean(this.options.RootFoldersToClean);
+        ItemToClean[] itemsToClean = this.GetItemsToClean(this.options.RootFoldersToClean);
 
-        if (itemsToClean.Count == 0)
+        if (itemsToClean.Length == 0)
         {
             this.logger.NothingToClean();
             return;
