@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 /// A shortcut path syntax can be used to convert to a <see cref="FileShortcut"/>: "{file_path};{target_path}".
 /// Implements the <see cref="FileShortcut" />
 /// </summary>
-public class FileShortcut : IEquatable<FileShortcut>
+internal sealed class FileShortcut : IEquatable<FileShortcut>
 {
     private const char fragmentSeparator = ';';
 

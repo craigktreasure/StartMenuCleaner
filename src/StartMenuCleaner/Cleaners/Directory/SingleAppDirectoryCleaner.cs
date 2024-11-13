@@ -41,11 +41,11 @@ internal class SingleAppDirectoryCleaner : DirectoryCleanerBase
             return false;
         }
 
-        IReadOnlyList<string> filePaths = this.FileSystem.Directory
+        string[] filePaths = this.FileSystem.Directory
             .EnumerateFiles(directoryPath)
             .ToArray();
 
-        if (filePaths.Count != 1)
+        if (filePaths.Length != 1)
         {
             return false;
         }
