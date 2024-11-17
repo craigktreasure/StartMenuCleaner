@@ -34,7 +34,6 @@
     <PackageVersion Include="Serilog.Sinks.File"                                Version="6.0.0" />
     <PackageVersion Include="Serilog.Sinks.Trace"                               Version="4.0.0" />
     <PackageVersion Include="System.IO.Abstractions"                            Version="$(SystemIOAbstractionsVersion)" />
-    <PackageVersion Include="Treasure.Utils.Argument"                           Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup Label="Test Only Packages" Condition=" '$(TestOnlyPackagesEnabled)' == 'true' ">
