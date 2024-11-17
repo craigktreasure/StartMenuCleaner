@@ -46,7 +46,12 @@ internal sealed class FileShortcut : IEquatable<FileShortcut>
     /// </summary>
     /// <param name="fileShortcut">The shortcut path.</param>
     /// <returns>The result of the conversion.</returns>
-    public static explicit operator string(FileShortcut fileShortcut) => Argument.NotNull(fileShortcut).ToString();
+    public static explicit operator string(FileShortcut fileShortcut)
+    {
+        ArgumentNullException.ThrowIfNull(fileShortcut);
+
+        return fileShortcut.ToString();
+    }
 
     /// <summary>
     /// Converts shortcut path syntax ("{file_path};{target_path}") to a <see cref="FileShortcut"/>.
@@ -84,7 +89,7 @@ internal sealed class FileShortcut : IEquatable<FileShortcut>
     /// <returns><see cref="bool"/>.</returns>
     public static bool TryConvertFrom(string shortcutPathSyntax, [NotNullWhen(true)] out FileShortcut? fileShortcut)
     {
-        Argument.NotNullOrWhiteSpace(shortcutPathSyntax);
+        ArgumentException.ThrowIfNullOrWhiteSpace(shortcutPathSyntax);
 
         fileShortcut = null;
 

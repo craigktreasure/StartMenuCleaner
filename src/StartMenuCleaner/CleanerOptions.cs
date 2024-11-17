@@ -37,8 +37,11 @@ internal class CleanerOptions
     /// <param name="foldersToIgnore">The folders to ignore.</param>
     public CleanerOptions(IReadOnlyList<string> rootFoldersToClean, IReadOnlyList<string> foldersToIgnore)
     {
-        this.RootFoldersToClean = Argument.NotNull(rootFoldersToClean);
-        this.FoldersToIgnore = new HashSet<string>(Argument.NotNull(foldersToIgnore), StringComparer.CurrentCultureIgnoreCase);
+        ArgumentNullException.ThrowIfNull(rootFoldersToClean);
+        ArgumentNullException.ThrowIfNull(foldersToIgnore);
+
+        this.RootFoldersToClean = rootFoldersToClean;
+        this.FoldersToIgnore = new HashSet<string>(foldersToIgnore, StringComparer.CurrentCultureIgnoreCase);
     }
 
     /// <summary>

@@ -19,8 +19,10 @@ internal sealed class ManualDirectoryRemoveConfiguration
     /// <param name="filesToPromote">The files to keep and promote.</param>
     public ManualDirectoryRemoveConfiguration(string directoryName, IEnumerable<string> filesToPromote)
     {
-        this.DirectoryName = Argument.NotNullOrWhiteSpace(directoryName);
-        Argument.NotNull(filesToPromote);
+        ArgumentException.ThrowIfNullOrWhiteSpace(directoryName);
+        ArgumentNullException.ThrowIfNull(filesToPromote);
+
+        this.DirectoryName = directoryName;
         this.FilesToPromote = new HashSet<string>(filesToPromote, StringComparer.OrdinalIgnoreCase);
     }
 }

@@ -13,6 +13,8 @@ internal sealed class ManualFileRemoveConfiguration
     /// <param name="fileName">The name of the file.</param>
     public ManualFileRemoveConfiguration(string fileName)
     {
-        this.FileName = Argument.NotNullOrWhiteSpace(fileName);
+        ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
+
+        this.FileName = fileName;
     }
 }
