@@ -6,9 +6,6 @@ on:
       checkFormat:
         type: boolean
         default: true
-      platform:
-        type: string
-        default: ubuntu
     outputs:
       package_version:
         description: 'The version of the package that was built.'
@@ -21,7 +18,7 @@ env:
 jobs:
   build:
     name: Build
-    runs-on: windows-latest
+    runs-on: windows-2025
 
     outputs:
       package_version: ${{steps.version.outputs.package_version}}
