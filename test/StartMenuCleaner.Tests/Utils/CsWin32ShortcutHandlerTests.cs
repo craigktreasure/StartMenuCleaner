@@ -2,8 +2,6 @@
 
 using System.IO;
 
-using FluentAssertions;
-
 using StartMenuCleaner.TestLibrary;
 using StartMenuCleaner.Utils;
 
@@ -23,7 +21,7 @@ public class CsWin32ShortcutHandlerTests
             CsWin32ShortcutHandler shortcutHandler = new();
             string actualTargetPath = shortcutHandler.ResolveTarget(temporaryFilePath);
 
-            actualTargetPath.Should().Be(@"C:\Windows\System32\systeminfo.exe");
+            Assert.Equal(@"C:\Windows\System32\systeminfo.exe", actualTargetPath);
         }
         finally
         {
