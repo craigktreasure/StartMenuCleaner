@@ -2,8 +2,6 @@
 
 using System;
 
-using FluentAssertions;
-
 using StartMenuCleaner.TestLibrary;
 using StartMenuCleaner.Utils;
 
@@ -20,7 +18,7 @@ public class FileShortcutHandlerTests
         this.shortcutHandler.AddShortcutMapping(expectedFileShortcut);
 
         FileShortcut shortcut = this.shortcutHandler.GetShortcut(expectedFileShortcut.FilePath);
-        shortcut.Should().Be(expectedFileShortcut);
+        Assert.Equal(expectedFileShortcut, shortcut);
     }
 
     [Fact]
@@ -33,44 +31,59 @@ public class FileShortcutHandlerTests
     [Fact]
     public void IsShortcut_ContainsNonShortcutExtension_ReturnsFalse()
     {
-        FileShortcutHandler.IsShortcut(@"C:\StartMenu\MyApp\MyApp.txt").Should().Be(false);
+        // Act
+        bool result = FileShortcutHandler.IsShortcut(@"C:\StartMenu\MyApp\MyApp.txt");
+
+        // Assert
+        Assert.False(result);
     }
 
     [Fact]
     public void IsShortcut_ContainsShortcutExtension_ReturnsTrue()
     {
-        FileShortcutHandler.IsShortcut(@"C:\StartMenu\MyApp\MyApp.lnk").Should().Be(true);
+        // Act
+        bool result = FileShortcutHandler.IsShortcut(@"C:\StartMenu\MyApp\MyApp.lnk");
+
+        // Assert
+        Assert.True(result);
     }
 
     [Fact]
     public void TryGetShortcut()
     {
+        // Arrange
         FileShortcut expectedFileShortcut = new(@"C:\StartMenu\MyApp\MyApp.lnk", @"C:\Programs\MyApp\MyApp.exe");
         this.shortcutHandler.AddShortcutMapping(expectedFileShortcut);
 
-        this.shortcutHandler.TryGetShortcut(expectedFileShortcut.FilePath, out FileShortcut? shortcut)
-            .Should().Be(true);
+        // Act
+        bool result = this.shortcutHandler.TryGetShortcut(expectedFileShortcut.FilePath, out FileShortcut? shortcut);
 
-        shortcut.Should().Be(expectedFileShortcut);
+        // Assert
+        Assert.True(result);
+        Assert.Equal(expectedFileShortcut, shortcut);
     }
 
     [Fact]
     public void TryGetShortcutFromInvalidPath()
     {
-        this.shortcutHandler.TryGetShortcut(@"C:\StartMenu\MyApp\MyApp.txt", out FileShortcut? shortcut)
-            .Should().Be(false);
+        // Act
+        bool result = this.shortcutHandler.TryGetShortcut(@"C:\StartMenu\MyApp\MyApp.txt", out FileShortcut? shortcut);
 
-        shortcut.Should().BeNull();
+        // Assert
+        Assert.False(result);
+        Assert.Null(shortcut);
     }
 
     [Fact]
     public void TryGetShortcutWithResolutionFailure()
     {
+        // Act
         // Don't register the link causing the TestFileShortcutHandler to
         // throw in ResolveTarget.
-        this.shortcutHandler.TryGetShortcut(@"C:\StartMenu\MyApp\MyApp.lnk", out FileShortcut? shortcut)
-            .Should().Be(false);
+        bool result = this.shortcutHandler.TryGetShortcut(@"C:\StartMenu\MyApp\MyApp.lnk", out FileShortcut? shortcut);
 
-        shortcut.Should().BeNull();
+        // Assert
+        Assert.False(result);
+        Assert.Null(shortcut);
     }
 }

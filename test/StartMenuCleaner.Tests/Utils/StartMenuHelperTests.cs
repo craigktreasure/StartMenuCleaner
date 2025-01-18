@@ -1,7 +1,5 @@
 ﻿namespace StartMenuCleaner.Tests.Utils;
 
-using FluentAssertions;
-
 using StartMenuCleaner.Utils;
 
 using Xunit;
@@ -10,9 +8,21 @@ public class StartMenuHelperTests
 {
     [Fact]
     public void GetKnownStartMenuFolders()
-        => StartMenuHelper.GetKnownStartMenuFolders().Should().HaveCount(2);
+    {
+        // Act
+        IReadOnlyList<string> result = StartMenuHelper.GetKnownStartMenuFolders();
+
+        // Assert
+        Assert.Equal(2, result.Count);
+    }
 
     [Fact]
     public void GetKnownStartMenuProgramsFolders()
-        => StartMenuHelper.GetKnownStartMenuProgramsFolders().Should().HaveCount(2);
+    {
+        // Act
+        IReadOnlyList<string> result = StartMenuHelper.GetKnownStartMenuProgramsFolders();
+
+        // Assert
+        Assert.Equal(2, result.Count);
+    }
 }

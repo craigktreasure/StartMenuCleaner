@@ -2,8 +2,6 @@
 
 using System.IO.Abstractions.TestingHelpers;
 
-using FluentAssertions;
-
 using Microsoft.Extensions.Logging;
 
 using StartMenuCleaner.Cleaners.Directory;
@@ -126,7 +124,7 @@ public class CleanerTests
     {
         Cleaner cleaner = this.GetCleaner();
 
-        string[] ignoredDirectoryPaths = Constants.DirectoriesToIgnore.Select(d => $@"C:\StartMenu\{d}").ToArray();
+        string[] ignoredDirectoryPaths = [.. Constants.DirectoriesToIgnore.Select(d => $@"C:\StartMenu\{d}")];
         foreach (string ignoredDirectoryPath in ignoredDirectoryPaths)
         {
             this.fileSystemComposer.AddDirectory(ignoredDirectoryPath);
@@ -248,7 +246,7 @@ public class CleanerTests
     private void AssertFileSystemContains(IEnumerable<string> expectedNodes)
     {
         IEnumerable<string> fileSystemNodes = this.fileSystemComposer.GetAllNodes();
-        expectedNodes.Should().BeEquivalentTo(fileSystemNodes);
+        Assert.Equivalent(expectedNodes, fileSystemNodes);
     }
 
     private Cleaner GetCleaner(bool simulate = false)
