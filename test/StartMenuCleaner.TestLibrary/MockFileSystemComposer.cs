@@ -27,7 +27,7 @@ internal class MockFileSystemComposer
     /// </summary>
     public MockFileSystemComposer()
     {
-        this.defaultFileSystemNodes = this.FileSystem.AllNodes.ToArray();
+        this.defaultFileSystemNodes = [.. this.FileSystem.AllNodes];
     }
 
     /// <summary>

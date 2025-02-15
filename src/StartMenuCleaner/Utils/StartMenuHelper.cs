@@ -18,7 +18,5 @@ internal static class StartMenuHelper
     /// </summary>
     /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="string"/>.</returns>
     public static IReadOnlyList<string> GetKnownStartMenuProgramsFolders() =>
-        GetKnownStartMenuFolders()
-            .Select(x => Path.Combine(x, programsFolderName))
-            .ToArray();
+        [.. GetKnownStartMenuFolders().Select(x => Path.Combine(x, programsFolderName))];
 }
