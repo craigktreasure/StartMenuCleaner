@@ -86,10 +86,9 @@ internal class Cleaner
     /// <param name="directoryPaths">The directory paths.</param>
     /// <returns>An array of <see cref="ItemToClean"/>.</returns>
     private ItemToClean[] GetDirectoryItemsToClean(IEnumerable<string> directoryPaths)
-        => directoryPaths
+        => [.. directoryPaths
         .Where(this.fileSystem.Directory.Exists)
-        .SelectMany(this.GetDirectoryItemsToClean)
-        .ToArray();
+        .SelectMany(this.GetDirectoryItemsToClean)];
 
     /// <summary>
     /// Gets the directory items to clean.
@@ -133,10 +132,9 @@ internal class Cleaner
     /// <param name="directoryPaths">The directory paths.</param>
     /// <returns>An array of <see cref="ItemToClean"/>.</returns>
     private ItemToClean[] GetFileItemsToClean(IEnumerable<string> directoryPaths)
-        => directoryPaths
+        => [.. directoryPaths
         .Where(this.fileSystem.Directory.Exists)
-        .SelectMany(this.GetFileItemsToClean)
-        .ToArray();
+        .SelectMany(this.GetFileItemsToClean)];
 
     /// <summary>
     /// Gets the file items to clean.

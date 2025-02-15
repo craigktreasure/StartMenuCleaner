@@ -65,5 +65,5 @@ internal class CleanerOptions
     }
 
     private static string[] LoadFoldersToIgnoreFromConfiguration(Config config)
-        => config.GetAll(Constants.ConfigurationSectionName, "ignore").Select(x => x.GetString()).ToArray();
+        => [.. config.GetAll(Constants.ConfigurationSectionName, "ignore").Select(x => x.GetString())];
 }

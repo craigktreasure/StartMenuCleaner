@@ -43,13 +43,11 @@ internal class FewAppsWithCruftDirectoryCleaner : DirectoryCleanerBase
             return false;
         }
 
-        IReadOnlyList<string> filePaths = this.FileSystem.Directory.EnumerateFiles(directoryPath)
-            .ToArray();
+        IReadOnlyList<string> filePaths = [.. this.FileSystem.Directory.EnumerateFiles(directoryPath)];
 
         // Classify the files
-        IReadOnlyList<FileClassificationItem> classifiedFiles = filePaths
-            .Select(x => new FileClassificationItem(x, this.fileClassifier.ClassifyFile(x)))
-            .ToArray();
+        IReadOnlyList<FileClassificationItem> classifiedFiles =
+            [.. filePaths.Select(x => new FileClassificationItem(x, this.fileClassifier.ClassifyFile(x)))];
 
         if (classifiedFiles.Any(x => x.Classification == FileClassification.Other))
         {

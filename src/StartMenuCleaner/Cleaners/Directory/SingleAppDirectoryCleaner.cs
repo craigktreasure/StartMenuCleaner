@@ -41,9 +41,7 @@ internal class SingleAppDirectoryCleaner : DirectoryCleanerBase
             return false;
         }
 
-        string[] filePaths = this.FileSystem.Directory
-            .EnumerateFiles(directoryPath)
-            .ToArray();
+        string[] filePaths = [.. this.FileSystem.Directory.EnumerateFiles(directoryPath)];
 
         if (filePaths.Length != 1)
         {
