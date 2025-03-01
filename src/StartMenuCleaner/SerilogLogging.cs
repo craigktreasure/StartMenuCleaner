@@ -2,11 +2,12 @@
 
 using System;
 using System.Globalization;
-using System.IO;
 
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+
+using IPath = Path;
 
 internal static class SerilogLogging
 {
@@ -30,7 +31,7 @@ internal static class SerilogLogging
                 restrictedToMinimumLevel: LogEventLevel.Verbose,
                 formatProvider: CultureInfo.CurrentCulture)
             .WriteTo.File(
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"logs\log-.txt"),
+                IPath.Combine(AppDomain.CurrentDomain.BaseDirectory, @"logs\log-.txt"),
                 retainedFileCountLimit: 14,
                 outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}",
                 restrictedToMinimumLevel: LogEventLevel.Debug,

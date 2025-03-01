@@ -2,6 +2,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 
+using IPath = Path;
+
 internal abstract class FileShortcutHandler
 {
     private const string lnkFileExtension = ".lnk";
@@ -36,7 +38,7 @@ internal abstract class FileShortcutHandler
     /// <returns><see cref="bool"/>.</returns>
     public static bool IsShortcut(string filePath)
     {
-        string ext = Path.GetExtension(filePath);
+        string ext = IPath.GetExtension(filePath);
 
         return ext == lnkFileExtension;
     }
