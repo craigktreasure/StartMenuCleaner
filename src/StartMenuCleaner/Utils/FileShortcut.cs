@@ -2,6 +2,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 
+using IPath = Path;
+
 /// <summary>
 /// A utility class for handling file shortcuts.
 /// A shortcut path syntax can be used to convert to a <see cref="FileShortcut"/>: "{file_path};{target_path}".
@@ -73,7 +75,7 @@ internal sealed class FileShortcut : IEquatable<FileShortcut>
         string path = fragments[0];
         string target = fragments[1];
 
-        if (!Path.GetExtension(path).Equals(lnkFileExtension, StringComparison.OrdinalIgnoreCase))
+        if (!IPath.GetExtension(path).Equals(lnkFileExtension, StringComparison.OrdinalIgnoreCase))
         {
             throw new ArgumentException("Shortcut path does not contain a link (.lnk) file.", nameof(shortcutPathSyntax));
         }
@@ -103,7 +105,7 @@ internal sealed class FileShortcut : IEquatable<FileShortcut>
         string path = fragments[0];
         string target = fragments[1];
 
-        if (!Path.GetExtension(path).Equals(lnkFileExtension, StringComparison.OrdinalIgnoreCase))
+        if (!IPath.GetExtension(path).Equals(lnkFileExtension, StringComparison.OrdinalIgnoreCase))
         {
             return false;
         }
