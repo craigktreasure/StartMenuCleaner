@@ -6,6 +6,8 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Reflection;
 
+using StartMenuCleaner.TestLibrary.Extensions;
+
 /// <summary>
 /// Class EmbeddedResourceHelper.
 /// </summary>
@@ -86,7 +88,7 @@ public class EmbeddedResourceHelper
     /// <returns><see cref="string"/>.</returns>
     public string CopyToTempFile(string embeddedResourcePath)
     {
-        string temporaryFileName = this.fileSystem.Path.GetTempFileName();
+        string temporaryFileName = this.fileSystem.Path.GetTemporaryFilePath();
 
         try
         {
