@@ -29,7 +29,7 @@
     <PackageVersion Include="Microsoft.Extensions.Logging"                      Version="9.0.5" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug"                Version="9.0.5" />
     <PackageVersion Include="Microsoft.Windows.CsWin32"                         Version="0.3.183" />
-    <PackageVersion Include="Serilog"                                           Version="4.2.0" />
+    <PackageVersion Include="Serilog"                                           Version="4.3.0" />
     <PackageVersion Include="Serilog.Extensions.Logging"                        Version="9.0.1" />
     <PackageVersion Include="Serilog.Sinks.Console"                             Version="6.0.0" />
     <PackageVersion Include="Serilog.Sinks.File"                                Version="7.0.0" />
@@ -41,7 +41,7 @@
     <PackageVersion Include="coverlet.collector"                                Version="6.0.4" />
     <PackageVersion Include="coverlet.msbuild"                                  Version="6.0.4" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing"                  Version="9.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk"                            Version="17.13.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk"                            Version="17.14.0" />
     <PackageVersion Include="Neovolve.Logging.Xunit.v3"                         Version="7.1.0" />
     <PackageVersion Include="System.IO.Abstractions.TestingHelpers"             Version="$(SystemIOAbstractionsVersion)" />
     <PackageVersion Include="xunit.analyzers"                                   Version="1.21.0" />
