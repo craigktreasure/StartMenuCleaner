@@ -8,7 +8,7 @@
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <AnalysisLevel>9.0</AnalysisLevel>
+    <AnalysisLevel>10.0</AnalysisLevel>
   </PropertyGroup>
 
 </Project>

@@ -67,7 +67,7 @@ dotnet tool uninstall -g StartMenuCleaner
 
 ``` shell
 > Clean-StartMenu --help
-StartMenuCleaner 2.0.0
+StartMenuCleaner 4.0.0
 Copyright (C) 2021 Craig Treasure
 
   -d, --debug       Enable debug information in console.
