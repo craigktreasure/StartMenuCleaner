@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Setup NuGet
-        uses: NuGet/setup-nuget@v3
+        uses: NuGet/setup-nuget@v4
         with:
           nuget-version: latest
 
