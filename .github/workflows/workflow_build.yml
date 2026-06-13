@@ -49,7 +49,7 @@ jobs:
         run: dotnet test --configuration Release --no-build --verbosity normal /p:CollectCoverage=true
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           name: codecov
           directory: __artifacts/test-results
