@@ -41,7 +41,7 @@
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
     <PackageVersion Include="coverlet.msbuild" Version="10.0.1" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.6" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.6.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
     <PackageVersion Include="Neovolve.Logging.Xunit.v3" Version="7.2.0" />
     <PackageVersion Include="System.IO.Abstractions.TestingHelpers" Version="$(SystemIOAbstractionsVersion)" />
     <PackageVersion Include="xunit.analyzers" Version="1.27.0" />
