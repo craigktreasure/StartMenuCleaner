@@ -9,9 +9,6 @@ updates:
     timezone: 'America/Los_Angeles'
   open-pull-requests-limit: 10
   groups:
-    coverlet:
-      patterns:
-      - "coverlet*"
     Microsoft.Extensions:
       patterns:
       - "Microsoft.Extensions*"
