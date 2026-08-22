@@ -12,10 +12,6 @@
 
     <!-- Mark projects as test by default. -->
     <IsTestProject>true</IsTestProject>
-
-    <!-- Configure code coverage settings for coverlet. -->
-    <ExcludeByAttribute>GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
-    <CoverletOutputFormat>cobertura</CoverletOutputFormat>
   </PropertyGroup>
 
   <ItemGroup>
