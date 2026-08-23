@@ -1,4 +1,4 @@
-﻿# EditorConfig is awesome: https://EditorConfig.org
+# EditorConfig is awesome: https://EditorConfig.org
 # You can learn more about editorconfig here: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
 
 # IMPORTANT
@@ -9,7 +9,7 @@
 root = true
 
 [*]
-charset = utf-8-bom
+charset = utf-8
 indent_style = space
 insert_final_newline = false
 trim_trailing_whitespace = true

@@ -1,4 +1,4 @@
-﻿namespace StartMenuCleaner.Cleaners.Directory;
+namespace StartMenuCleaner.Cleaners.Directory;
 
 using System;
 using System.Diagnostics.CodeAnalysis;
