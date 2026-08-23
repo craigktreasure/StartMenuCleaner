@@ -1,4 +1,4 @@
-﻿namespace StartMenuCleaner;
+namespace StartMenuCleaner;
 
 using System;
 using System.Globalization;

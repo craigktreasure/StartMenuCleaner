@@ -1,4 +1,4 @@
-﻿namespace StartMenuCleaner.Extensions;
+namespace StartMenuCleaner.Extensions;
 
 using System.IO.Abstractions;
 

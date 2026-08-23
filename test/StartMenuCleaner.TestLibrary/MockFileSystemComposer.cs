@@ -1,4 +1,4 @@
-﻿namespace StartMenuCleaner.TestLibrary;
+namespace StartMenuCleaner.TestLibrary;
 
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;

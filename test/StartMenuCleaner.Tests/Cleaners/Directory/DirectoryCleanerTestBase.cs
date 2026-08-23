@@ -1,4 +1,4 @@
-﻿namespace StartMenuCleaner.Tests.Cleaners.Directory;
+namespace StartMenuCleaner.Tests.Cleaners.Directory;
 
 using System.IO.Abstractions.TestingHelpers;
 

@@ -1,4 +1,4 @@
-﻿namespace StartMenuCleaner.Cleaners;
+namespace StartMenuCleaner.Cleaners;
 
 internal class ItemToClean
 {

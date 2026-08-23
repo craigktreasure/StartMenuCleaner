@@ -1,4 +1,4 @@
-﻿namespace StartMenuCleaner;
+namespace StartMenuCleaner;
 
 internal static class Constants
 {
