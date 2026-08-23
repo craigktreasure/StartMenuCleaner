@@ -1,0 +1,12 @@
+# This file lists commits that should be ignored by git blame because they
+# contain only mechanical, repo-wide formatting changes.
+#
+# Configure this locally with:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# GitHub's blame view honors this file automatically.
+
+# Drop the UTF-8 BOM requirement (#440)
+# Changed charset = utf-8-bom to charset = utf-8 and stripped the leading
+# EF BB BF bytes from the 66 tracked files that carried one.
+71c86f356565cc4293e57e8f4d76937d9b5b8853
